@@ -19,11 +19,15 @@
     "@vue/cli-service": "^3.11.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.1",
+    "buefy": "^0.8.3",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "numeral": "^2.0.6",
     "sass": "^1.18.0",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.10"
+    "vue-numeral-filter": "^1.1.1",
+    "vue-template-compiler": "^2.6.10",
+    "vuedraggable": "^2.23.0"
   },
   "eslintConfig": {
     "root": true,

@@ -1,0 +1,35 @@
+.flex {
+    display: flex;
+}
+
+.grow {
+    flex-grow: 1;
+}
+
+.shrink {
+    flex-shrink: 1;
+}
+
+.justify-content-between {
+    justify-content: space-between !important;
+}
+
+.justify-content-stretch {
+    justify-content: stretch !important;
+}
+
+.margin-left {
+    margin-left: $base-spacing;
+}
+
+.margin-right {
+    margin-right: $base-spacing;
+}
+
+.sticky {
+    position: sticky;
+}
+
+.scroll {
+    overflow: scroll;
+}

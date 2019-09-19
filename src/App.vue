@@ -25,6 +25,11 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * We received an orderUpdated event, propagate to children
+     * @param {Array} newOrder
+     */
     updateOrder(newOrder) {
       this.buildOrder = newOrder;
     }

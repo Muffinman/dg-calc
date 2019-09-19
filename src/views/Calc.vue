@@ -117,6 +117,10 @@ export default {
     this.ticks(300)
   },
   methods: {
+
+    /**
+     * Reset all outputs to 0
+     */
     resetOutput () {
       this.output = {
         metal: 0,
@@ -125,11 +129,19 @@ export default {
         pop: 0
       }
     },
+
+    /**
+     * Reset all storage to 0
+     */
     resetStorage () {
       this.storage = {
         pop: 0
       }
     },
+
+    /**
+     * Re-calculate current planet output
+     */
     calcOutput () {
       this.resetOutput()
       this.resetStorage()
@@ -148,6 +160,9 @@ export default {
       })
     },
 
+    /**
+     * Update stored resources with current outputs
+     */
     addOutputs () {
       this.resources.forEach(resource => {
         this.stored[resource] += this.output[resource]
@@ -157,6 +172,9 @@ export default {
       })
     },
 
+    /**
+     * Put current planet outputs into log
+     */
     recordOutputs () {
       this.$set(this.log, this.turn, {
         turn: this.turn,
@@ -167,6 +185,9 @@ export default {
       })
     },
 
+    /**
+     * Main tick controller method
+     */
     tick () {
       this.turn++
       this.processQueues()
@@ -178,12 +199,19 @@ export default {
       this.recordOutputs()
     },
 
+    /**
+     * Advance {count} ticks
+     * @param {Integer} count
+     */
     ticks (count) {
       for (let i = 0; i < count; i++) {
         this.tick()
       }
     },
 
+    /**
+     * Advance all queues
+     */
     processQueues () {
       this.processBuildingQueue()
       if (this.hasShipYard()) {
@@ -191,6 +219,9 @@ export default {
       }
     },
 
+    /**
+     * Advance or complete building queue
+     */
     processBuildingQueue () {
       if (this.queue.building.turns > 0) {
         this.queue.building.turns--
@@ -200,6 +231,9 @@ export default {
       }
     },
 
+    /**
+     * Advance or complete production queue
+     */
     processProductionQueue () {
       if (this.queue.production.turns > 0) {
         this.queue.production.turns--
@@ -209,6 +243,9 @@ export default {
       }
     },
 
+    /**
+     * Start construction new queue items if ready
+     */
     startQueues () {
       this.startBuildingQueue()
       if (this.hasShipYard()) {
@@ -216,6 +253,9 @@ export default {
       }
     },
 
+    /**
+     * Find next building for building queue
+     */
     startBuildingQueue () {
       if (!this.queue.building.ref) {
         let next = this.buildOrder.shift()
@@ -241,6 +281,9 @@ export default {
       }
     },
 
+    /**
+     * Find next unit for production queue
+     */
     startProductionQueue () {
       if (!this.queue.production.ref) {
         let next = 'outpost_ship'
@@ -256,6 +299,10 @@ export default {
       }
     },
 
+    /**
+     * Start construction of a building
+     * @param {String} building
+     */
     buildingConstructionStart (building) {
       Object.keys(this.buildings[building].cost).forEach(resource => {
         this.stored[resource] -= this.buildings[building].cost[resource]
@@ -267,6 +314,10 @@ export default {
       this.$set(this.queue.building, 'turns', this.buildings[building].turns)
     },
 
+    /**
+     * Process completion of a building
+     * @param {String} building
+     */
     buildingConstructionFinish (building) {
       if (this.constructed[building]) {
         this.constructed[building]++
@@ -281,6 +332,10 @@ export default {
       this.$set(this.queue.building, 'turns', 0)
     },
 
+    /**
+     * Start construction of a unit
+     * @param {String} unit
+     */
     unitConstructionStart (unit) {
       Object.keys(this.units[unit].cost).forEach(resource => {
         this.stored[resource] -= this.units[unit].cost[resource]
@@ -292,6 +347,10 @@ export default {
       this.$set(this.queue.production, 'turns', this.units[unit].turns)
     },
 
+    /**
+     * Process completion of a unit
+     * @param {String} unit
+     */
     unitConstructionFinish (unit) {
       this.stored.pop += this.units[unit].cost.pop
       this.stored.pop_busy -= this.units[unit].cost.pop
@@ -303,12 +362,20 @@ export default {
       this.$set(this.queue.production, 'turns', 0)
     },
 
+    /**
+     * Check if the selected building has available energy to start construction
+     * @param {String} building
+     */
     checkEnergy (building) {
       let required = -this.buildings[building].output.energy
       let available = this.output.energy
       return required <= available
     },
 
+    /**
+     * Check if the selected building has available resources to start construction
+     * @param {String} building
+     */
     checkBuildingResources (building) {
       let canBuild = true
       Object.keys(this.buildings[building].cost).forEach(resource => {
@@ -319,6 +386,11 @@ export default {
       return canBuild
     },
 
+    /**
+     * Check if the selected unit has available resources to start construction
+     * @param {String} unit
+     * @return {Boolean}
+     */
     checkUnitResources (unit) {
       let canBuild = true
       Object.keys(this.units[unit].cost).forEach(resource => {
@@ -329,6 +401,10 @@ export default {
       return canBuild
     },
 
+    /**
+     * Get the best energy producing building to construct
+     * @return {String}
+     */
     energyBuilding () {
       let toBuild = null
       Object.keys(this.buildings).forEach(building => {
@@ -339,6 +415,10 @@ export default {
       return toBuild
     },
 
+    /**
+     * Does this planet have a shipyard yet?
+     * @return {Boolean}
+     */
     hasShipYard () {
       return this.constructed['ship_yard'] && this.constructed['ship_yard'] > 0
     },

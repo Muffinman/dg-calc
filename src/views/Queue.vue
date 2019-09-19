@@ -43,12 +43,25 @@ export default {
     }
   },
   methods: {
+    /**
+     * Emit the updated queue order to the parent
+     */
     updateOrder() {
       this.$emit('orderUpdated', this.newOrder);
     },
+
+    /**
+     * Add a building to the queue
+     * @param {String} building
+     */
     addToQueue(building) {
       this.newOrder.push(building);
     },
+
+    /**
+     * Remove an item from the queue
+     * @param {Integer} index
+     */
     removeFromQueue(index) {
       this.newOrder.splice(index, 1);
     }

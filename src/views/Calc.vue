@@ -8,6 +8,7 @@
           <th>Turn</th>
           <th>Building</th>
           <th>Production</th>
+          <th>Research</th>
           <th>Metal</th>
           <th>Mineral</th>
           <th>Energy</th>
@@ -19,14 +20,15 @@
           <td>{{ turn.turn }}</td>
           <td><span v-if="turn.queue.building.ref">{{ buildings[turn.queue.building.ref].name }} ({{ turn.queue.building.turns }})</span></td>
           <td><span v-if="turn.queue.production.ref">{{ units[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
+          <td><span v-if="turn.queue.research.ref">{{ research[turn.queue.research.ref].name }}</span></td>
           <td>{{ turn.stored.metal | numeral('0,0') }} ({{ turn.output.metal | numeral('+0,0') }})</td>
           <td>{{ turn.stored.mineral | numeral('0,0') }} ({{ turn.output.mineral | numeral('+0,0') }})</td>
           <td>{{ turn.stored.energy | numeral('0,0') }} ({{ turn.output.energy | numeral('+0,0') }})</td>
           <td>
             {{ (turn.stored.pop + turn.stored.pop_busy) | numeral('0,0') }}
-            ({{ turn.output.pop | numeral('0,0') }})
+            / {{ turn.storage.pop | numeral('0,0') }}
+            ({{ turn.output.pop | numeral('+0,0') }})
             / {{ turn.stored.pop_busy | numeral('0,0') }} Busy
-            / {{ turn.storage.pop | numeral('0,0') }} Storage
           </td>
         </tr>
         </tbody>
@@ -38,13 +40,16 @@
 <script>
 import BorderBox from '@/components/BorderBox'
 import Buildings from '@/buildings.js'
+import Units from '@/units.js'
+import Research from '@/research.js'
 
 export default {
   components: {
     BorderBox
   },
   props: {
-    order: Array
+    buildOrder: Array,
+    researchOrder: Array
   },
   data () {
     return {
@@ -55,15 +60,18 @@ export default {
         'metal',
         'mineral',
         'energy',
-        'pop'
+        'pop',
+        'research'
       ],
-      buildOrder: Object.assign([], this.order),
+      currentBuildOrder: Object.assign([], this.buildOrder),
+      currentResearchOrder: Object.assign([], this.researchOrder),
       stored: {
         metal: 30000,
         mineral: 20000,
         energy: 1000,
         pop: 20000,
-        pop_busy: 0
+        pop_busy: 0,
+        research: 0
       },
       storage: {
         pop: 0
@@ -72,34 +80,19 @@ export default {
         metal: 0,
         mineral: 0,
         energy: 0,
-        pop: 0
-      },
-      constructed: {
-        outpost: 1,
-        metal_mine: 3,
-        mineral_extractor: 3,
-        solar_generator: 2,
-        farm: 0
+        pop: 0,
+        research: 0
       },
       abundancies: {
         metal: 0.7,
         mineral: 0.7,
         energy: 0.7,
-        pop: 1
+        pop: 1,
+        research: 1
       },
-      units: {
-        outpost_ship: {
-          name: 'Outpost Ship',
-          turns: 16,
-          cost: {
-            metal: 30000,
-            mineral: 20000,
-            energy: 0,
-            pop: 50000
-          }
-        }
-      },
+      units: Units,
       buildings: Buildings,
+      research: Research,
       queue: {
         building: {
           ref: null,
@@ -108,12 +101,31 @@ export default {
         production: {
           ref: null,
           turns: 0
+        },
+        research: {
+          ref: null,
+          turns: 0
         }
+      },
+      constructed: {
+        outpost: 1,
+        metal_mine: 3,
+        mineral_extractor: 3,
+        solar_generator: 2,
+        farm: 0
+      },
+      researched: [],
+      researchBonus: {
+        metal: 1,
+        mineral: 1,
+        pop: 1,
+        energy: 1,
+        research: 1
       }
     }
   },
   mounted () {
-    this.calcOutput()
+    this.calcOutputAndStorage()
     this.ticks(300)
   },
   methods: {
@@ -126,7 +138,8 @@ export default {
         metal: 0,
         mineral: 0,
         energy: 0,
-        pop: 0
+        pop: 0,
+        research: 0
       }
     },
 
@@ -142,17 +155,25 @@ export default {
     /**
      * Re-calculate current planet output
      */
-    calcOutput () {
+    calcOutputAndStorage () {
       this.resetOutput()
       this.resetStorage()
+
       Object.keys(this.constructed).forEach(building => {
         this.resources.forEach(resource => {
+          // Calc outputs
           let resourceOutput = this.constructed[building] * this.buildings[building].output[resource]
+
+          // Take into account abundancy if not an energy cost or research
           if (resource !== 'energy' || this.buildings[building].output[resource] > 0) {
             resourceOutput *= this.abundancies[resource]
           }
+          if (resource !== 'research' && resource !== 'energy') {
+            resourceOutput *= this.researchBonus[resource]
+          }
           this.output[resource] += resourceOutput
 
+          // Calc storages, only do this for pop at the moment
           if (resource === 'pop') {
             this.storage[resource] += this.buildings[building].storage[resource]
           }
@@ -190,13 +211,16 @@ export default {
      */
     tick () {
       this.turn++
+      this.recordOutputs()
       this.processQueues()
       if (this.turn > 1) {
         this.addOutputs()
       }
+      this.startResearchQueue()
       this.recordOutputs()
       this.startQueues()
       this.recordOutputs()
+      this.finishResearchQueue()
     },
 
     /**
@@ -244,6 +268,15 @@ export default {
     },
 
     /**
+     * Advance or complete research queue
+     */
+    finishResearchQueue () {
+      if (this.queue.research.ref) {
+        this.researchFinish(this.queue.research.ref)
+      }
+    },
+
+    /**
      * Start construction new queue items if ready
      */
     startQueues () {
@@ -258,19 +291,19 @@ export default {
      */
     startBuildingQueue () {
       if (!this.queue.building.ref) {
-        let next = this.buildOrder.shift()
+        let next = this.currentBuildOrder.shift()
 
         if (!next) {
           return
         }
 
         if (!this.checkEnergy(next)) {
-          this.buildOrder.unshift(next)
+          this.currentBuildOrder.unshift(next)
           next = this.energyBuilding()
         }
 
         if (!this.checkBuildingResources(next)) {
-          this.buildOrder.unshift(next)
+          this.currentBuildOrder.unshift(next)
           next = null
         }
 
@@ -295,6 +328,26 @@ export default {
         if (next) {
           this.unitConstructionStart(next)
           this.$set(this.log[this.turn].queue, 'production', Object.assign({}, this.queue.production))
+        }
+      }
+    },
+
+    startResearchQueue () {
+      if (!this.queue.research.ref) {
+        let next = this.currentResearchOrder.shift()
+
+        if (!next) {
+          return
+        }
+
+        if (!this.checkReseach(next)) {
+          this.currentResearchOrder.unshift(next)
+          next = null
+        }
+
+        if (next) {
+          this.researchStart(next)
+          this.$set(this.log[this.turn].queue, 'research', Object.assign({}, this.queue.research))
         }
       }
     },
@@ -326,7 +379,7 @@ export default {
       }
       this.stored.pop += this.buildings[building].cost.pop
       this.stored.pop_busy -= this.buildings[building].cost.pop
-      this.calcOutput()
+      this.calcOutputAndStorage()
 
       this.$set(this.queue.building, 'ref', null)
       this.$set(this.queue.building, 'turns', 0)
@@ -355,11 +408,33 @@ export default {
       this.stored.pop += this.units[unit].cost.pop
       this.stored.pop_busy -= this.units[unit].cost.pop
       if (!this.first_colo_turn) {
-        this.first_colo_turn = this.turn + 24;
+        this.first_colo_turn = this.turn + 24
       }
 
       this.$set(this.queue.production, 'ref', null)
       this.$set(this.queue.production, 'turns', 0)
+    },
+
+    /**
+     * Process start of research
+     * @param {String} research
+     */
+    researchStart (research) {
+      this.stored.research -= this.research[research].cost
+      this.$set(this.queue.research, 'ref', research)
+      this.$set(this.queue.research, 'turns', 0)
+    },
+
+    /**
+     * Process completion of research
+     * @param {String} research
+     */
+    researchFinish (researchItem) {
+      this.researched.push(researchItem)
+      this.researchBonus[this.research[researchItem].affects] += this.research[researchItem].bonus
+      this.$set(this.queue.research, 'ref', null)
+      this.$set(this.queue.research, 'turns', 0)
+      this.calcOutputAndStorage()
     },
 
     /**
@@ -402,6 +477,19 @@ export default {
     },
 
     /**
+     * Check we can start a particular research item
+     */
+    checkReseach (researchItem) {
+      if (this.research[researchItem].cost > this.stored.research) {
+        return false
+      }
+      if (this.research[researchItem].requires !== null && this.researched.indexOf(this.research[researchItem].requires) === -1) {
+        return false
+      }
+      return true
+    },
+
+    /**
      * Get the best energy producing building to construct
      * @return {String}
      */
@@ -421,7 +509,7 @@ export default {
      */
     hasShipYard () {
       return this.constructed['ship_yard'] && this.constructed['ship_yard'] > 0
-    },
+    }
   }
 }
 </script>

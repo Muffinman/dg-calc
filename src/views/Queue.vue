@@ -42,17 +42,6 @@ export default {
       newOrder: this.order
     }
   },
-  computed: {
-    buildingsArray () {
-      let newArray = []
-      Object.keys(this.buildings).forEach(building => {
-        let buildingObject = this.buildings[building]
-        buildingObject.ref = building
-        newArray.push(buildingObject)
-      })
-      return newArray
-    }
-  },
   methods: {
     updateOrder() {
       this.$emit('orderUpdated', this.newOrder);

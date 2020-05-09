@@ -27,10 +27,10 @@ export default {
   },
   watch: {
     buildOrder () {
-      this.updateUrlHash();
+      this.updateUrlHash()
     },
     researchOrder () {
-      this.updateUrlHash();
+      this.updateUrlHash()
     }
   },
   data () {

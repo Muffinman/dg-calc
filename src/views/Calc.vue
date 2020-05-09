@@ -217,10 +217,9 @@ export default {
         this.addOutputs()
       }
       this.startResearchQueue()
-      //this.recordOutputs()
       this.startQueues()
-      //this.recordOutputs()
       this.finishResearchQueue()
+      this.recordOutputs()
     },
 
     /**

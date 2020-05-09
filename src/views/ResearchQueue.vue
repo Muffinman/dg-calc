@@ -58,8 +58,8 @@ export default {
     }
   },
   watch: {
-    order() {
-      this.newOrder = this.order;
+    order () {
+      this.newOrder = this.order
     }
   },
   methods: {

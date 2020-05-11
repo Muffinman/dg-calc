@@ -138,7 +138,7 @@ let buildings = {
     cost: {
       metal: 60000,
       mineral: 40000,
-      pop: 40000,
+      pop: 80000,
       energy: 0,
       research: 0
     },

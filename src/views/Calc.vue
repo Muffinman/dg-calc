@@ -53,9 +53,25 @@ export default {
   },
   data () {
     return {
+
+      /**
+       * Current tick/turn
+       */
       turn: 0,
+
+      /**
+       * Debug log
+       */
       log: {},
+
+      /**
+       * Current first colo turn
+       */
       first_colo_turn: 0,
+
+      /**
+       * List of resources
+       */
       resources: [
         'metal',
         'mineral',
@@ -63,8 +79,20 @@ export default {
         'pop',
         'research'
       ],
+
+      /**
+       * Current building order
+       */
       currentBuildOrder: Object.assign([], this.buildOrder),
+
+      /**
+       * Current research order
+       */
       currentResearchOrder: Object.assign([], this.researchOrder),
+
+      /**
+       * Current stored planet resources
+       */
       stored: {
         metal: 30000,
         mineral: 20000,
@@ -73,9 +101,17 @@ export default {
         pop_busy: 0,
         research: 0
       },
+
+      /**
+       * Current resource storage limits
+       */
       storage: {
         pop: 0
       },
+
+      /**
+       * Current calculated planet output
+       */
       output: {
         metal: 0,
         mineral: 0,
@@ -83,6 +119,10 @@ export default {
         pop: 0,
         research: 0
       },
+
+      /**
+       * Home planet abundances
+       */
       abundancies: {
         metal: 0.7,
         mineral: 0.7,
@@ -90,9 +130,25 @@ export default {
         pop: 1,
         research: 1
       },
+
+      /**
+       * List of units
+       */
       units: Units,
+
+      /**
+       * List of buildings
+       */
       buildings: Buildings,
+
+      /**
+       * List of research
+       */
       research: Research,
+
+      /**
+       * Current queues
+       */
       queue: {
         building: {
           ref: null,
@@ -107,6 +163,10 @@ export default {
           turns: 0
         }
       },
+
+      /**
+       * Completed structures
+       */
       constructed: {
         outpost: 1,
         metal_mine: 3,
@@ -114,7 +174,15 @@ export default {
         solar_generator: 2,
         farm: 0
       },
+
+      /**
+       * Completed research
+       */
       researched: [],
+
+      /**
+       * Calculated research bonuses
+       */
       researchBonus: {
         metal: 1,
         mineral: 1,
@@ -155,10 +223,12 @@ export default {
       }
     }
   },
+
   mounted () {
     this.calcOutputAndStorage()
     this.ticks(300)
   },
+
   methods: {
 
     /**

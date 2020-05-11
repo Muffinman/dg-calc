@@ -121,6 +121,37 @@ export default {
         pop: 1,
         energy: 1,
         research: 1
+      },
+
+      /**
+       * Syntax:
+       * source: { destination: turns }
+       */
+      travel: {
+        homeworld : {
+          center: 24,
+          inner: 24,
+          outer: 24,
+          homeworld: 24,
+        },
+        center: {
+          center: 12,
+          inner: 20,
+          outer: 28,
+          homeworld: 24,
+        },
+        inner: {
+          center: 12,
+          inner: 12,
+          outer: 20,
+          homeworld: 24,
+        },
+        outer: {
+          center: 16,
+          inner: 16,
+          outer: 12,
+          homeworld: 24,
+        },
       }
     }
   },
@@ -407,7 +438,7 @@ export default {
       this.stored.pop += this.units[unit].cost.pop
       this.stored.pop_busy -= this.units[unit].cost.pop
       if (!this.first_colo_turn) {
-        this.first_colo_turn = this.turn + 24
+        this.first_colo_turn = this.turn + this.travel.homeworld.center;
       }
 
       this.$set(this.queue.production, 'ref', null)

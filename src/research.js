@@ -208,6 +208,146 @@ let research = {
     bonus: 0.15,
     affects: 'pop',
     requires: 'pop_9'
+  },
+  planet_limit_8: {
+    name: 'Planet Limit 8',
+    cost: 24,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: null
+  },
+  planet_limit_10: {
+    name: 'Planet Limit 10',
+    cost: 36,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: 'planet_limit_8'
+  },
+  planet_limit_12: {
+    name: 'Planet Limit 12',
+    cost: 48,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: 'planet_limit_10'
+  },
+  planet_limit_14: {
+    name: 'Planet Limit 14',
+    cost: 60,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: 'planet_limit_12'
+  },
+  planet_limit_16: {
+    name: 'Planet Limit 16',
+    cost: 72,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: 'planet_limit_14'
+  },
+  planet_limit_18: {
+    name: 'Planet Limit 18',
+    cost: 84,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: 'planet_limit_16'
+  },
+  planet_limit_20: {
+    name: 'Planet Limit 20',
+    cost: 96,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: 'planet_limit_18'
+  },
+  planet_limit_22: {
+    name: 'Planet Limit 22',
+    cost: 108,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: 'planet_limit_20'
+  },
+  planet_limit_24: {
+    name: 'Planet Limit 24',
+    cost: 120,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: 'planet_limit_22'
+  },
+  planet_limit_26: {
+    name: 'Planet Limit 26',
+    cost: 132,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: 'planet_limit_24'
+  },
+  planet_limit_28: {
+    name: 'Planet Limit 28',
+    cost: 144,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: 'planet_limit_26'
+  },
+  planet_limit_30: {
+    name: 'Planet Limit 30',
+    cost: 156,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: 'planet_limit_28'
+  },
+  planet_limit_32: {
+    name: 'Planet Limit 32',
+    cost: 168,
+    bonus: null,
+    affects: 'planet_limit',
+    requires: 'planet_limit_30'
+  },
+  queue_length_4: {
+    name: 'Queue Length 4',
+    cost: 48,
+    bonus: null,
+    affects: 'queue_length',
+    requires: null
+  },
+  queue_length_5: {
+    name: 'Queue Length 5',
+    cost: 48,
+    bonus: null,
+    affects: 'queue_length',
+    requires: 'queue_length_4'
+  },
+  queue_length_6: {
+    name: 'Queue Length 6',
+    cost: 48,
+    bonus: null,
+    affects: 'queue_length',
+    requires: 'queue_length_5'
+  },
+  queue_length_7: {
+    name: 'Queue Length 7',
+    cost: 48,
+    bonus: null,
+    affects: 'queue_length',
+    requires: 'queue_length_6'
+  },
+  queue_length_8: {
+    name: 'Queue Length 8',
+    cost: 48,
+    bonus: null,
+    affects: 'queue_length',
+    requires: 'queue_length_7'
+  },
+  queue_length_9: {
+    name: 'Queue Length 9',
+    cost: 48,
+    bonus: null,
+    affects: 'queue_length',
+    requires: 'queue_length_8'
+  },
+  queue_length_10: {
+    name: 'Queue Length 10',
+    cost: 48,
+    bonus: null,
+    affects: 'queue_length',
+    requires: 'queue_length_9'
   }
 }
 

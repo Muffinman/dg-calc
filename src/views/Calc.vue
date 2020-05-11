@@ -319,8 +319,8 @@ export default {
       }
       this.startResearchQueue()
       this.startQueues()
-      this.finishResearchQueue()
       this.recordOutputs()
+      this.finishResearchQueue()
     },
 
     /**

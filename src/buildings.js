@@ -1,4 +1,26 @@
 let buildings = {
+  wait: {
+    name: 'Wait...',
+    turns: 1,
+    canBuild: true,
+    cost: {
+      metal: 0,
+      mineral: 0,
+      energy: 0,
+      pop: 0,
+      research: 0
+    },
+    output: {
+      metal: 0,
+      mineral: 0,
+      energy: 0,
+      pop: 0,
+      research: 0
+    },
+    storage: {
+      pop: 0
+    }
+  },
   outpost: {
     name: 'Outpost',
     turns: 0,

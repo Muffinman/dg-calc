@@ -6,7 +6,9 @@
       <h3>Available</h3>
       <ul class="queue">
         <li v-for="(item, index) in availableResearch" :key="index">
-          <button @click="addToQueue(item.ref)">+</button> {{ item.name }}
+          <button @click="addToQueue(item.ref)">+</button>
+          <img :src="item.image" :title="item.name" class="image-queue">
+          {{ item.name }}
         </li>
       </ul>
 
@@ -14,7 +16,9 @@
       <ul class="queue draggable">
         <draggable :list="newOrder" group="research" @change="updateOrder">
           <li v-for="(item, index) in newOrder" :key="index">
-            <button @click="removeFromQueue(index)">x</button> {{ research[item].name }}
+            <button @click="removeFromQueue(index)">x</button>
+            <img :src="research[item].image" :title="research[item].name" class="image-queue">
+            {{ research[item].name }}
           </li>
         </draggable>
       </ul>
@@ -88,3 +92,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.image-queue {
+  width: 18px;
+}
+</style>

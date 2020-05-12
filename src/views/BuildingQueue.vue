@@ -14,7 +14,7 @@
       <ul class="queue draggable">
         <draggable :list="newOrder" group="buildings" @change="updateOrder">
           <li v-for="(building, index) in newOrder" :key="index">
-            <button @click="removeFromQueue(index)">x</button> {{ buildings[building].name }}
+            <button @click="removeFromQueue(index)">x</button> {{ `${building.turn} ${buildings[building.key].name}` }}
           </li>
         </draggable>
       </ul>
@@ -71,7 +71,11 @@ export default {
      * @param {String} building
      */
     addToQueue (building) {
-      this.newOrder.push(building)
+      this.newOrder.push({
+        turn: null,
+        key: building
+      })
+      this.$emit('orderUpdated', this.newOrder)
     },
 
     /**

@@ -5,14 +5,14 @@
       <table>
         <thead>
         <tr>
-          <th>Turn</th>
-          <th>Building</th>
-          <th>Production</th>
-          <th>Research</th>
-          <th>Metal</th>
-          <th>Mineral</th>
-          <th>Energy</th>
-          <th>Pop</th>
+          <th><img :src="`${imgDG}/units/small/time.png`" title="Turn" class="image-header"></th>
+          <th><img :src="`${imgDG}/buttons/construction.png`" title="Building" class="image-header"> Building</th>
+          <th><img :src="`${imgDG}/buttons/production.png`" title="Production" class="image-header"> Production</th>
+          <th><img :src="`${imgDG}/icons/research_small.png`" title="Research" class="image-header"> Research</th>
+          <th><img :src="`${imgDG}/units/small/metal.gif`" title="Metal" class="image-header"> Metal</th>
+          <th><img :src="`${imgDG}/units/small/mineral.gif`" title="Mineral" class="image-header"> Mineral</th>
+          <th><img :src="`${imgDG}/units/small/energy.gif`" title="Energy" class="image-header"> Energy</th>
+          <th><img :src="`${imgDG}/units/small/worker.gif`" title="Population" class="image-header"> Population</th>
         </tr>
         </thead>
         <tbody>
@@ -21,14 +21,14 @@
           <td><span v-if="turn.queue.building.ref">{{ buildings[turn.queue.building.ref].name }} ({{ turn.queue.building.turns }})</span></td>
           <td><span v-if="turn.queue.production.ref">{{ units[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
           <td><span v-if="turn.queue.research.ref">{{ research[turn.queue.research.ref].name }}</span></td>
-          <td>{{ turn.stored.metal | numeral('0,0') }} ({{ turn.output.metal | numeral('+0,0') }})</td>
-          <td>{{ turn.stored.mineral | numeral('0,0') }} ({{ turn.output.mineral | numeral('+0,0') }})</td>
-          <td>{{ turn.stored.energy | numeral('0,0') }} ({{ turn.output.energy | numeral('+0,0') }})</td>
+          <td class="metal">{{ turn.stored.metal | numeral('0,0') }} ({{ turn.output.metal | numeral('+0,0') }})</td>
+          <td class="mineral">{{ turn.stored.mineral | numeral('0,0') }} ({{ turn.output.mineral | numeral('+0,0') }})</td>
+          <td class="energy">{{ turn.stored.energy | numeral('0,0') }} ({{ turn.output.energy | numeral('+0,0') }})</td>
           <td>
             {{ (turn.stored.pop + turn.stored.pop_busy) | numeral('0,0') }}
             / {{ turn.storage.pop | numeral('0,0') }}
-            ({{ turn.output.pop | numeral('+0,0') }})
-            / {{ turn.stored.pop_busy | numeral('0,0') }} Busy
+            <span class="population">({{ turn.output.pop | numeral('+0,0') }}) </span>
+            <span class="neutral">({{ turn.stored.pop_busy | numeral('0,0') }} occupied)</span>
           </td>
         </tr>
         </tbody>
@@ -220,7 +220,12 @@ export default {
           outer: 12,
           homeworld: 24
         }
-      }
+      },
+
+      /**
+       * Link to the website of Dark Galaxy to get images
+       */
+      imgDG: 'https://beta.darkgalaxy.com/images'
     }
   },
 
@@ -617,3 +622,29 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.image-header {
+  width: 17px;
+}
+
+.metal {
+  color: #EEEEEE;
+}
+
+.mineral {
+  color: #E33E4C;
+}
+
+.energy {
+  color: #6596DA;
+}
+
+.population {
+  color: #EAC861;
+}
+
+.neutral {
+  color: #9B9B9B;
+}
+</style>

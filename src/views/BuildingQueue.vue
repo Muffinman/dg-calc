@@ -6,7 +6,9 @@
       <h3>Available</h3>
       <ul class="queue">
         <li v-for="(building, index) in availableBuildings" :key="index">
-          <button @click="addToQueue(index)">+</button> {{ building.name }}
+          <button class="button-add" title="Add" @click="addToQueue(index)">+</button>
+          <img :src="building.image" :title="building.name" class="image-queue">
+          {{ building.name }}
         </li>
       </ul>
 
@@ -14,7 +16,9 @@
       <ul class="queue draggable">
         <draggable :list="newOrder" group="buildings" @change="updateOrder">
           <li v-for="(building, index) in newOrder" :key="index">
-            <button @click="removeFromQueue(index)">x</button> {{ `${building.turn} ${buildings[building.key].name}` }}
+            <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
+            <img :src="buildings[building.key].image" :title="buildings[building.key].name" class="image-queue">
+            {{ `${building.turn} ${buildings[building.key].name}` }}
           </li>
         </draggable>
       </ul>
@@ -39,7 +43,8 @@ export default {
   data () {
     return {
       buildings: Buildings,
-      newOrder: this.order
+      newOrder: this.order,
+      imgDG: 'https://beta.darkgalaxy.com/images'
     }
   },
   computed: {
@@ -88,3 +93,22 @@ export default {
   }
 }
 </script>
+
+<style>
+.image-queue {
+  width: 18px;
+  margin-left: 10px;
+}
+
+.button-destroy {
+  width: 23px;
+  vertical-align: bottom;
+}
+
+.button-add {
+  background-color: black;
+  color: darkgrey;
+  border: none;
+  cursor: pointer;
+}
+</style>

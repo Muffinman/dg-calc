@@ -6,7 +6,9 @@
       <h3>Available</h3>
       <ul class="queue">
         <li v-for="(item, index) in availableResearch" :key="index">
-          <button @click="addToQueue(item.ref)">+</button> {{ item.name }}
+          <button class="button-add" title="Add" @click="addToQueue(item.ref)">+</button>
+          <img :src="item.image" :title="item.name" class="image-queue">
+          {{ item.name }}
         </li>
       </ul>
 
@@ -14,7 +16,9 @@
       <ul class="queue draggable">
         <draggable :list="newOrder" group="research" @change="updateOrder">
           <li v-for="(item, index) in newOrder" :key="index">
-            <button @click="removeFromQueue(index)">x</button> {{ research[item].name }}
+            <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
+            <img :src="research[item].image" :title="research[item].name" class="image-queue">
+            {{ research[item].name }}
           </li>
         </draggable>
       </ul>
@@ -39,7 +43,8 @@ export default {
   data () {
     return {
       research: Research,
-      newOrder: this.order
+      newOrder: this.order,
+      imgDG: 'https://beta.darkgalaxy.com/images'
     }
   },
   computed: {
@@ -88,3 +93,22 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.image-queue {
+  width: 18px;
+  margin-left: 3px;
+}
+
+.button-destroy {
+  width: 23px;
+  vertical-align: bottom;
+}
+
+.button-add {
+  background-color: black;
+  color: darkgrey;
+  border: none;
+  cursor: pointer;
+}
+</style>

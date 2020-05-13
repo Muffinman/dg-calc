@@ -276,7 +276,7 @@ export default {
 
           // Calc storages, only do this for pop at the moment
           if (resource === 'pop') {
-            this.storage[resource] += this.buildings[building].storage[resource]
+            this.storage[resource] += this.constructed[building] * this.buildings[building].storage[resource]
           }
         })
       })

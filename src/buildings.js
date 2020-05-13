@@ -22,7 +22,7 @@ let buildings = {
     storage: {
       pop: 0
     },
-    image: `${imgDG}/units/main/ships/outpost_ship.gif`
+    image: `${imgDG}/units/small/time.png`
   },
   outpost: {
     name: 'Outpost',

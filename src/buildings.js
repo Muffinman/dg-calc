@@ -1,3 +1,5 @@
+const imgDG = 'https://beta.darkgalaxy.com/images'
+
 let buildings = {
   wait: {
     name: 'Wait...',
@@ -19,7 +21,8 @@ let buildings = {
     },
     storage: {
       pop: 0
-    }
+    },
+    image: `${imgDG}/units/main/ships/outpost_ship.gif`
   },
   outpost: {
     name: 'Outpost',
@@ -41,7 +44,8 @@ let buildings = {
     },
     storage: {
       pop: 50000
-    }
+    },
+    image: `${imgDG}/units/main/structures/outpost.png`
   },
   metal_mine: {
     name: 'Metal Mine',
@@ -63,7 +67,8 @@ let buildings = {
     },
     storage: {
       pop: 0
-    }
+    },
+    image: `${imgDG}/units/main/structures/metal_mine.jpg`
   },
   mineral_extractor: {
     name: 'Mineral Extractor',
@@ -85,7 +90,8 @@ let buildings = {
     },
     storage: {
       pop: 0
-    }
+    },
+    image: `${imgDG}/units/main/structures/mineral_extractor.jpg`
   },
   farm: {
     name: 'Farm',
@@ -107,7 +113,8 @@ let buildings = {
     },
     storage: {
       pop: 0
-    }
+    },
+    image: `${imgDG}/units/main/structures/farm.jpg`
   },
   solar_generator: {
     name: 'Solar Generator',
@@ -129,7 +136,8 @@ let buildings = {
     },
     storage: {
       pop: 0
-    }
+    },
+    image: `${imgDG}/units/main/structures/solar_generator.jpg`
   },
   launch_site: {
     name: 'Launch Site',
@@ -151,7 +159,8 @@ let buildings = {
     },
     storage: {
       pop: 0
-    }
+    },
+    image: `${imgDG}/units/main/structures/launch_site.jpg`
   },
   colony: {
     name: 'Colony',
@@ -173,7 +182,8 @@ let buildings = {
     },
     storage: {
       pop: 125000
-    }
+    },
+    image: `${imgDG}/units/main/structures/colony.jpg`
   },
   ship_yard: {
     name: 'Ship Yard',
@@ -195,7 +205,8 @@ let buildings = {
     },
     storage: {
       pop: 0
-    }
+    },
+    image: `${imgDG}/units/main/structures/ship_yard.jpg`
   },
   comms_satellite: {
     name: 'Comms Satellite',
@@ -217,7 +228,8 @@ let buildings = {
     },
     storage: {
       pop: 0
-    }
+    },
+    image: `${imgDG}/units/main/structures/comms_satellite.jpg`
   },
   living_quarters: {
     name: 'Living Quarters',
@@ -239,7 +251,8 @@ let buildings = {
     },
     storage: {
       pop: 50000
-    }
+    },
+    image: `${imgDG}/units/main/structures/living_quarters.jpg`
   },
   habitat: {
     name: 'Habitat',
@@ -261,7 +274,8 @@ let buildings = {
     },
     storage: {
       pop: 75000
-    }
+    },
+    image: `${imgDG}/units/main/structures/habitat.jpg`
   }
 }
 

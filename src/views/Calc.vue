@@ -623,7 +623,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .image-header {
   width: 17px;
 }

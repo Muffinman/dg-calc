@@ -1,0 +1,125 @@
+<template>
+  <div>
+    <border-box>
+      <h2 slot="header" class="card-header-title">Ship <strong>Order</strong></h2>
+
+      <h3>Available</h3>
+      <ul class="queue">
+        <li v-for="(ship, ref) in availableShips" :key="ref">
+          <button class="button-add" title="Add" @click="addToQueue(ship.ref)">+</button>
+          <img :src="ship.image" :title="ship.name" class="image-queue">
+          {{ ship.name }}
+        </li>
+      </ul>
+
+      <h3>Current Queue</h3>
+      <ul class="queue draggable">
+        <draggable :list="newOrder" group="ships" @change="updateOrder">
+          <li v-for="(item, index) in newOrder" :key="index">
+            <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
+            <img :src="ships[item].image" :title="ships[item].name" class="image-queue">
+            {{ ships[item].name }}
+          </li>
+        </draggable>
+      </ul>
+
+    </border-box>
+  </div>
+</template>
+
+<script>
+import BorderBox from '@/components/BorderBox'
+import Ships from '@/ships.js'
+import Draggable from 'vuedraggable'
+
+export default {
+  components: {
+    BorderBox,
+    Draggable
+  },
+  props: {
+    order: Array,
+    buildings: Array
+  },
+  data () {
+    return {
+      ships: Ships,
+      newOrder: this.order,
+      imgDG: 'https://beta.darkgalaxy.com/images'
+    }
+  },
+  computed: {
+    availableShips () {
+      let available = []
+
+      for (let ref in this.ships) {
+        let ship = this.ships[ref]
+        ship.ref = ref
+        if (this.buildingRequirementsMet(ship)) {
+          available.push(ship)
+        }
+      }
+
+      return available
+    }
+  },
+  watch: {
+    order () {
+      this.newOrder = this.order
+    }
+  },
+  methods: {
+    /**
+     * Emit the updated queue order to the parent
+     */
+    updateOrder () {
+      this.$emit('orderUpdated', this.newOrder)
+    },
+
+    /**
+     * Add a ship to the queue
+     * @param {String} ship
+     */
+    addToQueue (ship) {
+      this.newOrder.push(ship)
+    },
+
+    /**
+     * Remove an item from the queue
+     * @param {Integer} index
+     */
+    removeFromQueue (index) {
+      this.newOrder.splice(index, 1)
+    },
+
+    /**
+     * Check if the required buildings are constructed for a given ship
+     * @param {string} ship
+     */
+    buildingRequirementsMet (ship) {
+      return ship.requires.every(building => {
+        return this.buildings.includes(building)
+      })
+    }
+  }
+}
+</script>
+
+<style scoped>
+.image-queue {
+  width: 18px;
+  margin-left: 3px;
+}
+
+.button-destroy {
+  width: 23px;
+  vertical-align: bottom;
+}
+
+.button-add {
+  background-color: black;
+  color: darkgrey;
+  border: none;
+  cursor: pointer;
+}
+</style>

@@ -5,8 +5,8 @@
 
       <h3>Available</h3>
       <ul class="queue">
-        <li v-for="(ship, ref) in availableShips" :key="ref">
-          <button class="button-add" title="Add" @click="addToQueue(ship.ref)">+</button>
+        <li v-for="(ship, ref) in available" :key="ref">
+          <button class="button-add" title="Add" @click="addToQueue(ref)">+</button>
           <img :src="ship.image" :title="ship.name" class="image-queue">
           {{ ship.name }}
         </li>
@@ -15,10 +15,10 @@
       <h3>Current Queue</h3>
       <ul class="queue draggable">
         <draggable :list="newOrder" group="ships" @change="updateOrder">
-          <li v-for="(item, index) in newOrder" :key="index">
+          <li v-for="(ref, index) in newOrder" :key="index">
             <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
-            <img :src="ships[item].image" :title="ships[item].name" class="image-queue">
-            {{ ships[item].name }}
+            <img :src="ships[ref].image" :title="ships[ref].name" class="image-queue">
+            {{ ships[ref].name }}
           </li>
         </draggable>
       </ul>
@@ -39,28 +39,13 @@ export default {
   },
   props: {
     order: Array,
-    buildings: Array
+    available: Object
   },
   data () {
     return {
       ships: Ships,
       newOrder: this.order,
       imgDG: 'https://beta.darkgalaxy.com/images'
-    }
-  },
-  computed: {
-    availableShips () {
-      let available = []
-
-      for (let ref in this.ships) {
-        let ship = this.ships[ref]
-        ship.ref = ref
-        if (this.buildingRequirementsMet(ship)) {
-          available.push(ship)
-        }
-      }
-
-      return available
     }
   },
   watch: {
@@ -90,16 +75,6 @@ export default {
      */
     removeFromQueue (index) {
       this.newOrder.splice(index, 1)
-    },
-
-    /**
-     * Check if the required buildings are constructed for a given ship
-     * @param {string} ship
-     */
-    buildingRequirementsMet (ship) {
-      return ship.requires.every(building => {
-        return this.buildings.includes(building)
-      })
     }
   }
 }

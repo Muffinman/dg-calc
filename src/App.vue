@@ -1,12 +1,12 @@
 <template>
   <div id="app" class="flex">
     <div class="content flex justify-content-stretch scroll">
-      <building-queue :order="buildOrder" @orderUpdated="updateBuildOrder"/>
+      <building-queue :order="buildOrder" @orderUpdated="updateBuildOrder" />
       <div class="margin-left">
-        <research-queue :order="researchOrder" @orderUpdated="updateResearchOrder"/>
-        <ship-queue :order="shipOrder" :buildings="constructedBuildingsForShips" @orderUpdated="updateShipOrder" class="margin-top"/>
+        <research-queue :order="researchOrder" @orderUpdated="updateResearchOrder" />
+        <ship-queue :order="shipOrder" :available="availableShips" @orderUpdated="updateShipOrder" class="margin-top" />
       </div>
-      <calc :build-order="buildOrder" :research-order="researchOrder" :ship-order="shipOrder" class="grow margin-left" :key="orderHash"/>
+      <calc :build-order="buildOrder" :research-order="researchOrder" :ship-order="shipOrder" class="grow margin-left" :key="orderHash" />
     </div>
   </div>
 </template>
@@ -16,6 +16,7 @@ import Calc from './views/Calc'
 import BuildingQueue from './views/BuildingQueue'
 import ResearchQueue from './views/ResearchQueue'
 import ShipQueue from './views/ShipQueue'
+import Ships from '@/ships.js'
 import md5 from 'md5'
 
 export default {
@@ -29,16 +30,20 @@ export default {
     orderHash () {
       return md5(JSON.stringify(this.buildOrder) + JSON.stringify(this.researchOrder))
     },
-    constructedBuildingsForShips () {
-      return [
-        'ship_yard',
-        'light_weapons_factory',
-        'heavy_weapons_factory',
-        'space_dock',
-        'holo_generator'
-      ].filter(building => {
-        return this.buildingIsConstructed(building)
-      })
+    availableShips () {
+      let ships = {}
+
+      for (let shipRef in this.ships) {
+        if (this.ships[shipRef].requires.every(
+          requiredBuildingRef => this.buildOrder.some(
+            ({ ref }) => requiredBuildingRef === ref
+          )
+        )) {
+          ships[shipRef] = this.ships[shipRef]
+        }
+      }
+
+      return ships
     }
   },
   watch: {
@@ -56,7 +61,8 @@ export default {
     return {
       buildOrder: [],
       researchOrder: [],
-      shipOrder: []
+      shipOrder: [],
+      ships: Ships
     }
   },
   mounted () {
@@ -96,17 +102,7 @@ export default {
      * Update stored URL hash of build order
      */
     updateUrlHash () {
-      window.location.hash = btoa(JSON.stringify([this.buildOrder, this.researchOrder, this.shipOrder]))
-    },
-
-    /**
-     * Check if a building is constructed
-     * @param {string} building
-     */
-    buildingIsConstructed (building) {
-      return this.buildOrder.some(({ key }) => {
-        return key === building
-      })
+      window.location.hash = btoa(JSON.stringify([ this.buildOrder, this.researchOrder, this.shipOrder ]))
     },
 
     /**
@@ -157,12 +153,10 @@ export default {
         data = data.map(building => {
           building.ref = building.key
           delete building.key
-          console.log(building)
           return building
         })
       }
 
-      console.log(data)
       return data
     }
   }

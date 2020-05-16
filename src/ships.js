@@ -1,6 +1,18 @@
 const imgDG = 'https://beta.darkgalaxy.com/images'
 
 let ships = {
+  wait: {
+    name: 'Wait...',
+    turns: 1,
+    cost: {
+      metal: 0,
+      mineral: 0,
+      energy: 0,
+      pop: 0
+    },
+    requires: [],
+    image: `${imgDG}/units/small/time.png`
+  },
   outpost_ship: {
     name: 'Outpost Ship',
     turns: 16,

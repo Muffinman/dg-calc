@@ -138,8 +138,6 @@ export default {
         return data
       }
 
-      console.log(data)
-
       // Migrate from v1 to v2
       data = data.map(item => {
         if (typeof item === 'string') {

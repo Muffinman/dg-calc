@@ -399,21 +399,21 @@ export default {
           return
         }
 
-        if (!this.checkEnergy(next.key)) {
+        if (!this.checkEnergy(next.ref)) {
           this.currentBuildOrder.unshift(next)
           next = {
             turn: null,
-            key: this.energyBuilding()
+            ref: this.energyBuilding()
           }
         }
 
-        if (!this.checkBuildingResources(next.key)) {
+        if (!this.checkBuildingResources(next.ref)) {
           this.currentBuildOrder.unshift(next)
           next = null
         }
 
         if (next) {
-          this.buildingConstructionStart(next.key)
+          this.buildingConstructionStart(next.ref)
           this.$set(this.log[this.turn].queue, 'building', Object.assign({}, this.queue.building))
           next.turn = this.turn
         }

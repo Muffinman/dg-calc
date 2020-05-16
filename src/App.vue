@@ -59,6 +59,14 @@ export default {
       shipOrder: []
     }
   },
+  mounted () {
+    if (window.location.hash) {
+      let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
+      this.$set(this, 'buildOrder', this.migrateBuildingData(loadedData[0]))
+      this.$set(this, 'researchOrder', loadedData[1])
+      this.$set(this, 'shipOrder', loadedData[2] === undefined ? [] : loadedData[2])
+    }
+  },
   methods: {
     /**
      * We received an orderUpdated event for buildings, propagate to children
@@ -99,14 +107,63 @@ export default {
       return this.buildOrder.some(({ key }) => {
         return key === building
       })
-    }
-  },
-  mounted () {
-    if (window.location.hash) {
-      let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
-      this.$set(this, 'buildOrder', loadedData[0])
-      this.$set(this, 'researchOrder', loadedData[1])
-      this.$set(this, 'shipOrder', loadedData[2] === undefined ? [] : loadedData[2])
+    },
+
+    /**
+     * Different versions of hashes exist, which results in the annoying fact that when people load a bookmarked buildlist, they lost their data.
+     * To avoid frustration, we execute a migration step.
+     *
+     * v1: Only use string containing building ref.
+     * Example:
+     * [ 'mineral_extractor' ]
+     *
+     * v2: Change string to object with keys 'turn' and 'key'.
+     * Example:
+     * [
+     *   {
+     *     turn: '1',
+     *     key: 'mineral_extractor'
+     *   }
+     * ]
+     *
+     * v3: change object key 'key' to 'ref', as is used in most places in the code.
+     * Example:
+     * [
+     *   {
+     *     turn: '1',
+     *     ref: 'mineral_extractor'
+     *   }
+     * ]
+     *
+     * @param {Object} data
+     */
+    migrateBuildingData (data) {
+      if (data.length === 0) {
+        return data
+      }
+
+      // Migrate from v1 to v2
+      if (typeof data[0] === 'string') {
+        data = data.map(ref => {
+          return {
+            turn: null,
+            key: ref
+          }
+        })
+      }
+
+      // Migrate from v2 to v3
+      if (data[0].key) {
+        data = data.map(building => {
+          building.ref = building.key
+          delete building.key
+          console.log(building)
+          return building
+        })
+      }
+
+      console.log(data)
+      return data
     }
   }
 }

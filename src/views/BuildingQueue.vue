@@ -1,12 +1,13 @@
 <template>
   <div>
     <border-box>
+
       <h2 slot="header" class="card-header-title">Building <strong>Order</strong></h2>
 
       <h3>Available</h3>
       <ul class="queue">
-        <li v-for="(building, index) in availableBuildings" :key="index">
-          <button class="button-add" title="Add" @click="addToQueue(index)">+</button>
+        <li v-for="(building, ref) in availableBuildings" :key="ref">
+          <button class="button-add" title="Add" @click="addToQueue(ref)">+</button>
           <img :src="building.image" :title="building.name" class="image-queue">
           {{ building.name }}
         </li>

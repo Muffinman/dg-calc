@@ -323,15 +323,22 @@ export default {
      */
     tick () {
       this.turn++
+
       this.recordOutputs()
-      this.processQueues()
+
+      this.processBuildingQueue()
+      this.processProductionQueue()
+
       if (this.turn > 1) {
         this.addOutputs()
       }
+
       this.startResearchQueue()
       this.startBuildingQueue()
       this.startProductionQueue()
+
       this.recordOutputs()
+
       this.finishResearchQueue()
     },
 
@@ -342,16 +349,6 @@ export default {
     ticks (count) {
       for (let i = 0; i < count; i++) {
         this.tick()
-      }
-    },
-
-    /**
-     * Advance all queues
-     */
-    processQueues () {
-      this.processBuildingQueue()
-      if (this.hasShipYard()) {
-        this.processProductionQueue()
       }
     },
 
@@ -424,18 +421,22 @@ export default {
      * Find next ship for production queue
      */
     startProductionQueue () {
-      if (this.hasShipYard()) {
-        if (!this.queue.production.ref) {
-          let next = 'outpost_ship'
+      if (!this.queue.production.ref) {
+        let next = this.currentShipOrder.shift()
 
-          if (!this.checkShipResources(next)) {
-            next = null
-          }
+        if (!next) {
+          return
+        }
 
-          if (next) {
-            this.shipConstructionStart(next)
-            this.$set(this.log[this.turn].queue, 'production', Object.assign({}, this.queue.production))
-          }
+        if (!this.checkShipResources(next.ref)) {
+          this.currentShipOrder.unshift(next)
+          next = null
+        }
+
+        if (next) {
+          this.shipConstructionStart(next.ref)
+          this.$set(this.log[this.turn].queue, 'production', Object.assign({}, this.queue.production))
+          next.turn = this.turn
         }
       }
     },

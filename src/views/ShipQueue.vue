@@ -1,6 +1,7 @@
 <template>
   <div>
     <border-box>
+
       <h2 slot="header" class="card-header-title">Ship <strong>Order</strong></h2>
 
       <h3>Available</h3>
@@ -15,10 +16,10 @@
       <h3>Current Queue</h3>
       <ul class="queue draggable">
         <draggable :list="newOrder" group="ships" @change="updateOrder">
-          <li v-for="(ref, index) in newOrder" :key="index">
+          <li v-for="(ship, index) in newOrder" :key="index">
             <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
-            <img :src="ships[ref].image" :title="ships[ref].name" class="image-queue">
-            {{ ships[ref].name }}
+            <img :src="ships[ship.ref].image" :title="ships[ship.ref].name" class="image-queue">
+            {{ `${ship.turn} ${ships[ship.ref].name}` }}
           </li>
         </draggable>
       </ul>
@@ -66,7 +67,10 @@ export default {
      * @param {String} ship
      */
     addToQueue (ship) {
-      this.newOrder.push(ship)
+      this.newOrder.push({
+        turn: null,
+        ref: ship
+      })
     },
 
     /**

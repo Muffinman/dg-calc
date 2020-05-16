@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     orderHash () {
-      return md5(JSON.stringify(this.buildOrder) + JSON.stringify(this.researchOrder))
+      return md5(JSON.stringify(this.buildOrder) + JSON.stringify(this.researchOrder) + JSON.stringify(this.shipOrder))
     },
     availableShips () {
       let ships = {}
@@ -138,24 +138,29 @@ export default {
         return data
       }
 
+      console.log(data)
+
       // Migrate from v1 to v2
-      if (typeof data[0] === 'string') {
-        data = data.map(ref => {
-          return {
+      data = data.map(item => {
+        if (typeof item === 'string') {
+          item = {
             turn: null,
-            key: ref
+            key: item
           }
-        })
-      }
+        }
+        return item
+      })
 
       // Migrate from v2 to v3
-      if (data[0].key) {
-        data = data.map(building => {
-          building.ref = building.key
-          delete building.key
-          return building
-        })
-      }
+      data = data.map(item => {
+        if (item.key) {
+          item = {
+            turn: null,
+            ref: item.key
+          }
+        }
+        return item
+      })
 
       return data
     }

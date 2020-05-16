@@ -1,6 +1,7 @@
 <template>
   <div>
     <border-box>
+
       <h2 slot="header" class="card-header-title">Research <strong>Order</strong></h2>
 
       <h3>Available</h3>

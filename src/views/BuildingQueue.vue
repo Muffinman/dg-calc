@@ -1,12 +1,13 @@
 <template>
   <div>
     <border-box>
+
       <h2 slot="header" class="card-header-title">Building <strong>Order</strong></h2>
 
       <h3>Available</h3>
       <ul class="queue">
-        <li v-for="(building, index) in availableBuildings" :key="index">
-          <button class="button-add" title="Add" @click="addToQueue(index)">+</button>
+        <li v-for="(building, ref) in availableBuildings" :key="ref">
+          <button class="button-add" title="Add" @click="addToQueue(ref)">+</button>
           <img :src="building.image" :title="building.name" class="image-queue">
           {{ building.name }}
         </li>
@@ -17,8 +18,8 @@
         <draggable :list="newOrder" group="buildings" @change="updateOrder">
           <li v-for="(building, index) in newOrder" :key="index">
             <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
-            <img :src="buildings[building.key].image" :title="buildings[building.key].name" class="image-queue">
-            {{ `${building.turn} ${buildings[building.key].name}` }}
+            <img :src="buildings[building.ref].image" :title="buildings[building.ref].name" class="image-queue">
+            {{ `${building.turn} ${buildings[building.ref].name}` }}
           </li>
         </draggable>
       </ul>
@@ -78,7 +79,7 @@ export default {
     addToQueue (building) {
       this.newOrder.push({
         turn: null,
-        key: building
+        ref: building
       })
       this.$emit('orderUpdated', this.newOrder)
     },

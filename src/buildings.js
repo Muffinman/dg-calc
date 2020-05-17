@@ -276,6 +276,98 @@ let buildings = {
       pop: 75000
     },
     image: `${imgDG}/units/main/structures/habitat.jpg`
+  },
+  light_weapons_factory: {
+    name: 'Light Weapons Factory',
+    turns: 12,
+    canBuild: true,
+    cost: {
+      metal: 30000,
+      mineral: 20000,
+      pop: 50000,
+      energy: 0,
+      research: 0
+    },
+    output: {
+      metal: 0,
+      mineral: 0,
+      energy: -10,
+      pop: 0,
+      research: 0
+    },
+    storage: {
+      pop: 0
+    },
+    image: `${imgDG}/units/main/structures/light_weapons_factory.jpg`
+  },
+  army_barracks: {
+    name: 'Army Barracks',
+    turns: 8,
+    canBuild: true,
+    cost: {
+      metal: 12000,
+      mineral: 8000,
+      pop: 25000,
+      energy: 0,
+      research: 0
+    },
+    output: {
+      metal: 0,
+      mineral: 0,
+      energy: -20,
+      pop: 0,
+      research: 0
+    },
+    storage: {
+      pop: 0
+    },
+    image: `${imgDG}/units/main/structures/army_barracks.jpg`
+},
+  space_dock: {
+    name: 'Space Dock',
+    turns: 24,
+    canBuild: true,
+    cost: {
+      metal: 144000,
+      mineral: 96000,
+      pop: 240000,
+      energy: 0,
+      research: 0
+    },
+    output: {
+      metal: 0,
+      mineral: 0,
+      energy: -20,
+      pop: 0,
+      research: 0
+    },
+    storage: {
+      pop: 0
+    },
+    image: `${imgDG}/units/main/structures/space_dock.jpg`
+  },
+  heavy_weapons_factory: {
+    name: 'Heavy Weapons Factory',
+    turns: 24,
+    canBuild: true,
+    cost: {
+      metal: 90000,
+      mineral: 60000,
+      pop: 200000,
+      energy: 0,
+      research: 0
+    },
+    output: {
+      metal: 0,
+      mineral: 0,
+      energy: -30,
+      pop: 0,
+      research: 0
+    },
+    storage: {
+      pop: 0
+    },
+    image: `${imgDG}/units/main/structures/heavy_weapons_factory.jpg`
   }
 }
 

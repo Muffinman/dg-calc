@@ -2,24 +2,24 @@
   <div>
     <border-box>
 
-      <h2 slot="header" class="card-header-title">Research <strong>Order</strong></h2>
+      <h2 slot="header" class="card-header-title">Ship <strong>Order</strong></h2>
 
       <h3>Available</h3>
       <ul class="queue">
-        <li v-for="(item, index) in availableResearch" :key="index">
-          <button class="button-add" title="Add" @click="addToQueue(item.ref)">+</button>
-          <img :src="item.image" :title="item.name" class="image-queue">
-          {{ item.name }}
+        <li v-for="(ship, ref) in available" :key="ref">
+          <button class="button-add" title="Add" @click="addToQueue(ref)">+</button>
+          <img :src="ship.image" :title="ship.name" class="image-queue">
+          {{ ship.name }}
         </li>
       </ul>
 
       <h3>Current Queue</h3>
       <ul class="queue draggable">
-        <draggable :list="newOrder" group="research" @change="updateOrder">
-          <li v-for="(item, index) in newOrder" :key="index">
+        <draggable :list="newOrder" group="ships" @change="updateOrder">
+          <li v-for="(ship, index) in newOrder" :key="index">
             <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
-            <img :src="research[item].image" :title="research[item].name" class="image-queue">
-            {{ research[item].name }}
+            <img :src="ships[ship.ref].image" :title="ships[ship.ref].name" class="image-queue">
+            {{ `${ship.turn} ${ships[ship.ref].name}` }}
           </li>
         </draggable>
       </ul>
@@ -30,7 +30,7 @@
 
 <script>
 import BorderBox from '@/components/BorderBox'
-import Research from '@/research.js'
+import Ships from '@/ships.js'
 import Draggable from 'vuedraggable'
 
 export default {
@@ -39,28 +39,14 @@ export default {
     Draggable
   },
   props: {
-    order: Array
+    order: Array,
+    available: Object
   },
   data () {
     return {
-      research: Research,
+      ships: Ships,
       newOrder: this.order,
       imgDG: 'https://beta.darkgalaxy.com/images'
-    }
-  },
-  computed: {
-    availableResearch () {
-      let available = []
-
-      for (let ref in this.research) {
-        let item = this.research[ref]
-        item.ref = ref
-        if ((item.requires === null || this.newOrder.indexOf(item.requires) !== -1) && this.newOrder.indexOf(item.ref) === -1) {
-          available.push(item)
-        }
-      }
-
-      return available
     }
   },
   watch: {
@@ -77,11 +63,14 @@ export default {
     },
 
     /**
-     * Add a research to the queue
-     * @param {String} item
+     * Add a ship to the queue
+     * @param {String} ship
      */
-    addToQueue (item) {
-      this.newOrder.push(item)
+    addToQueue (ship) {
+      this.newOrder.push({
+        turn: null,
+        ref: ship
+      })
     },
 
     /**

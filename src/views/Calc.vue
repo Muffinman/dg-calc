@@ -19,7 +19,7 @@
         <tr v-for="turn in log" :key="turn.turn">
           <td>{{ turn.turn }}</td>
           <td><span v-if="turn.queue.building.ref">{{ buildings[turn.queue.building.ref].name }} ({{ turn.queue.building.turns }})</span></td>
-          <td><span v-if="turn.queue.production.ref">{{ units[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
+          <td><span v-if="turn.queue.production.ref">{{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
           <td><span v-if="turn.queue.research.ref">{{ research[turn.queue.research.ref].name }}</span></td>
           <td class="metal">{{ turn.stored.metal | numeral('0,0') }} ({{ turn.output.metal | numeral('+0,0') }})</td>
           <td class="mineral">{{ turn.stored.mineral | numeral('0,0') }} ({{ turn.output.mineral | numeral('+0,0') }})</td>
@@ -40,7 +40,7 @@
 <script>
 import BorderBox from '@/components/BorderBox'
 import Buildings from '@/buildings.js'
-import Units from '@/units.js'
+import Ships from '@/ships.js'
 import Research from '@/research.js'
 
 export default {
@@ -49,7 +49,8 @@ export default {
   },
   props: {
     buildOrder: Array,
-    researchOrder: Array
+    researchOrder: Array,
+    shipOrder: Array
   },
   data () {
     return {
@@ -89,6 +90,11 @@ export default {
        * Current research order
        */
       currentResearchOrder: Object.assign([], this.researchOrder),
+
+      /**
+       * Current ship order
+       */
+      currentShipOrder: Object.assign([], this.shipOrder),
 
       /**
        * Current stored planet resources
@@ -132,9 +138,9 @@ export default {
       },
 
       /**
-       * List of units
+       * List of ships
        */
-      units: Units,
+      ships: Ships,
 
       /**
        * List of buildings
@@ -317,14 +323,22 @@ export default {
      */
     tick () {
       this.turn++
+
       this.recordOutputs()
-      this.processQueues()
+
+      this.processBuildingQueue()
+      this.processProductionQueue()
+
       if (this.turn > 1) {
         this.addOutputs()
       }
+
       this.startResearchQueue()
-      this.startQueues()
+      this.startBuildingQueue()
+      this.startProductionQueue()
+
       this.recordOutputs()
+
       this.finishResearchQueue()
     },
 
@@ -335,16 +349,6 @@ export default {
     ticks (count) {
       for (let i = 0; i < count; i++) {
         this.tick()
-      }
-    },
-
-    /**
-     * Advance all queues
-     */
-    processQueues () {
-      this.processBuildingQueue()
-      if (this.hasShipYard()) {
-        this.processProductionQueue()
       }
     },
 
@@ -368,7 +372,7 @@ export default {
         this.queue.production.turns--
       }
       if (this.queue.production.turns === 0 && this.queue.production.ref) {
-        this.unitConstructionFinish(this.queue.production.ref)
+        this.shipConstructionFinish(this.queue.production.ref)
       }
     },
 
@@ -378,16 +382,6 @@ export default {
     finishResearchQueue () {
       if (this.queue.research.ref) {
         this.researchFinish(this.queue.research.ref)
-      }
-    },
-
-    /**
-     * Start construction new queue items if ready
-     */
-    startQueues () {
-      this.startBuildingQueue()
-      if (this.hasShipYard()) {
-        this.startProductionQueue()
       }
     },
 
@@ -402,21 +396,21 @@ export default {
           return
         }
 
-        if (!this.checkEnergy(next.key)) {
+        if (!this.checkEnergy(next.ref)) {
           this.currentBuildOrder.unshift(next)
           next = {
             turn: null,
-            key: this.energyBuilding()
+            ref: this.energyBuilding()
           }
         }
 
-        if (!this.checkBuildingResources(next.key)) {
+        if (!this.checkBuildingResources(next.ref)) {
           this.currentBuildOrder.unshift(next)
           next = null
         }
 
         if (next) {
-          this.buildingConstructionStart(next.key)
+          this.buildingConstructionStart(next.ref)
           this.$set(this.log[this.turn].queue, 'building', Object.assign({}, this.queue.building))
           next.turn = this.turn
         }
@@ -424,19 +418,25 @@ export default {
     },
 
     /**
-     * Find next unit for production queue
+     * Find next ship for production queue
      */
     startProductionQueue () {
       if (!this.queue.production.ref) {
-        let next = 'outpost_ship'
+        let next = this.currentShipOrder.shift()
 
-        if (!this.checkUnitResources(next)) {
+        if (!next) {
+          return
+        }
+
+        if (!this.checkShipResources(next.ref)) {
+          this.currentShipOrder.unshift(next)
           next = null
         }
 
         if (next) {
-          this.unitConstructionStart(next)
+          this.shipConstructionStart(next.ref)
           this.$set(this.log[this.turn].queue, 'production', Object.assign({}, this.queue.production))
+          next.turn = this.turn
         }
       }
     },
@@ -495,27 +495,27 @@ export default {
     },
 
     /**
-     * Start construction of a unit
-     * @param {String} unit
+     * Start construction of a ship
+     * @param {String} ship
      */
-    unitConstructionStart (unit) {
-      Object.keys(this.units[unit].cost).forEach(resource => {
-        this.stored[resource] -= this.units[unit].cost[resource]
+    shipConstructionStart (ship) {
+      Object.keys(this.ships[ship].cost).forEach(resource => {
+        this.stored[resource] -= this.ships[ship].cost[resource]
         if (resource === 'pop') {
-          this.stored.pop_busy += this.units[unit].cost[resource]
+          this.stored.pop_busy += this.ships[ship].cost[resource]
         }
       })
-      this.$set(this.queue.production, 'ref', unit)
-      this.$set(this.queue.production, 'turns', this.units[unit].turns)
+      this.$set(this.queue.production, 'ref', ship)
+      this.$set(this.queue.production, 'turns', this.ships[ship].turns)
     },
 
     /**
-     * Process completion of a unit
-     * @param {String} unit
+     * Process completion of a ship
+     * @param {String} ship
      */
-    unitConstructionFinish (unit) {
-      this.stored.pop += this.units[unit].cost.pop
-      this.stored.pop_busy -= this.units[unit].cost.pop
+    shipConstructionFinish (ship) {
+      this.stored.pop += this.ships[ship].cost.pop
+      this.stored.pop_busy -= this.ships[ship].cost.pop
       if (!this.first_colo_turn) {
         this.first_colo_turn = this.turn + this.travel.homeworld.center
       }
@@ -571,14 +571,14 @@ export default {
     },
 
     /**
-     * Check if the selected unit has available resources to start construction
-     * @param {String} unit
+     * Check if the selected ship has available resources to start construction
+     * @param {String} ship
      * @return {Boolean}
      */
-    checkUnitResources (unit) {
+    checkShipResources (ship) {
       let canBuild = true
-      Object.keys(this.units[unit].cost).forEach(resource => {
-        if (this.stored[resource] < this.units[unit].cost[resource]) {
+      Object.keys(this.ships[ship].cost).forEach(resource => {
+        if (this.stored[resource] < this.ships[ship].cost[resource]) {
           canBuild = false
         }
       })

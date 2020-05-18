@@ -34,7 +34,7 @@ export default {
       let ships = {}
 
       for (let shipRef in this.ships) {
-        if (this.ships[shipRef].requires.every(
+        if (this.ships[shipRef].requires.buildings.every(
           requiredBuildingRef => this.buildOrder.some(
             ({ ref }) => requiredBuildingRef === ref
           )

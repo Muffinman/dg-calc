@@ -22,6 +22,10 @@ let buildings = {
     storage: {
       pop: 0
     },
+    requires: {
+      buildings: [],
+      research: []
+    },
     image: `${imgDG}/units/small/time.png`
   },
   outpost: {
@@ -44,6 +48,10 @@ let buildings = {
     },
     storage: {
       pop: 50000
+    },
+    requires: {
+      buildings: [],
+      research: []
     },
     image: `${imgDG}/units/main/structures/outpost.png`
   },
@@ -68,6 +76,10 @@ let buildings = {
     storage: {
       pop: 0
     },
+    requires: {
+      buildings: [],
+      research: []
+    },
     image: `${imgDG}/units/main/structures/metal_mine.jpg`
   },
   mineral_extractor: {
@@ -90,6 +102,10 @@ let buildings = {
     },
     storage: {
       pop: 0
+    },
+    requires: {
+      buildings: [],
+      research: []
     },
     image: `${imgDG}/units/main/structures/mineral_extractor.jpg`
   },
@@ -114,6 +130,10 @@ let buildings = {
     storage: {
       pop: 0
     },
+    requires: {
+      buildings: [],
+      research: []
+    },
     image: `${imgDG}/units/main/structures/farm.jpg`
   },
   solar_generator: {
@@ -136,6 +156,10 @@ let buildings = {
     },
     storage: {
       pop: 0
+    },
+    requires: {
+      buildings: [],
+      research: []
     },
     image: `${imgDG}/units/main/structures/solar_generator.jpg`
   },
@@ -160,6 +184,10 @@ let buildings = {
     storage: {
       pop: 0
     },
+    requires: {
+      buildings: [],
+      research: []
+    },
     image: `${imgDG}/units/main/structures/launch_site.jpg`
   },
   colony: {
@@ -182,6 +210,10 @@ let buildings = {
     },
     storage: {
       pop: 125000
+    },
+    requires: {
+      buildings: [],
+      research: []
     },
     image: `${imgDG}/units/main/structures/colony.jpg`
   },
@@ -206,6 +238,10 @@ let buildings = {
     storage: {
       pop: 0
     },
+    requires: {
+      buildings: ['launch_site'],
+      research: []
+    },
     image: `${imgDG}/units/main/structures/ship_yard.jpg`
   },
   comms_satellite: {
@@ -228,6 +264,10 @@ let buildings = {
     },
     storage: {
       pop: 0
+    },
+    requires: {
+      buildings: ['launch_site'],
+      research: []
     },
     image: `${imgDG}/units/main/structures/comms_satellite.jpg`
   },
@@ -252,6 +292,10 @@ let buildings = {
     storage: {
       pop: 50000
     },
+    requires: {
+      buildings: [],
+      research: []
+    },
     image: `${imgDG}/units/main/structures/living_quarters.jpg`
   },
   habitat: {
@@ -274,6 +318,10 @@ let buildings = {
     },
     storage: {
       pop: 75000
+    },
+    requires: {
+      buildings: ['launch_site'],
+      research: []
     },
     image: `${imgDG}/units/main/structures/habitat.jpg`
   },
@@ -298,6 +346,10 @@ let buildings = {
     storage: {
       pop: 0
     },
+    requires: {
+      buildings: ['colony'],
+      research: []
+    },
     image: `${imgDG}/units/main/structures/light_weapons_factory.jpg`
   },
   army_barracks: {
@@ -320,6 +372,10 @@ let buildings = {
     },
     storage: {
       pop: 0
+    },
+    requires: {
+      buildings: ['light_weapons_factory'],
+      research: []
     },
     image: `${imgDG}/units/main/structures/army_barracks.jpg`
 },
@@ -344,6 +400,10 @@ let buildings = {
     storage: {
       pop: 0
     },
+    requires: {
+      buildings: ['metropolis'],
+      research: []
+    },
     image: `${imgDG}/units/main/structures/space_dock.jpg`
   },
   heavy_weapons_factory: {
@@ -367,7 +427,38 @@ let buildings = {
     storage: {
       pop: 0
     },
+    requires: {
+      buildings: ['metropolis'],
+      research: []
+    },
     image: `${imgDG}/units/main/structures/heavy_weapons_factory.jpg`
+  },
+  metropolis: {
+    name: 'Heavy Weapons Factory',
+    turns: 24,
+    canBuild: true,
+    cost: {
+      metal: 120000,
+      mineral: 80000,
+      pop: 160000,
+      energy: 0,
+      research: 0
+    },
+    output: {
+      metal: 0,
+      mineral: 0,
+      energy: 0,
+      pop: 0,
+      research: 0
+    },
+    storage: {
+      pop: 0
+    },
+    requires: {
+      buildings: ['metropolis'],
+      research: []
+    },
+    image: `${imgDG}/units/main/structures/metropolis.jpg`
   }
 }
 

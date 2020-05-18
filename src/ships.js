@@ -10,7 +10,10 @@ let ships = {
       energy: 0,
       pop: 0
     },
-    requires: [],
+    requires: {
+      buildings: [],
+      research: []
+    },
     image: `${imgDG}/units/small/time.png`
   },
   outpost_ship: {
@@ -22,7 +25,10 @@ let ships = {
       energy: 0,
       pop: 50000
     },
-    requires: [ 'ship_yard' ],
+    requires: {
+      buildings: ['ship_yard'],
+      research: []
+    },
     image: `${imgDG}/units/main/ships/outpost_ship.gif`
   },
   invasion_ship: {
@@ -34,7 +40,10 @@ let ships = {
       energy: 0,
       pop: 50000
     },
-    requires: [ 'ship_yard' ],
+    requires: {
+      buildings: ['ship_yard'],
+      research: []
+    },
     image: `${imgDG}/units/main/ships/invasion_ship.gif`
   },
   freighter: {
@@ -46,7 +55,10 @@ let ships = {
       energy: 0,
       pop: 20000
     },
-    requires: [ 'ship_yard' ],
+    requires: {
+      buildings: ['ship_yard'],
+      research: []
+    },
     image: `${imgDG}/units/main/ships/freighter.gif`
   },
   trader: {
@@ -58,7 +70,10 @@ let ships = {
       energy: 0,
       pop: 60000
     },
-    requires: [ 'space_dock' ],
+    requires: {
+      buildings: ['space_dock'],
+      research: []
+    },
     image: `${imgDG}/units/main/ships/freighter.gif`
   },
   fighter: {
@@ -70,10 +85,13 @@ let ships = {
       energy: 0,
       pop: 500
     },
-    requires: [
-      'ship_yard',
-      'light_weapons_factory'
-    ],
+    requires: {
+      buildings: [
+        'ship_yard',
+        'light_weapons_factory'
+      ],
+      research: []
+    },
     image: `${imgDG}/units/main/ships/fighter.gif`
   },
   bomber: {
@@ -85,10 +103,13 @@ let ships = {
       energy: 0,
       pop: 1500
     },
-    requires: [
-      'ship_yard',
-      'light_weapons_factory'
-    ],
+    requires: {
+      buildings: [
+        'ship_yard',
+        'light_weapons_factory'
+      ],
+      research: []
+    },
     image: `${imgDG}/units/main/ships/bomber.gif`
   },
   frigate: {
@@ -100,10 +121,13 @@ let ships = {
       energy: 0,
       pop: 5000
     },
-    requires: [
-      'ship_yard',
-      'light_weapons_factory'
-    ],
+    requires: {
+      buildings: [
+        'ship_yard',
+        'light_weapons_factory'
+      ],
+      research: []
+    },
     image: `${imgDG}/units/main/ships/frigate.gif`
   },
   destroyer: {
@@ -115,10 +139,13 @@ let ships = {
       energy: 0,
       pop: 25000
     },
-    requires: [
-      'ship_yard',
-      'heavy_weapons_factory'
-    ],
+    requires: {
+      buildings: [
+        'ship_yard',
+        'heavy_weapons_factory'
+      ],
+      research: []
+    },
     image: `${imgDG}/units/main/ships/destroyer.gif`
   },
   cruiser: {
@@ -130,10 +157,13 @@ let ships = {
       energy: 0,
       pop: 50000
     },
-    requires: [
-      'space_dock',
-      'light_weapons_factory'
-    ],
+    requires: {
+      buildings: [
+        'ship_yard',
+        'heavy_weapons_factory'
+      ],
+      research: []
+    },
     image: `${imgDG}/units/main/ships/cruiser.gif`
   },
   battleship: {
@@ -145,10 +175,13 @@ let ships = {
       energy: 0,
       pop: 300000
     },
-    requires: [
-      'space_dock',
-      'heavy_weapons_factory'
-    ],
+    requires: {
+      buildings: [
+        'ship_yard',
+        'heavy_weapons_factory'
+      ],
+      research: []
+    },
     image: `${imgDG}/units/main/ships/battleship.gif`
   }
 }

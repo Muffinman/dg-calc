@@ -178,7 +178,16 @@ export default {
         metal_mine: 3,
         mineral_extractor: 3,
         solar_generator: 2,
-        farm: 0
+        farm: 0,
+        launch_site: 0,
+        ship_yard: 0,
+        comms_satellite: 0,
+        light_weapons_factory: 0,
+        army_barracks: 0,
+        colony: 0,
+        metropolis: 0,
+        space_dock: 0,
+        heavy_weapons_factory: 0
       },
 
       /**
@@ -404,7 +413,7 @@ export default {
           }
         }
 
-        if (!this.checkBuildingResources(next.ref)) {
+        if (!this.checkBuildingResources(next.ref) || !this.checkBuildingBuildings(next.ref)) {
           this.currentBuildOrder.unshift(next)
           next = null
         }
@@ -428,7 +437,7 @@ export default {
           return
         }
 
-        if (!this.checkShipResources(next.ref)) {
+        if (!this.checkShipResources(next.ref) || !this.checkShipBuildings(next.ref)) {
           this.currentShipOrder.unshift(next)
           next = null
         }
@@ -586,6 +595,40 @@ export default {
     },
 
     /**
+     * Check if the selected ship has available buildings to start construction
+     * @param {String} ship
+     * @return {Boolean}
+     */
+    checkShipBuildings (ship) {
+      let canBuild = true
+      Object.values(this.ships[ship].requires.buildings).forEach(building => {
+        if (!this.constructed[building]) {
+          canBuild = false
+        }
+      })
+      return canBuild
+    },
+
+    /**
+     * Check if the selected ship has available buildings to start construction
+     * @param {String} toBuild
+     * @return {Boolean}
+     */
+    checkBuildingBuildings (toBuild) {
+      if (!this.buildings[toBuild].requires.buildings) {
+        return true;
+      }
+
+      let canBuild = true
+      Object.values(this.buildings[toBuild].requires.buildings).forEach(building => {
+        if (!this.constructed[building]) {
+          canBuild = false
+        }
+      })
+      return canBuild
+    },
+
+    /**
      * Check we can start a particular research item
      */
     checkReseach (researchItem) {
@@ -611,14 +654,6 @@ export default {
       })
       return toBuild
     },
-
-    /**
-     * Does this planet have a shipyard yet?
-     * @return {Boolean}
-     */
-    hasShipYard () {
-      return this.constructed['ship_yard'] && this.constructed['ship_yard'] > 0
-    }
   }
 }
 </script>

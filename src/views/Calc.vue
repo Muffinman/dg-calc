@@ -616,7 +616,7 @@ export default {
      */
     checkBuildingBuildings (toBuild) {
       if (!this.buildings[toBuild].requires.buildings) {
-        return true;
+        return true
       }
 
       let canBuild = true
@@ -653,7 +653,7 @@ export default {
         }
       })
       return toBuild
-    },
+    }
   }
 }
 </script>

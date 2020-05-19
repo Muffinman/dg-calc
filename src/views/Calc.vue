@@ -19,7 +19,7 @@
         <tr v-for="turn in log" :key="turn.turn">
           <td>{{ turn.turn }}</td>
           <td><span v-if="turn.queue.building.ref">{{ buildings[turn.queue.building.ref].name }} ({{ turn.queue.building.turns }})</span></td>
-          <td><span v-if="turn.queue.production.ref">{{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
+          <td><span v-if="turn.queue.production.ref">{{turn.queue.production.quantity}} {{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
           <td><span v-if="turn.queue.research.ref">{{ research[turn.queue.research.ref].name }}</span></td>
           <td class="metal">{{ turn.stored.metal | numeral('0,0') }} ({{ turn.output.metal | numeral('+0,0') }})</td>
           <td class="mineral">{{ turn.stored.mineral | numeral('0,0') }} ({{ turn.output.mineral | numeral('+0,0') }})</td>
@@ -32,6 +32,11 @@
           </td>
         </tr>
         </tbody>
+        <tfoot>
+          <tr>
+            <td>Asset Score</td>
+          </tr>
+        </tfoot>
       </table>
     </border-box>
   </div>
@@ -162,7 +167,8 @@ export default {
         },
         production: {
           ref: null,
-          turns: 0
+          turns: 0,
+          quantity: 0
         },
         research: {
           ref: null,
@@ -437,13 +443,13 @@ export default {
           return
         }
 
-        if (!this.checkShipResources(next.ref) || !this.checkShipBuildings(next.ref)) {
+        if (!this.checkShipResources(next.ref, next.quantity) || !this.checkShipBuildings(next.ref)) {
           this.currentShipOrder.unshift(next)
           next = null
         }
 
         if (next) {
-          this.shipConstructionStart(next.ref)
+          this.shipConstructionStart(next.ref, next.quantity)
           this.$set(this.log[this.turn].queue, 'production', Object.assign({}, this.queue.production))
           next.turn = this.turn
         }
@@ -506,15 +512,17 @@ export default {
     /**
      * Start construction of a ship
      * @param {String} ship
+     * @param {Number} quantity
      */
-    shipConstructionStart (ship) {
+    shipConstructionStart (ship, quantity) {
       Object.keys(this.ships[ship].cost).forEach(resource => {
-        this.stored[resource] -= this.ships[ship].cost[resource]
+        this.stored[resource] -= this.ships[ship].cost[resource] * quantity
         if (resource === 'pop') {
-          this.stored.pop_busy += this.ships[ship].cost[resource]
+          this.stored.pop_busy += this.ships[ship].cost[resource] * quantity
         }
       })
       this.$set(this.queue.production, 'ref', ship)
+      this.$set(this.queue.production, 'quantity', quantity)
       this.$set(this.queue.production, 'turns', this.ships[ship].turns)
     },
 
@@ -530,6 +538,7 @@ export default {
       }
 
       this.$set(this.queue.production, 'ref', null)
+      this.$set(this.queue.production, 'quantity', 0)
       this.$set(this.queue.production, 'turns', 0)
     },
 
@@ -545,7 +554,7 @@ export default {
 
     /**
      * Process completion of research
-     * @param {String} research
+     * @param {String} researchItem
      */
     researchFinish (researchItem) {
       this.researched.push(researchItem)
@@ -582,12 +591,13 @@ export default {
     /**
      * Check if the selected ship has available resources to start construction
      * @param {String} ship
+     * @param {Number} quantity
      * @return {Boolean}
      */
-    checkShipResources (ship) {
+    checkShipResources (ship, quantity) {
       let canBuild = true
       Object.keys(this.ships[ship].cost).forEach(resource => {
-        if (this.stored[resource] < this.ships[ship].cost[resource]) {
+        if (this.stored[resource] < this.ships[ship].cost[resource] * quantity) {
           canBuild = false
         }
       })

@@ -707,7 +707,7 @@ export default {
         turn++
       }
       return output
-    },
+    }
   }
 }
 </script>

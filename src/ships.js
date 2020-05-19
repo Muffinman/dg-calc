@@ -41,7 +41,10 @@ let ships = {
       pop: 50000
     },
     requires: {
-      buildings: ['ship_yard'],
+      buildings: [
+        'ship_yard',
+        'light_weapons_factory'
+      ],
       research: []
     },
     image: `${imgDG}/units/main/ships/invasion_ship.gif`
@@ -160,7 +163,7 @@ let ships = {
     requires: {
       buildings: [
         'ship_yard',
-        'heavy_weapons_factory'
+        'light_weapons_factory'
       ],
       research: []
     },
@@ -177,7 +180,7 @@ let ships = {
     },
     requires: {
       buildings: [
-        'ship_yard',
+        'space_dock',
         'heavy_weapons_factory'
       ],
       research: []

@@ -460,7 +460,7 @@ export default {
           return
         }
 
-        if (!this.checkReseach(next)) {
+        if (!this.checkResearch(next)) {
           this.currentResearchOrder.unshift(next)
           next = null
         }
@@ -613,7 +613,7 @@ export default {
     /**
      * Check we can start a particular research item
      */
-    checkReseach (researchItem) {
+    checkResearch (researchItem) {
       if (this.research[researchItem].cost > this.stored.research) {
         return false
       }
@@ -629,6 +629,7 @@ export default {
      */
     energyBuilding () {
       let toBuild = null
+      // TODO: this doesn't make sense and works because there is only 1 energy building in the buildings object. Try to add at least Solar Array, see what happens and improve.
       Object.keys(this.buildings).forEach(building => {
         if (this.buildings[building].output.energy > 0) {
           toBuild = building

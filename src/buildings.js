@@ -378,7 +378,7 @@ let buildings = {
       research: []
     },
     image: `${imgDG}/units/main/structures/army_barracks.jpg`
-},
+  },
   space_dock: {
     name: 'Space Dock',
     turns: 24,
@@ -434,8 +434,8 @@ let buildings = {
     image: `${imgDG}/units/main/structures/heavy_weapons_factory.jpg`
   },
   metropolis: {
-    name: 'Heavy Weapons Factory',
-    turns: 24,
+    name: 'Metropolis',
+    turns: 48,
     canBuild: true,
     cost: {
       metal: 120000,
@@ -452,10 +452,10 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 200000
     },
     requires: {
-      buildings: ['metropolis'],
+      buildings: ['colony'],
       research: []
     },
     image: `${imgDG}/units/main/structures/metropolis.jpg`

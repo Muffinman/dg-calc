@@ -419,14 +419,12 @@ export default {
 
         if (!this.checkBuildingResources(next.ref) || !this.checkBuildingBuildings(next.ref)) {
           this.currentBuildOrder.unshift(next)
-          next = null
+          return
         }
 
-        if (next) {
-          this.buildingConstructionStart(next.ref)
-          this.$set(this.log[this.turn].queue, 'building', Object.assign({}, this.queue.building))
-          next.turn = this.turn
-        }
+        this.buildingConstructionStart(next.ref)
+        this.$set(this.log[this.turn].queue, 'building', Object.assign({}, this.queue.building))
+        next.turn = this.turn
       }
     },
 

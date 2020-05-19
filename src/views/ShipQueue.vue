@@ -5,6 +5,7 @@
       <h2 slot="header" class="card-header-title">Ship <strong>Order</strong></h2>
 
       <h3>Available</h3>
+      <p><label>Quantity: <input v-model.number="quantity" class="queue-quantity" /></label></p>
       <ul class="queue">
         <li v-for="(ship, ref) in available" :key="ref">
           <button class="button-add" title="Add" @click="addToQueue(ref)">+</button>
@@ -20,6 +21,7 @@
             <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
             <img :src="ships[ship.ref].image" :title="ships[ship.ref].name" class="image-queue">
             {{ `${ship.turn} ${ships[ship.ref].name}` }}
+            <input v-model.number="ship.quantity" class="queue-quantity" />
           </li>
         </draggable>
       </ul>
@@ -46,7 +48,8 @@ export default {
     return {
       ships: Ships,
       newOrder: this.order,
-      imgDG: 'https://beta.darkgalaxy.com/images'
+      imgDG: 'https://beta.darkgalaxy.com/images',
+      quantity: 1
     }
   },
   watch: {
@@ -69,7 +72,8 @@ export default {
     addToQueue (ship) {
       this.newOrder.push({
         turn: null,
-        ref: ship
+        ref: ship,
+        quantity: this.quantity
       })
     },
 
@@ -100,5 +104,15 @@ export default {
   color: darkgrey;
   border: none;
   cursor: pointer;
+}
+
+.queue-quantity {
+  background-color: #000000;
+  border: 1px solid #444444;
+  padding: 0.4em 0.2em;
+  width: 50px;
+  display: inline-block;
+  color: #FFFFFF;
+  text-align: center;
 }
 </style>

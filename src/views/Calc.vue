@@ -19,7 +19,7 @@
         <tr v-for="turn in log" :key="turn.turn">
           <td>{{ turn.turn }}</td>
           <td><span v-if="turn.queue.building.ref">{{ buildings[turn.queue.building.ref].name }} ({{ turn.queue.building.turns }})</span></td>
-          <td><span v-if="turn.queue.production.ref">{{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
+          <td><span v-if="turn.queue.production.ref">{{turn.queue.production.quantity}} {{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
           <td><span v-if="turn.queue.research.ref">{{ research[turn.queue.research.ref].name }}</span></td>
           <td class="metal">{{ turn.stored.metal | numeral('0,0') }} ({{ turn.output.metal | numeral('+0,0') }})</td>
           <td class="mineral">{{ turn.stored.mineral | numeral('0,0') }} ({{ turn.output.mineral | numeral('+0,0') }})</td>
@@ -32,6 +32,25 @@
           </td>
         </tr>
         </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td>Asset Score</td>
+            <td>Outposts</td>
+            <td></td>
+            <td colspan="4">Total Output</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>{{ totalScore }}</td>
+            <td>{{ totalOutposts }}</td>
+            <td></td>
+            <td><img :src="`${imgDG}/units/small/metal.gif`" title="Metal" class="image-header"> {{ totalResource('metal') | numeral('0,0') }}</td>
+            <td><img :src="`${imgDG}/units/small/mineral.gif`" title="Mineral" class="image-header"> {{ totalResource('mineral') | numeral('0,0') }}</td>
+            <td><img :src="`${imgDG}/units/small/energy.gif`" title="Energy" class="image-header"> {{ totalResource('energy') | numeral('0,0') }}</td>
+            <td><img :src="`${imgDG}/units/small/worker.gif`" title="Population" class="image-header"> {{ totalResource('pop') | numeral('0,0') }}</td>
+          </tr>
+        </tfoot>
       </table>
     </border-box>
   </div>
@@ -162,7 +181,8 @@ export default {
         },
         production: {
           ref: null,
-          turns: 0
+          turns: 0,
+          quantity: 0
         },
         research: {
           ref: null,
@@ -241,6 +261,25 @@ export default {
        * Link to the website of Dark Galaxy to get images
        */
       imgDG: 'https://beta.darkgalaxy.com/images'
+    }
+  },
+
+  computed: {
+    totalScore () {
+      return 'Coming soon'
+    },
+
+    totalOutposts () {
+      let turn = 1
+      let count = 0
+      while (this.log[turn]) {
+        let prod = this.log[turn].queue.production
+        if (prod.ref === 'outpost_ship' && prod.turns === 16) {
+          count += prod.quantity
+        }
+        turn++
+      }
+      return count
     }
   },
 
@@ -439,13 +478,13 @@ export default {
           return
         }
 
-        if (!this.checkShipResources(next.ref) || !this.checkShipBuildings(next.ref)) {
+        if (!this.checkShipResources(next.ref, next.quantity) || !this.checkShipBuildings(next.ref)) {
           this.currentShipOrder.unshift(next)
           next = null
         }
 
         if (next) {
-          this.shipConstructionStart(next.ref)
+          this.shipConstructionStart(next.ref, next.quantity)
           this.$set(this.log[this.turn].queue, 'production', Object.assign({}, this.queue.production))
           next.turn = this.turn
         }
@@ -508,15 +547,17 @@ export default {
     /**
      * Start construction of a ship
      * @param {String} ship
+     * @param {Number} quantity
      */
-    shipConstructionStart (ship) {
+    shipConstructionStart (ship, quantity) {
       Object.keys(this.ships[ship].cost).forEach(resource => {
-        this.stored[resource] -= this.ships[ship].cost[resource]
+        this.stored[resource] -= this.ships[ship].cost[resource] * quantity
         if (resource === 'pop') {
-          this.stored.pop_busy += this.ships[ship].cost[resource]
+          this.stored.pop_busy += this.ships[ship].cost[resource] * quantity
         }
       })
       this.$set(this.queue.production, 'ref', ship)
+      this.$set(this.queue.production, 'quantity', quantity)
       this.$set(this.queue.production, 'turns', this.ships[ship].turns)
     },
 
@@ -532,6 +573,7 @@ export default {
       }
 
       this.$set(this.queue.production, 'ref', null)
+      this.$set(this.queue.production, 'quantity', 0)
       this.$set(this.queue.production, 'turns', 0)
     },
 
@@ -547,7 +589,7 @@ export default {
 
     /**
      * Process completion of research
-     * @param {String} research
+     * @param {String} researchItem
      */
     researchFinish (researchItem) {
       this.researched.push(researchItem)
@@ -580,12 +622,13 @@ export default {
     /**
      * Check if the selected ship has available resources to start construction
      * @param {String} ship
+     * @param {Number} quantity
      * @return {Boolean}
      */
-    checkShipResources (ship) {
+    checkShipResources (ship, quantity) {
       return Object
         .keys(this.ships[ship].cost)
-        .every(resource => this.stored[resource] >= this.ships[ship].cost[resource])
+        .every(resource => this.stored[resource] >= this.ships[ship].cost[resource] * quantity)
     },
 
     /**
@@ -600,7 +643,7 @@ export default {
     },
 
     /**
-     * Check if the selected ship has available buildings to start construction
+     * Check if the selected building has available buildings to start construction
      * @param {String} toBuild
      * @return {Boolean}
      */
@@ -636,6 +679,16 @@ export default {
         }
       })
       return toBuild
+    },
+
+    totalResource (resource) {
+      let turn = 1
+      let output = 0
+      while (this.log[turn]) {
+        output += this.log[turn].output[resource]
+        turn++
+      }
+      return output
     },
 
     /**

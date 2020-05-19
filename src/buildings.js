@@ -434,7 +434,7 @@ let buildings = {
     image: `${imgDG}/units/main/structures/heavy_weapons_factory.jpg`
   },
   metropolis: {
-    name: 'Heavy Weapons Factory',
+    name: 'Metropolis',
     turns: 24,
     canBuild: true,
     cost: {

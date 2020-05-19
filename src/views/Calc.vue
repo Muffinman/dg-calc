@@ -698,7 +698,6 @@ export default {
       return toBuild
     },
 
-
     totalResource (resource) {
       let turn = 1
       let output = 0

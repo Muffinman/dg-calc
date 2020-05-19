@@ -6,7 +6,7 @@
         <research-queue :order="researchOrder" @orderUpdated="updateResearchOrder" />
         <ship-queue :order="shipOrder" :available="availableShips" @orderUpdated="updateShipOrder" class="margin-top" />
       </div>
-      <calc :build-order="buildOrder" :research-order="researchOrder" :ship-order="shipOrder" class="grow margin-left" :key="orderHash" />
+      <calc :build-order="buildOrder" :research-order="researchOrder" :ship-order="shipOrder" class="grow margin-left" :key="orderHash" @orderUpdated="updateBuildOrder" />
     </div>
   </div>
 </template>

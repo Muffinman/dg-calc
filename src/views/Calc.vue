@@ -34,7 +34,21 @@
         </tbody>
         <tfoot>
           <tr>
+            <td></td>
             <td>Asset Score</td>
+            <td>Outposts</td>
+            <td></td>
+            <td colspan="4">Total Output</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>{{ totalScore }}</td>
+            <td>{{ totalOutposts }}</td>
+            <td></td>
+            <td><img :src="`${imgDG}/units/small/metal.gif`" title="Metal" class="image-header"> {{ totalResource('metal') | numeral('0,0') }}</td>
+            <td><img :src="`${imgDG}/units/small/mineral.gif`" title="Mineral" class="image-header"> {{ totalResource('mineral') | numeral('0,0') }}</td>
+            <td><img :src="`${imgDG}/units/small/energy.gif`" title="Energy" class="image-header"> {{ totalResource('energy') | numeral('0,0') }}</td>
+            <td><img :src="`${imgDG}/units/small/worker.gif`" title="Population" class="image-header"> {{ totalResource('pop') | numeral('0,0') }}</td>
           </tr>
         </tfoot>
       </table>
@@ -248,6 +262,25 @@ export default {
        */
       imgDG: 'https://beta.darkgalaxy.com/images'
     }
+  },
+
+  computed: {
+    totalScore () {
+      return 'Coming soon'
+    },
+
+    totalOutposts () {
+      let turn = 1
+      let count = 0
+      while (this.log[turn]) {
+        let prod = this.log[turn].queue.production
+        if (prod.ref === 'outpost_ship' && prod.turns === 16) {
+          count += prod.quantity
+        }
+        turn++
+      }
+      return count
+    },
   },
 
   mounted () {
@@ -663,7 +696,18 @@ export default {
         }
       })
       return toBuild
-    }
+    },
+
+
+    totalResource (resource) {
+      let turn = 1
+      let output = 0
+      while (this.log[turn]) {
+        output += this.log[turn].output[resource]
+        turn++
+      }
+      return output
+    },
   }
 }
 </script>

@@ -70,7 +70,7 @@ export default {
       let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
       this.$set(this, 'buildOrder', this.migrateBuildingData(loadedData[0]))
       this.$set(this, 'researchOrder', loadedData[1])
-      this.$set(this, 'shipOrder', loadedData[2] === undefined ? [] : loadedData[2])
+      this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
     }
   },
   methods: {
@@ -106,7 +106,7 @@ export default {
     },
 
     /**
-     * Different versions of hashes exist, which results in the annoying fact that when people load a bookmarked buildlist, they lost their data.
+     * Different versions of hashes exist, which results in the annoying fact that when people load a bookmarked buildlist, they lose their data.
      * To avoid frustration, we execute a migration step.
      *
      * v1: Only use string containing building ref.
@@ -155,6 +155,51 @@ export default {
           item = {
             turn: null,
             ref: item.key
+          }
+        }
+        return item
+      })
+
+      return data
+    },
+
+    /**
+     * Different versions of hashes exist, which results in the annoying fact that when people load a bookmarked buildlist, they lose their data.
+     * To avoid frustration, we execute a migration step.
+     *
+     * v1: Use object with keys 'turn' and 'ref'.
+     * Example:
+     * [
+     *   {
+     *     turn: '100',
+     *     ref: 'outpost_ship'
+     *   }
+     * ]
+     *
+     * v2: add quantity
+     * Example:
+     * [
+     *   {
+     *     turn: '100',
+     *     ref: 'outpost_ship',
+     *     quantity: 1
+     *   }
+     * ]
+     *
+     * @param {Object} data
+     */
+    migrateShipData (data) {
+      if (data.length === 0) {
+        return data
+      }
+
+      // Migrate from v1 to v2
+      data = data.map(item => {
+        if (!item.quantity) {
+          item = {
+            turn: item.turn,
+            ref: item.ref,
+            quantity: 1
           }
         }
         return item

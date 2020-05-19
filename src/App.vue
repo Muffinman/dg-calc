@@ -189,7 +189,7 @@ export default {
      * @param {Object} data
      */
     migrateShipData (data) {
-      if (data.length === 0) {
+      if (data === undefined) {
         return data
       }
 

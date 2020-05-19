@@ -653,7 +653,7 @@ export default {
     },
 
     /**
-     * Check if the selected ship has available buildings to start construction
+     * Check if the selected building has available buildings to start construction
      * @param {String} toBuild
      * @return {Boolean}
      */

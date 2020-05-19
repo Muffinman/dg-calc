@@ -682,13 +682,9 @@ export default {
     },
 
     totalResource (resource) {
-      let turn = 1
-      let output = 0
-      while (this.log[turn]) {
-        output += this.log[turn].output[resource]
-        turn++
-      }
-      return output
+      return Object
+        .values(this.log)
+        .reduce((total, turn) => total + turn.output[resource], 0)
     },
 
     /**

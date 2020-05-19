@@ -574,13 +574,9 @@ export default {
      * @param {String} building
      */
     checkBuildingResources (building) {
-      let canBuild = true
-      Object.keys(this.buildings[building].cost).forEach(resource => {
-        if (this.stored[resource] < this.buildings[building].cost[resource]) {
-          canBuild = false
-        }
-      })
-      return canBuild
+      return Object
+        .keys(this.buildings[building].cost)
+        .every(resource => this.stored[resource] >= this.buildings[building].cost[resource])
     },
 
     /**
@@ -589,13 +585,9 @@ export default {
      * @return {Boolean}
      */
     checkShipResources (ship) {
-      let canBuild = true
-      Object.keys(this.ships[ship].cost).forEach(resource => {
-        if (this.stored[resource] < this.ships[ship].cost[resource]) {
-          canBuild = false
-        }
-      })
-      return canBuild
+      return Object
+        .keys(this.ships[ship].cost)
+        .every(resource => this.stored[resource] >= this.ships[ship].cost[resource])
     },
 
     /**
@@ -604,13 +596,9 @@ export default {
      * @return {Boolean}
      */
     checkShipBuildings (ship) {
-      let canBuild = true
-      Object.values(this.ships[ship].requires.buildings).forEach(building => {
-        if (!this.constructed[building]) {
-          canBuild = false
-        }
-      })
-      return canBuild
+      return Object
+        .values(this.ships[ship].requires.buildings)
+        .every(building => this.constructed[building])
     },
 
     /**
@@ -619,17 +607,9 @@ export default {
      * @return {Boolean}
      */
     checkBuildingBuildings (toBuild) {
-      if (!this.buildings[toBuild].requires.buildings) {
-        return true
-      }
-
-      let canBuild = true
-      Object.values(this.buildings[toBuild].requires.buildings).forEach(building => {
-        if (!this.constructed[building]) {
-          canBuild = false
-        }
-      })
-      return canBuild
+      return Object
+        .values(this.buildings[toBuild].requires.buildings)
+        .every(building => this.constructed[building])
     },
 
     /**

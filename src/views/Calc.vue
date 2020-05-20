@@ -12,22 +12,22 @@
           <th><img :src="`${imgDG}/units/small/metal.gif`" title="Metal" class="image-header"> Metal</th>
           <th><img :src="`${imgDG}/units/small/mineral.gif`" title="Mineral" class="image-header"> Mineral</th>
           <th><img :src="`${imgDG}/units/small/energy.gif`" title="Energy" class="image-header"> Energy</th>
-          <th><img :src="`${imgDG}/units/small/worker.gif`" title="Population" class="image-header"> Population</th>
+          <th><img :src="`${imgDG}/units/small/worker.gif`" title="Workers" class="image-header"> Workers</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="turn in log" :key="turn.turn">
           <td>{{ turn.turn }}</td>
           <td><span v-if="turn.queue.building.ref">{{ buildings[turn.queue.building.ref].name }} ({{ turn.queue.building.turns }})</span></td>
-          <td><span v-if="turn.queue.production.ref">{{turn.queue.production.quantity}} {{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
+          <td><span v-if="turn.queue.production.ref">{{turn.queue.production.quantity}}x {{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
           <td><span v-if="turn.queue.research.ref">{{ research[turn.queue.research.ref].name }}</span></td>
-          <td class="metal">{{ turn.stored.metal | numeral('0,0') }} ({{ turn.output.metal | numeral('+0,0') }})</td>
-          <td class="mineral">{{ turn.stored.mineral | numeral('0,0') }} ({{ turn.output.mineral | numeral('+0,0') }})</td>
-          <td class="energy">{{ turn.stored.energy | numeral('0,0') }} ({{ turn.output.energy | numeral('+0,0') }})</td>
+          <td class="resource-metal">{{ turn.stored.metal | numeral('0,0') }} ({{ turn.output.metal | numeral('+0,0') }})</td>
+          <td class="resource-mineral">{{ turn.stored.mineral | numeral('0,0') }} ({{ turn.output.mineral | numeral('+0,0') }})</td>
+          <td class="resource-energy">{{ turn.stored.energy | numeral('0,0') }} ({{ turn.output.energy | numeral('+0,0') }})</td>
           <td>
             {{ (turn.stored.pop + turn.stored.pop_busy) | numeral('0,0') }}
             / {{ turn.storage.pop | numeral('0,0') }}
-            <span class="population">({{ turn.output.pop | numeral('+0,0') }}) </span>
+            <span class="workers">({{ turn.output.pop | numeral('+0,0') }}) </span>
             <span class="neutral">({{ turn.stored.pop_busy | numeral('0,0') }} occupied)</span>
           </td>
         </tr>
@@ -48,7 +48,7 @@
             <td><img :src="`${imgDG}/units/small/metal.gif`" title="Metal" class="image-header"> {{ totalResource('metal') | numeral('0,0') }}</td>
             <td><img :src="`${imgDG}/units/small/mineral.gif`" title="Mineral" class="image-header"> {{ totalResource('mineral') | numeral('0,0') }}</td>
             <td><img :src="`${imgDG}/units/small/energy.gif`" title="Energy" class="image-header"> {{ totalResource('energy') | numeral('0,0') }}</td>
-            <td><img :src="`${imgDG}/units/small/worker.gif`" title="Population" class="image-header"> {{ totalResource('pop') | numeral('0,0') }}</td>
+            <td><img :src="`${imgDG}/units/small/worker.gif`" title="Workers" class="image-header"> {{ totalResource('pop') | numeral('0,0') }}</td>
           </tr>
         </tfoot>
       </table>
@@ -138,7 +138,7 @@ export default {
       /**
        * Planet abundances
        */
-      abundancies: {},
+      abundances: {},
 
       /**
        * List of ships
@@ -230,7 +230,7 @@ export default {
   mounted () {
     this.constructed = JSON.parse(JSON.stringify(HomePlanet.constructed))
     this.stored = JSON.parse(JSON.stringify(HomePlanet.stored))
-    this.abundancies = JSON.parse(JSON.stringify(HomePlanet.abundancies))
+    this.abundances = JSON.parse(JSON.stringify(HomePlanet.abundances))
     this.travel = JSON.parse(JSON.stringify(Travel))
     this.resources = JSON.parse(JSON.stringify(Resources))
 
@@ -278,7 +278,7 @@ export default {
 
           // Take into account abundancy if not an energy cost or research
           if (resource !== 'energy' || this.buildings[building].output[resource] > 0) {
-            resourceOutput *= this.abundancies[resource]
+            resourceOutput *= this.abundances[resource]
           }
           if (resource !== 'research' && resource !== 'energy') {
             resourceOutput *= this.researchBonus[resource]
@@ -647,22 +647,6 @@ export default {
 <style scoped>
 .image-header {
   width: 17px;
-}
-
-.metal {
-  color: #EEEEEE;
-}
-
-.mineral {
-  color: #E33E4C;
-}
-
-.energy {
-  color: #6596DA;
-}
-
-.population {
-  color: #EAC861;
 }
 
 .neutral {

@@ -10,12 +10,15 @@
             </div>
           </border-box>
         </div>
-        <building-queue
-          v-model="buildOrder"
-          :available="availableBuildings"
-          :log="buildLog"
-          class="grow"
-        />
+        <div class="grow">
+          <planet planet-type="home" />
+          <building-queue
+            v-model="buildOrder"
+            :available="availableBuildings"
+            :log="buildLog"
+            class="margin-top"
+          />
+        </div>
         <div class="margin-left grow">
           <research-queue
             :order="researchOrder"
@@ -48,15 +51,18 @@ import BorderBox from '@/components/BorderBox'
 import Buildings from '@/buildings.js'
 import Calc from './views/Calc'
 import BuildingQueue from './views/BuildingQueue'
+import Planet from './views/Planet'
 import ResearchQueue from './views/ResearchQueue'
 import ShipQueue from './views/ShipQueue'
 import Ships from '@/ships.js'
 import md5 from 'md5'
-let TinyURL = require('tinyurl');
+
+let TinyURL = require('tinyurl')
 
 export default {
   components: {
     buildingQueue: BuildingQueue,
+    planet: Planet,
     researchQueue: ResearchQueue,
     shipQueue: ShipQueue,
     calc: Calc,
@@ -70,7 +76,7 @@ export default {
       buildings: Buildings,
       ships: Ships,
       log: [],
-      shortUrl: '',
+      shortUrl: ''
     }
   },
   mounted () {
@@ -84,11 +90,11 @@ export default {
       // Look up current short URL
       TinyURL.resolve(window.location.href + '#' + window.location.hash)
         .then(shortUrl => {
-          this.shortUrl = shortUrl;
+          this.shortUrl = shortUrl
         })
-        .catch(error => {
+        .catch(() => {
           // No need to do anything with the error
-        });
+        })
     }
   },
   computed: {
@@ -188,7 +194,7 @@ export default {
      */
     updateUrlHash () {
       window.location.hash = btoa(JSON.stringify([this.buildOrder, this.researchOrder, this.shipOrder]))
-      this.shortUrl = '';
+      this.shortUrl = ''
     },
 
     /**
@@ -197,9 +203,9 @@ export default {
     getShortLink () {
       TinyURL.shorten(window.location.href + '#' + window.location.hash)
         .then(shortUrl => {
-          this.shortUrl = shortUrl;
+          this.shortUrl = shortUrl
         })
-        .catch(error => {
+        .catch(() => {
           // No need to do anything with the error
         })
     },

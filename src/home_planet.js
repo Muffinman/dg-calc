@@ -13,7 +13,7 @@ let homePlanet = {
     pop_busy: 0,
     research: 0
   },
-  abundancies: {
+  abundances: {
     metal: 0.7,
     mineral: 0.7,
     energy: 0.7,

@@ -63,13 +63,24 @@ export default {
   methods: {
     /**
      * Add a ship to the queue
-     * @param {String} ship
+     * @param {String} ref
      */
-    addToQueue (ship) {
+    addToQueue (ref) {
+      let quantity = this.quantity
+
+      // If you add wait multiple times, join the waits together
+      if (ref === 'wait') {
+        let lastOrder = this.order.reverse().shift()
+        if (lastOrder && lastOrder.ref === 'wait') {
+          quantity += lastOrder.quantity
+        }
+      }
+
       this.order.push({
-        ref: ship,
-        quantity: this.quantity
+        ref: ref,
+        quantity: quantity
       })
+
       this.$emit('input', this.order)
     },
 

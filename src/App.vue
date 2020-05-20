@@ -53,7 +53,7 @@ export default {
       shipOrder: [],
       buildings: Buildings,
       ships: Ships,
-      log: [],
+      log: []
     }
   },
   mounted () {
@@ -115,13 +115,15 @@ export default {
 
     shipLog () {
       let shipLog = []
+      let waiting = false
       this.log.forEach(({ queue, turn }) => {
-        if (queue.production.ref && queue.production.turns === this.ships[queue.production.ref].turns) {
+        if ((queue.production.ref === 'wait' && !waiting) || (queue.production.ref && queue.production.turns === this.ships[queue.production.ref].turns)) {
           shipLog.push({
             turn: turn,
             ref: queue.production.ref,
             quantity: queue.production.quantity
           })
+          waiting = queue.production.ref === 'wait'
         }
       })
       return shipLog

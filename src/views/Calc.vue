@@ -542,19 +542,26 @@ export default {
 
     /**
      * Start construction of a ship
-     * @param {String} ship
+     * @param {String} ref
      * @param {Number} quantity
      */
-    shipConstructionStart (ship, quantity) {
-      Object.keys(this.ships[ship].cost).forEach(resource => {
-        this.stored[resource] -= this.ships[ship].cost[resource] * quantity
-        if (resource === 'pop') {
-          this.stored.pop_busy += this.ships[ship].cost[resource] * quantity
+    shipConstructionStart (ref, quantity) {
+      Object.keys(this.ships[ref].cost).forEach(resource => {
+        switch (ref) {
+          case 'wait':
+            this.$set(this.queue.production, 'turns', quantity)
+            break
+          default: {
+            this.stored[resource] -= this.ships[ref].cost[resource] * quantity
+            if (resource === 'pop') {
+              this.stored.pop_busy += this.ships[ref].cost[resource] * quantity
+            }
+            this.$set(this.queue.production, 'turns', this.ships[ref].turns)
+          }
         }
       })
-      this.$set(this.queue.production, 'ref', ship)
+      this.$set(this.queue.production, 'ref', ref)
       this.$set(this.queue.production, 'quantity', quantity)
-      this.$set(this.queue.production, 'turns', this.ships[ship].turns)
     },
 
     /**

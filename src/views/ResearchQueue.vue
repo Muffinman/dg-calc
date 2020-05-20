@@ -32,7 +32,7 @@
 
 <script>
 import BorderBox from '@/components/BorderBox'
-import Research from '@/research.js'
+import Research from '@/data/research.js'
 import Draggable from 'vuedraggable'
 
 export default {

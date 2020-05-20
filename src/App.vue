@@ -45,12 +45,12 @@
 
 <script>
 import BorderBox from '@/components/BorderBox'
-import Buildings from '@/buildings.js'
+import Buildings from '@/data/buildings.js'
 import Calc from './views/Calc'
 import BuildingQueue from './views/BuildingQueue'
 import ResearchQueue from './views/ResearchQueue'
 import ShipQueue from './views/ShipQueue'
-import Ships from '@/ships.js'
+import Ships from '@/data/ships.js'
 import md5 from 'md5'
 import TinyURL from '@/helper/tiny-url.js';
 

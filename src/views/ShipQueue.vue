@@ -34,7 +34,7 @@
 
 <script>
 import BorderBox from '@/components/BorderBox'
-import Ships from '@/ships.js'
+import Ships from '@/data/ships.js'
 import Draggable from 'vuedraggable'
 
 export default {

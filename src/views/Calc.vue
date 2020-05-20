@@ -58,9 +58,9 @@
 
 <script>
 import BorderBox from '@/components/BorderBox'
-import Buildings from '@/buildings.js'
-import Ships from '@/ships.js'
-import Research from '@/research.js'
+import Buildings from '@/data/buildings.js'
+import Ships from '@/data/ships.js'
+import Research from '@/data/research.js'
 
 export default {
   components: {

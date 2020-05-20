@@ -3,7 +3,7 @@ const imgDG = 'https://beta.darkgalaxy.com/images'
 let ships = {
   wait: {
     name: 'Wait...',
-    turns: 1,
+    turns: null,
     cost: {
       metal: 0,
       mineral: 0,

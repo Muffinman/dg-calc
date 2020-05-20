@@ -284,12 +284,10 @@ export default {
   },
 
   mounted () {
-    this.removeEnergyBuildingsFromBuildOrder()
-
     this.calcOutputAndStorage()
     this.ticks(300)
 
-    this.setBuildOrderFromLog()
+    this.$emit('logUpdated', Object.values(this.log))
   },
 
   methods: {
@@ -480,14 +478,12 @@ export default {
 
         if (!this.checkShipResources(next.ref, next.quantity) || !this.checkShipBuildings(next.ref)) {
           this.currentShipOrder.unshift(next)
-          next = null
+          return
         }
 
-        if (next) {
-          this.shipConstructionStart(next.ref, next.quantity)
-          this.$set(this.log[this.turn].queue, 'production', Object.assign({}, this.queue.production))
-          next.turn = this.turn
-        }
+        this.shipConstructionStart(next.ref, next.quantity)
+        this.$set(this.log[this.turn].queue, 'production', Object.assign({}, this.queue.production))
+        next.turn = this.turn
       }
     },
 
@@ -546,19 +542,26 @@ export default {
 
     /**
      * Start construction of a ship
-     * @param {String} ship
+     * @param {String} ref
      * @param {Number} quantity
      */
-    shipConstructionStart (ship, quantity) {
-      Object.keys(this.ships[ship].cost).forEach(resource => {
-        this.stored[resource] -= this.ships[ship].cost[resource] * quantity
-        if (resource === 'pop') {
-          this.stored.pop_busy += this.ships[ship].cost[resource] * quantity
+    shipConstructionStart (ref, quantity) {
+      Object.keys(this.ships[ref].cost).forEach(resource => {
+        switch (ref) {
+          case 'wait':
+            this.$set(this.queue.production, 'turns', quantity)
+            break
+          default: {
+            this.stored[resource] -= this.ships[ref].cost[resource] * quantity
+            if (resource === 'pop') {
+              this.stored.pop_busy += this.ships[ref].cost[resource] * quantity
+            }
+            this.$set(this.queue.production, 'turns', this.ships[ref].turns)
+          }
         }
       })
-      this.$set(this.queue.production, 'ref', ship)
+      this.$set(this.queue.production, 'ref', ref)
       this.$set(this.queue.production, 'quantity', quantity)
-      this.$set(this.queue.production, 'turns', this.ships[ship].turns)
     },
 
     /**
@@ -685,41 +688,6 @@ export default {
       return Object
         .values(this.log)
         .reduce((total, turn) => total + turn.output[resource], 0)
-    },
-
-    /**
-     * Because we automatically add the best possible energy building at the earliest possible turn,
-     * extra energy buildings may be created when moving a building earlier than the previous energy building.
-     * We want to avoid this and optimize the build list by removing all energy structures and later add them again at best possible turn.
-     */
-    removeEnergyBuildingsFromBuildOrder () {
-      this.$set(
-        this,
-        'currentBuildOrder',
-        this.currentBuildOrder.filter(({ ref }) => {
-          return this.buildings[ref].output.energy <= 0
-        })
-      )
-    },
-
-    /**
-     * Some buildings, e.g. for energy are automatically handled when energy is required,
-     * but we still want them to be visible in the buildOrder.
-     * Therefore we get all buildings from the log and emit the completed build order.
-     *
-     * @return {String}
-     */
-    setBuildOrderFromLog () {
-      let newBuildOrder = []
-      Object.values(this.log).forEach(({ queue, turn }) => {
-        if (queue.building.ref && queue.building.turns === this.buildings[queue.building.ref].turns) {
-          newBuildOrder.push({
-            turn: turn,
-            ref: queue.building.ref
-          })
-        }
-      })
-      this.$emit('orderUpdated', newBuildOrder)
     }
   }
 }

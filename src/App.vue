@@ -6,7 +6,7 @@
           <border-box>
             <div class="flex justify-content-stretch">
               <button @click="getShortLink">Get Shortlink</button>
-              <input type="text" v-model="shortUrl" readonly class="grow" />
+              <input type="text" v-model="shortUrl" placeholder="No url saved..." readonly class="grow" />
             </div>
           </border-box>
         </div>
@@ -184,6 +184,7 @@ export default {
      */
     updateUrlHash () {
       window.location.hash = btoa(JSON.stringify([this.buildOrder, this.researchOrder, this.shipOrder]))
+      this.shortUrl = '';
     },
 
     /**

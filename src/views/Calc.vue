@@ -572,7 +572,7 @@ export default {
     shipConstructionFinish (ship, quantity) {
       this.stored.pop += this.ships[ship].cost.pop * quantity
       this.stored.pop_busy -= this.ships[ship].cost.pop * quantity
-      if (!this.first_colo_turn && ship === 'colony_ship') {
+      if (!this.first_colo_turn && ship === 'outpost_ship') {
         this.first_colo_turn = this.turn + this.travel.homeworld.center
       }
 

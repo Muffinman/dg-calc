@@ -372,7 +372,7 @@ export default {
         this.queue.production.turns--
       }
       if (this.queue.production.turns === 0 && this.queue.production.ref) {
-        this.shipConstructionFinish(this.queue.production.ref)
+        this.shipConstructionFinish(this.queue.production.ref, this.queue.production.quantity)
       }
     },
 
@@ -517,11 +517,12 @@ export default {
     /**
      * Process completion of a ship
      * @param {String} ship
+     * @param {Number} quantity
      */
-    shipConstructionFinish (ship) {
-      this.stored.pop += this.ships[ship].cost.pop
-      this.stored.pop_busy -= this.ships[ship].cost.pop
-      if (!this.first_colo_turn) {
+    shipConstructionFinish (ship, quantity) {
+      this.stored.pop += this.ships[ship].cost.pop * quantity
+      this.stored.pop_busy -= this.ships[ship].cost.pop * quantity
+      if (!this.first_colo_turn && ship === 'outpost_ship') {
         this.first_colo_turn = this.turn + this.travel.homeworld.center
       }
 

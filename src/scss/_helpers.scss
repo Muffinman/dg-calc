@@ -9,6 +9,13 @@
 .shrink {
     flex-shrink: 1;
 }
+.wrap {
+    flex-wrap: wrap;
+}
+
+.align-items-top {
+    align-items: flex-start;
+}
 
 .justify-content-between {
     justify-content: space-between !important;
@@ -16,6 +23,10 @@
 
 .justify-content-stretch {
     justify-content: stretch !important;
+}
+
+.full-width {
+    flex-basis: 100%;
 }
 
 .margin-left {
@@ -36,4 +47,34 @@
 
 .scroll {
     overflow: scroll;
+}
+
+.left-panel {
+    display: flex;
+    max-width: 550px;
+}
+
+.right-panel {
+
+}
+
+.short-url {
+    margin-bottom: $base-spacing;
+
+    button {
+        background: $grey-dark;
+        border: 2px solid $grey-lighter;
+        color: white;
+        padding: 1em 1.5em;
+        font-size: 1.4em;
+    }
+
+    input {
+        font-size: 1.6em;
+        background: $grey-darker;
+        color: white;
+        padding: 0.5em 1em;
+        text-align: center;
+        border: none;
+    }
 }

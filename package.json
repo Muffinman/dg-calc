@@ -26,6 +26,7 @@
     "numeral": "^2.0.6",
     "sass": "^1.18.0",
     "sass-loader": "^7.1.0",
+    "tinyurl": "^1.1.5",
     "vue-numeral-filter": "^1.1.1",
     "vue-template-compiler": "^2.6.10",
     "vuedraggable": "^2.23.0"

@@ -34,13 +34,13 @@
       <h3>Current Queue</h3>
       <ul class="queue draggable">
         <draggable
-          :list="currentOrder"
+          :list="order"
           group="buildings"
           handle=".handle"
-          @change="updateOrder"
+          @change="emitOrder"
         >
           <li
-            v-for="(building, index) in currentOrder"
+            v-for="(building, index) in order"
             :key="index"
           >
             <input
@@ -88,24 +88,22 @@ export default {
     return {
       buildings: Buildings,
       imgDG: 'https://beta.darkgalaxy.com/images',
-      currentOrder: [],
-      newOrder: []
+      order: []
     }
   },
   watch: {
     log () {
-      this.$set(this, 'currentOrder', JSON.parse(JSON.stringify(this.log)))
-    },
-    value () {
-      this.$set(this, 'newOrder', JSON.parse(JSON.stringify(this.value)))
+      this.$set(this, 'order', JSON.parse(JSON.stringify(this.log)))
     }
   },
   methods: {
     /**
-     * Emit the updated queue order to the parent
+     * Emit the updated queue order to the parent.
+     * This is actually the ouput of the log, optionally with a change for removing or adding a building.
+     * In the calculation, energy buildings are added automatically so we don't want them to be part of the order.
      */
-    updateOrder () {
-      this.$emit('input', this.currentOrder.filter(
+    emitOrder () {
+      this.$emit('input', this.order.filter(
         ({ ref }) => this.buildings[ref].output['energy'] <= 0
       ))
     },
@@ -115,8 +113,8 @@ export default {
      * @param {String} building
      */
     addToQueue (building) {
-      this.newOrder.push({ ref: building })
-      this.$emit('input', this.newOrder)
+      this.order.push({ ref: building })
+      this.emitOrder()
     },
 
     /**
@@ -124,10 +122,8 @@ export default {
      * @param {Integer} index
      */
     removeFromQueue (index) {
-      this.currentOrder.splice(index, 1)
-      this.$emit('input', this.currentOrder.filter(
-        ({ ref }) => this.buildings[ref].output['energy'] <= 0
-      ))
+      this.order.splice(index, 1)
+      this.emitOrder()
     }
   }
 }

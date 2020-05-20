@@ -230,6 +230,7 @@ export default {
   mounted () {
     this.constructed = JSON.parse(JSON.stringify(HomePlanet.constructed))
     this.stored = JSON.parse(JSON.stringify(HomePlanet.stored))
+    this.abundancies = JSON.parse(JSON.stringify(HomePlanet.abundancies))
     this.travel = JSON.parse(JSON.stringify(Travel))
     this.resources = JSON.parse(JSON.stringify(Resources))
 

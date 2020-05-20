@@ -12,9 +12,9 @@
           @orderUpdated="updateResearchOrder"
         />
         <ship-queue
-          :order="shipOrder"
+          v-model="shipOrder"
           :available="availableShips"
-          @orderUpdated="updateShipOrder"
+          :log="shipLog"
           class="margin-top"
         />
       </div>
@@ -24,7 +24,7 @@
         :ship-order="shipOrder"
         :key="orderHash"
         class="grow margin-left"
-        @logUpdated="updateBuildLog"
+        @logUpdated="updateLog"
       />
     </div>
   </div>
@@ -45,6 +45,24 @@ export default {
     researchQueue: ResearchQueue,
     shipQueue: ShipQueue,
     calc: Calc
+  },
+  data () {
+    return {
+      buildOrder: [],
+      researchOrder: [],
+      shipOrder: [],
+      buildings: Buildings,
+      ships: Ships,
+      log: [],
+    }
+  },
+  mounted () {
+    if (window.location.hash) {
+      let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
+      this.$set(this, 'buildOrder', this.migrateBuildingData(loadedData[0]))
+      this.$set(this, 'researchOrder', loadedData[1])
+      this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
+    }
   },
   computed: {
     orderHash () {
@@ -75,6 +93,38 @@ export default {
       }
 
       return ships
+    },
+
+    /*
+     * Some buildings, e.g. for energy, are automatically handled when energy is required,
+     * but we still want them to be visible in the buildOrder.
+     * Therefore we extract all required information from the calculated log.
+     */
+    buildLog () {
+      let buildLog = []
+      this.log.forEach(({ queue, turn }) => {
+        if (queue.building.ref && queue.building.turns === this.buildings[queue.building.ref].turns) {
+          buildLog.push({
+            turn: turn,
+            ref: queue.building.ref
+          })
+        }
+      })
+      return buildLog
+    },
+
+    shipLog () {
+      let shipLog = []
+      this.log.forEach(({ queue, turn }) => {
+        if (queue.production.ref && queue.production.turns === this.ships[queue.production.ref].turns) {
+          shipLog.push({
+            turn: turn,
+            ref: queue.production.ref,
+            quantity: queue.production.quantity
+          })
+        }
+      })
+      return shipLog
     }
   },
   watch: {
@@ -88,58 +138,20 @@ export default {
       this.updateUrlHash()
     }
   },
-  data () {
-    return {
-      buildOrder: [],
-      researchOrder: [],
-      shipOrder: [],
-      buildings: Buildings,
-      ships: Ships,
-      buildLog: []
-    }
-  },
-  mounted () {
-    if (window.location.hash) {
-      let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
-      this.$set(this, 'buildOrder', this.migrateBuildingData(loadedData[0]))
-      this.$set(this, 'researchOrder', loadedData[1])
-      this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
-    }
-  },
   methods: {
     /**
      * We received an orderUpdated event for research, propagate to children
      * @param {Array} newOrder
      */
     updateResearchOrder (newOrder) {
-      this.researchOrder = newOrder
+      this.$set(this, 'researchOrder', newOrder)
     },
 
     /**
-     * We received an orderUpdated event for research, propagate to children
-     * @param {Array} newOrder
-     */
-    updateShipOrder (newOrder) {
-      this.shipOrder = newOrder
-    },
-
-    /**
-     * Some buildings, e.g. for energy are automatically handled when energy is required,
-     * but we still want them to be visible in the buildOrder.
-     * Therefore we extract all required information from the calculated log.
      * @param {Array} log
      */
-    updateBuildLog (log) {
-      let buildLog = []
-      log.forEach(({ queue, turn }) => {
-        if (queue.building.ref && queue.building.turns === this.buildings[queue.building.ref].turns) {
-          buildLog.push({
-            turn: turn,
-            ref: queue.building.ref
-          })
-        }
-      })
-      this.$set(this, 'buildLog', buildLog)
+    updateLog (log) {
+      this.$set(this, 'log', log)
     },
 
     /**

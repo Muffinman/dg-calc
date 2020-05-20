@@ -16,8 +16,8 @@
 
       <h3>Current Queue</h3>
       <ul class="queue draggable">
-        <draggable :list="newOrder" group="ships" handle=".handle" @change="updateOrder">
-          <li v-for="(ship, index) in newOrder" :key="index">
+        <draggable :list="order" group="ships" handle=".handle" @change="$emit('input', order)">
+          <li v-for="(ship, index) in order" :key="index">
             <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
             <span class="handle">
               <img :src="ships[ship.ref].image" :title="ships[ship.ref].name" class="image-queue">
@@ -43,40 +43,34 @@ export default {
     Draggable
   },
   props: {
-    order: Array,
+    value: Array,
+    log: Array,
     available: Object
   },
   data () {
     return {
       ships: Ships,
-      newOrder: this.order,
+      order: [],
       imgDG: 'https://beta.darkgalaxy.com/images',
       quantity: 1
     }
   },
   watch: {
-    order () {
-      this.newOrder = this.order
+    log () {
+      this.$set(this, 'order', JSON.parse(JSON.stringify(this.log)))
     }
   },
   methods: {
-    /**
-     * Emit the updated queue order to the parent
-     */
-    updateOrder () {
-      this.$emit('orderUpdated', this.newOrder)
-    },
-
     /**
      * Add a ship to the queue
      * @param {String} ship
      */
     addToQueue (ship) {
-      this.newOrder.push({
-        turn: null,
+      this.order.push({
         ref: ship,
         quantity: this.quantity
       })
+      this.$emit('input', this.order)
     },
 
     /**
@@ -84,7 +78,8 @@ export default {
      * @param {Integer} index
      */
     removeFromQueue (index) {
-      this.newOrder.splice(index, 1)
+      this.order.splice(index, 1)
+      this.$emit('input', this.order)
     }
   }
 }

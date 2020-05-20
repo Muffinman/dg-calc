@@ -1,36 +1,50 @@
 <template>
   <div id="app" class="flex">
-    <div class="content flex justify-content-stretch scroll">
-      <building-queue
-        v-model="buildOrder"
-        :available="availableBuildings"
-        :log="buildLog"
-      />
-      <div class="margin-left">
-        <research-queue
-          :order="researchOrder"
-          @orderUpdated="updateResearchOrder"
+    <div class="content flex align-items-top justify-content-stretch scroll">
+      <div class="left-panel wrap">
+        <div class="short-url grow full-width">
+          <border-box>
+            <div class="flex justify-content-stretch">
+              <button @click="getShortLink">Get Shortlink</button>
+              <input type="text" v-model="shortUrl" readonly class="grow" />
+            </div>
+          </border-box>
+        </div>
+        <building-queue
+          v-model="buildOrder"
+          :available="availableBuildings"
+          :log="buildLog"
+          class="grow"
         />
-        <ship-queue
-          v-model="shipOrder"
-          :available="availableShips"
-          :log="shipLog"
-          class="margin-top"
+        <div class="margin-left grow">
+          <research-queue
+            :order="researchOrder"
+            @orderUpdated="updateResearchOrder"
+          />
+          <ship-queue
+            v-model="shipOrder"
+            :available="availableShips"
+            :log="shipLog"
+            class="margin-top"
+          />
+        </div>
+      </div>
+
+      <div class="right-panel grow margin-left">
+        <calc
+          :build-order="buildOrder"
+          :research-order="researchOrder"
+          :ship-order="shipOrder"
+          :key="orderHash"
+          @logUpdated="updateLog"
         />
       </div>
-      <calc
-        :build-order="buildOrder"
-        :research-order="researchOrder"
-        :ship-order="shipOrder"
-        :key="orderHash"
-        class="grow margin-left"
-        @logUpdated="updateLog"
-      />
     </div>
   </div>
 </template>
 
 <script>
+import BorderBox from '@/components/BorderBox'
 import Buildings from '@/buildings.js'
 import Calc from './views/Calc'
 import BuildingQueue from './views/BuildingQueue'
@@ -38,13 +52,15 @@ import ResearchQueue from './views/ResearchQueue'
 import ShipQueue from './views/ShipQueue'
 import Ships from '@/ships.js'
 import md5 from 'md5'
+let TinyURL = require('tinyurl');
 
 export default {
   components: {
     buildingQueue: BuildingQueue,
     researchQueue: ResearchQueue,
     shipQueue: ShipQueue,
-    calc: Calc
+    calc: Calc,
+    BorderBox
   },
   data () {
     return {
@@ -53,15 +69,22 @@ export default {
       shipOrder: [],
       buildings: Buildings,
       ships: Ships,
-      log: []
+      log: [],
+      shortUrl: '',
     }
   },
   mounted () {
     if (window.location.hash) {
       let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
+
       this.$set(this, 'buildOrder', this.migrateBuildingData(loadedData[0]))
       this.$set(this, 'researchOrder', loadedData[1])
       this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
+
+      // Look up current short URL
+      TinyURL.resolve(window.location.href + '#' + window.location.hash).then(shortUrl => {
+        this.shortUrl = shortUrl;
+      });
     }
   },
   computed: {
@@ -161,6 +184,15 @@ export default {
      */
     updateUrlHash () {
       window.location.hash = btoa(JSON.stringify([this.buildOrder, this.researchOrder, this.shipOrder]))
+    },
+
+    /**
+     * Get a short link for the current config
+     */
+    getShortLink () {
+      TinyURL.shorten(window.location.href + '#' + window.location.hash).then(shortUrl => {
+        this.shortUrl = shortUrl;
+      })
     },
 
     /**

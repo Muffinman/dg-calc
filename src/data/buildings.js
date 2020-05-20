@@ -225,6 +225,118 @@ let buildings = {
     unique: true,
     image: `${imgDG}/units/main/structures/colony.jpg`
   },
+  core_metal_mine: {
+    name: 'Core Metal Mine',
+    turns: 8,
+    canBuild: true,
+    cost: {
+      metal: 3600,
+      mineral: 12000,
+      energy: 0,
+      pop: 40000,
+      research: 0
+    },
+    output: {
+      metal: 900,
+      mineral: 0,
+      energy: -20,
+      pop: 0,
+      research: 0
+    },
+    storage: {
+      pop: 0
+    },
+    requires: {
+      buildings: ['colony'],
+      research: []
+    },
+    unique: false,
+    image: `${imgDG}/units/main/structures/core_metal_mine.jpg`
+  },
+  core_mineral_extractor: {
+    name: 'Core Mineral Extractor',
+    turns: 8,
+    canBuild: true,
+    cost: {
+      metal: 18000,
+      mineral: 2400,
+      energy: 0,
+      pop: 40000,
+      research: 0
+    },
+    output: {
+      metal: 0,
+      mineral: 600,
+      energy: -20,
+      pop: 0,
+      research: 0
+    },
+    storage: {
+      pop: 0
+    },
+    requires: {
+      buildings: ['colony'],
+      research: []
+    },
+    unique: false,
+    image: `${imgDG}/units/main/structures/core_mineral_extractor.jpg`
+  },
+  hyrdroponics_lab: {
+    name: 'Hydroponics Lab',
+    turns: 8,
+    canBuild: true,
+    cost: {
+      metal: 9000,
+      mineral: 6000,
+      energy: 0,
+      pop: 40000,
+      research: 0
+    },
+    output: {
+      metal: 0,
+      mineral: 0,
+      energy: -20,
+      pop: 900,
+      research: 0
+    },
+    storage: {
+      pop: 0
+    },
+    requires: {
+      buildings: ['colony', 'launch_site'],
+      research: []
+    },
+    unique: false,
+    image: `${imgDG}/units/main/structures/hydroponics_lab.jpg`
+  },
+  solar_array: {
+    name: 'Solar Array',
+    turns: 8,
+    canBuild: true,
+    cost: {
+      metal: 9000,
+      mineral: 6000,
+      energy: 0,
+      pop: 40000,
+      research: 0
+    },
+    output: {
+      metal: 0,
+      mineral: 0,
+      energy: 300,
+      pop: 0,
+      research: 0
+    },
+    storage: {
+      pop: 0
+    },
+    requires: {
+      buildings: ['colony', 'launch_site'],
+      research: []
+    },
+    unique: false,
+    image: `${imgDG}/units/main/structures/hydroponics_lab.jpg`
+  },
   ship_yard: {
     name: 'Ship Yard',
     turns: 12,

@@ -59,8 +59,11 @@
 <script>
 import BorderBox from '@/components/BorderBox'
 import Buildings from '@/buildings.js'
+import HomePlanet from '@/home_planet.js'
 import Ships from '@/ships.js'
+import Resources from '@/resources.js'
 import Research from '@/research.js'
+import Travel from '@/travel.js'
 
 export default {
   components: {
@@ -92,13 +95,7 @@ export default {
       /**
        * List of resources
        */
-      resources: [
-        'metal',
-        'mineral',
-        'energy',
-        'pop',
-        'research'
-      ],
+      resources: [],
 
       /**
        * Current building order
@@ -118,14 +115,7 @@ export default {
       /**
        * Current stored planet resources
        */
-      stored: {
-        metal: 30000,
-        mineral: 20000,
-        energy: 1000,
-        pop: 20000,
-        pop_busy: 0,
-        research: 0
-      },
+      stored: {},
 
       /**
        * Current resource storage limits
@@ -146,15 +136,9 @@ export default {
       },
 
       /**
-       * Home planet abundances
+       * Planet abundances
        */
-      abundancies: {
-        metal: 0.7,
-        mineral: 0.7,
-        energy: 0.7,
-        pop: 1,
-        research: 1
-      },
+      abundancies: {},
 
       /**
        * List of ships
@@ -193,22 +177,7 @@ export default {
       /**
        * Completed structures
        */
-      constructed: {
-        outpost: 1,
-        metal_mine: 3,
-        mineral_extractor: 3,
-        solar_generator: 2,
-        farm: 0,
-        launch_site: 0,
-        ship_yard: 0,
-        comms_satellite: 0,
-        light_weapons_factory: 0,
-        army_barracks: 0,
-        colony: 0,
-        metropolis: 0,
-        space_dock: 0,
-        heavy_weapons_factory: 0
-      },
+      constructed: {},
 
       /**
        * Completed research
@@ -230,32 +199,7 @@ export default {
        * Syntax:
        * source: { destination: turns }
        */
-      travel: {
-        homeworld: {
-          center: 24,
-          inner: 24,
-          outer: 24,
-          homeworld: 24
-        },
-        center: {
-          center: 12,
-          inner: 20,
-          outer: 28,
-          homeworld: 24
-        },
-        inner: {
-          center: 12,
-          inner: 12,
-          outer: 20,
-          homeworld: 24
-        },
-        outer: {
-          center: 16,
-          inner: 16,
-          outer: 12,
-          homeworld: 24
-        }
-      },
+      travel: {},
 
       /**
        * Link to the website of Dark Galaxy to get images
@@ -284,6 +228,11 @@ export default {
   },
 
   mounted () {
+    this.constructed = JSON.parse(JSON.stringify(HomePlanet.constructed))
+    this.stored = JSON.parse(JSON.stringify(HomePlanet.stored))
+    this.travel = JSON.parse(JSON.stringify(Travel))
+    this.resources = JSON.parse(JSON.stringify(Resources))
+
     this.calcOutputAndStorage()
     this.ticks(300)
 

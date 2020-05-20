@@ -5,7 +5,7 @@
       <h2 slot="header" class="card-header-title">Ship <strong>Order</strong></h2>
 
       <h3>Available</h3>
-      <p><label>Quantity: <input v-model.number="quantity" class="queue-quantity" /></label></p>
+      <p><label>Quantity: <input v-model.number="quantity" type="number" min="1" class="queue-quantity is-pulled-right" /></label></p>
       <ul class="queue">
         <li v-for="(ship, ref) in available" :key="ref">
           <button class="button-add" title="Add" @click="addToQueue(ref)">+</button>
@@ -16,14 +16,14 @@
 
       <h3>Current Queue</h3>
       <ul class="queue draggable">
-        <draggable :list="newOrder" group="ships" handle=".handle" @change="updateOrder">
-          <li v-for="(ship, index) in newOrder" :key="index">
+        <draggable :list="order" group="ships" handle=".handle" @change="$emit('input', order)">
+          <li v-for="(ship, index) in order" :key="index">
             <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
             <span class="handle">
               <img :src="ships[ship.ref].image" :title="ships[ship.ref].name" class="image-queue">
               {{ `${ship.turn} ${ships[ship.ref].name}` }}
             </span>
-            <input v-model.number="ship.quantity" class="queue-quantity" />
+            <input v-model.number="ship.quantity" type="number" min="1" class="queue-quantity is-pulled-right" @change="handleShipInput" @keyup="handleShipInput" />
           </li>
         </draggable>
       </ul>
@@ -43,40 +43,46 @@ export default {
     Draggable
   },
   props: {
-    order: Array,
+    value: Array,
+    log: Array,
     available: Object
   },
   data () {
     return {
       ships: Ships,
-      newOrder: this.order,
+      order: [],
       imgDG: 'https://beta.darkgalaxy.com/images',
       quantity: 1
     }
   },
   watch: {
-    order () {
-      this.newOrder = this.order
+    log () {
+      this.$set(this, 'order', JSON.parse(JSON.stringify(this.log)))
     }
   },
   methods: {
     /**
-     * Emit the updated queue order to the parent
-     */
-    updateOrder () {
-      this.$emit('orderUpdated', this.newOrder)
-    },
-
-    /**
      * Add a ship to the queue
-     * @param {String} ship
+     * @param {String} ref
      */
-    addToQueue (ship) {
-      this.newOrder.push({
-        turn: null,
-        ref: ship,
-        quantity: this.quantity
+    addToQueue (ref) {
+      let quantity = this.quantity
+
+      // If you add wait multiple times, join the waits together
+      if (ref === 'wait' && this.order.length > 0) {
+        let lastOrder = this.order.slice(-1)[0]
+        if (lastOrder.ref === 'wait') {
+          quantity += lastOrder.quantity
+          this.order.pop()
+        }
+      }
+
+      this.order.push({
+        ref: ref,
+        quantity: quantity
       })
+
+      this.$emit('input', this.order)
     },
 
     /**
@@ -84,7 +90,14 @@ export default {
      * @param {Integer} index
      */
     removeFromQueue (index) {
-      this.newOrder.splice(index, 1)
+      this.order.splice(index, 1)
+      this.$emit('input', this.order)
+    },
+
+    handleShipInput (event) {
+      if (event.target.value !== '') {
+        this.$emit('input', this.order)
+      }
     }
   }
 }

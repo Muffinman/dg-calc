@@ -309,34 +309,34 @@ let buildings = {
     unique: false,
     image: `${imgDG}/units/main/structures/hydroponics_lab.jpg`
   },
-  solar_array: {
-    name: 'Solar Array',
-    turns: 8,
-    canBuild: true,
-    cost: {
-      metal: 9000,
-      mineral: 6000,
-      energy: 0,
-      pop: 40000,
-      research: 0
-    },
-    output: {
-      metal: 0,
-      mineral: 0,
-      energy: 300,
-      pop: 0,
-      research: 0
-    },
-    storage: {
-      pop: 0
-    },
-    requires: {
-      buildings: ['colony', 'launch_site'],
-      research: []
-    },
-    unique: false,
-    image: `${imgDG}/units/main/structures/solar_array.jpg`
-  },
+  // solar_array: {
+  //   name: 'Solar Array',
+  //   turns: 8,
+  //   canBuild: true,
+  //   cost: {
+  //     metal: 9000,
+  //     mineral: 6000,
+  //     energy: 0,
+  //     pop: 40000,
+  //     research: 0
+  //   },
+  //   output: {
+  //     metal: 0,
+  //     mineral: 0,
+  //     energy: 300,
+  //     pop: 0,
+  //     research: 0
+  //   },
+  //   storage: {
+  //     pop: 0
+  //   },
+  //   requires: {
+  //     buildings: ['colony', 'launch_site'],
+  //     research: []
+  //   },
+  //   unique: false,
+  //   image: `${imgDG}/units/main/structures/solar_array.jpg`
+  // },
   ship_yard: {
     name: 'Ship Yard',
     turns: 12,

@@ -5,7 +5,7 @@
       <h2 slot="header" class="card-header-title">Ship <strong>Order</strong></h2>
 
       <h3>Available</h3>
-      <p><label>Quantity: <input v-model.number="quantity" class="queue-quantity is-pulled-right" /></label></p>
+      <p><label>Quantity: <input v-model.number="quantity" type="number" min="1" class="queue-quantity is-pulled-right" /></label></p>
       <ul class="queue">
         <li v-for="(ship, ref) in available" :key="ref">
           <button class="button-add" title="Add" @click="addToQueue(ref)">+</button>
@@ -23,7 +23,7 @@
               <img :src="ships[ship.ref].image" :title="ships[ship.ref].name" class="image-queue">
               {{ `${ship.turn} ${ships[ship.ref].name}` }}
             </span>
-            <input v-model.number="ship.quantity" class="queue-quantity is-pulled-right" />
+            <input v-model.number="ship.quantity" type="number" min="1" class="queue-quantity is-pulled-right" @change="handleShipInput" @keyup="handleShipInput" />
           </li>
         </draggable>
       </ul>
@@ -69,10 +69,11 @@ export default {
       let quantity = this.quantity
 
       // If you add wait multiple times, join the waits together
-      if (ref === 'wait') {
-        let lastOrder = this.order.reverse().shift()
-        if (lastOrder && lastOrder.ref === 'wait') {
+      if (ref === 'wait' && this.order.length > 0) {
+        let lastOrder = this.order.slice(-1)[0]
+        if (lastOrder.ref === 'wait') {
           quantity += lastOrder.quantity
+          this.order.pop()
         }
       }
 
@@ -91,6 +92,12 @@ export default {
     removeFromQueue (index) {
       this.order.splice(index, 1)
       this.$emit('input', this.order)
+    },
+
+    handleShipInput (event) {
+      if (event.target.value !== '') {
+        this.$emit('input', this.order)
+      }
     }
   }
 }

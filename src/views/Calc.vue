@@ -280,12 +280,14 @@ export default {
         turn++
       }
       return count
-    },
+    }
   },
 
   mounted () {
     this.calcOutputAndStorage()
     this.ticks(300)
+
+    this.$emit('logUpdated', Object.values(this.log))
   },
 
   methods: {
@@ -454,14 +456,12 @@ export default {
 
         if (!this.checkBuildingResources(next.ref) || !this.checkBuildingBuildings(next.ref)) {
           this.currentBuildOrder.unshift(next)
-          next = null
+          return
         }
 
-        if (next) {
-          this.buildingConstructionStart(next.ref)
-          this.$set(this.log[this.turn].queue, 'building', Object.assign({}, this.queue.building))
-          next.turn = this.turn
-        }
+        this.buildingConstructionStart(next.ref)
+        this.$set(this.log[this.turn].queue, 'building', Object.assign({}, this.queue.building))
+        next.turn = this.turn
       }
     },
 
@@ -478,14 +478,12 @@ export default {
 
         if (!this.checkShipResources(next.ref, next.quantity) || !this.checkShipBuildings(next.ref)) {
           this.currentShipOrder.unshift(next)
-          next = null
+          return
         }
 
-        if (next) {
-          this.shipConstructionStart(next.ref, next.quantity)
-          this.$set(this.log[this.turn].queue, 'production', Object.assign({}, this.queue.production))
-          next.turn = this.turn
-        }
+        this.shipConstructionStart(next.ref, next.quantity)
+        this.$set(this.log[this.turn].queue, 'production', Object.assign({}, this.queue.production))
+        next.turn = this.turn
       }
     },
 
@@ -497,7 +495,7 @@ export default {
           return
         }
 
-        if (!this.checkReseach(next)) {
+        if (!this.checkResearch(next)) {
           this.currentResearchOrder.unshift(next)
           next = null
         }
@@ -544,19 +542,26 @@ export default {
 
     /**
      * Start construction of a ship
-     * @param {String} ship
+     * @param {String} ref
      * @param {Number} quantity
      */
-    shipConstructionStart (ship, quantity) {
-      Object.keys(this.ships[ship].cost).forEach(resource => {
-        this.stored[resource] -= this.ships[ship].cost[resource] * quantity
-        if (resource === 'pop') {
-          this.stored.pop_busy += this.ships[ship].cost[resource] * quantity
+    shipConstructionStart (ref, quantity) {
+      Object.keys(this.ships[ref].cost).forEach(resource => {
+        switch (ref) {
+          case 'wait':
+            this.$set(this.queue.production, 'turns', quantity)
+            break
+          default: {
+            this.stored[resource] -= this.ships[ref].cost[resource] * quantity
+            if (resource === 'pop') {
+              this.stored.pop_busy += this.ships[ref].cost[resource] * quantity
+            }
+            this.$set(this.queue.production, 'turns', this.ships[ref].turns)
+          }
         }
       })
-      this.$set(this.queue.production, 'ref', ship)
+      this.$set(this.queue.production, 'ref', ref)
       this.$set(this.queue.production, 'quantity', quantity)
-      this.$set(this.queue.production, 'turns', this.ships[ship].turns)
     },
 
     /**
@@ -612,13 +617,9 @@ export default {
      * @param {String} building
      */
     checkBuildingResources (building) {
-      let canBuild = true
-      Object.keys(this.buildings[building].cost).forEach(resource => {
-        if (this.stored[resource] < this.buildings[building].cost[resource]) {
-          canBuild = false
-        }
-      })
-      return canBuild
+      return Object
+        .keys(this.buildings[building].cost)
+        .every(resource => this.stored[resource] >= this.buildings[building].cost[resource])
     },
 
     /**
@@ -628,13 +629,9 @@ export default {
      * @return {Boolean}
      */
     checkShipResources (ship, quantity) {
-      let canBuild = true
-      Object.keys(this.ships[ship].cost).forEach(resource => {
-        if (this.stored[resource] < this.ships[ship].cost[resource] * quantity) {
-          canBuild = false
-        }
-      })
-      return canBuild
+      return Object
+        .keys(this.ships[ship].cost)
+        .every(resource => this.stored[resource] >= this.ships[ship].cost[resource] * quantity)
     },
 
     /**
@@ -643,13 +640,9 @@ export default {
      * @return {Boolean}
      */
     checkShipBuildings (ship) {
-      let canBuild = true
-      Object.values(this.ships[ship].requires.buildings).forEach(building => {
-        if (!this.constructed[building]) {
-          canBuild = false
-        }
-      })
-      return canBuild
+      return Object
+        .values(this.ships[ship].requires.buildings)
+        .every(building => this.constructed[building])
     },
 
     /**
@@ -658,23 +651,15 @@ export default {
      * @return {Boolean}
      */
     checkBuildingBuildings (toBuild) {
-      if (!this.buildings[toBuild].requires.buildings) {
-        return true
-      }
-
-      let canBuild = true
-      Object.values(this.buildings[toBuild].requires.buildings).forEach(building => {
-        if (!this.constructed[building]) {
-          canBuild = false
-        }
-      })
-      return canBuild
+      return Object
+        .values(this.buildings[toBuild].requires.buildings)
+        .every(building => this.constructed[building])
     },
 
     /**
      * Check we can start a particular research item
      */
-    checkReseach (researchItem) {
+    checkResearch (researchItem) {
       if (this.research[researchItem].cost > this.stored.research) {
         return false
       }
@@ -690,6 +675,7 @@ export default {
      */
     energyBuilding () {
       let toBuild = null
+      // TODO: this doesn't make sense and works because there is only 1 energy building in the buildings object. Try to add at least Solar Array, see what happens and improve.
       Object.keys(this.buildings).forEach(building => {
         if (this.buildings[building].output.energy > 0) {
           toBuild = building
@@ -699,13 +685,9 @@ export default {
     },
 
     totalResource (resource) {
-      let turn = 1
-      let output = 0
-      while (this.log[turn]) {
-        output += this.log[turn].output[resource]
-        turn++
-      }
-      return output
+      return Object
+        .values(this.log)
+        .reduce((total, turn) => total + turn.output[resource], 0)
     }
   }
 }

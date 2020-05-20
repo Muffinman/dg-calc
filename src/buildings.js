@@ -26,6 +26,7 @@ let buildings = {
       buildings: [],
       research: []
     },
+    unique: false,
     image: `${imgDG}/units/small/time.png`
   },
   outpost: {
@@ -53,7 +54,8 @@ let buildings = {
       buildings: [],
       research: []
     },
-    image: `${imgDG}/units/main/structures/outpost.png`
+    unique: true,
+    image: `${imgDG}/units/main/structures/outpost.jpg`
   },
   metal_mine: {
     name: 'Metal Mine',
@@ -80,6 +82,7 @@ let buildings = {
       buildings: [],
       research: []
     },
+    unique: false,
     image: `${imgDG}/units/main/structures/metal_mine.jpg`
   },
   mineral_extractor: {
@@ -107,6 +110,7 @@ let buildings = {
       buildings: [],
       research: []
     },
+    unique: false,
     image: `${imgDG}/units/main/structures/mineral_extractor.jpg`
   },
   farm: {
@@ -134,12 +138,13 @@ let buildings = {
       buildings: [],
       research: []
     },
+    unique: false,
     image: `${imgDG}/units/main/structures/farm.jpg`
   },
   solar_generator: {
     name: 'Solar Generator',
     turns: 4,
-    canBuild: true,
+    canBuild: false,
     cost: {
       metal: 1500,
       mineral: 1000,
@@ -161,6 +166,7 @@ let buildings = {
       buildings: [],
       research: []
     },
+    unique: false,
     image: `${imgDG}/units/main/structures/solar_generator.jpg`
   },
   launch_site: {
@@ -188,6 +194,7 @@ let buildings = {
       buildings: [],
       research: []
     },
+    unique: true,
     image: `${imgDG}/units/main/structures/launch_site.jpg`
   },
   colony: {
@@ -215,6 +222,7 @@ let buildings = {
       buildings: [],
       research: []
     },
+    unique: true,
     image: `${imgDG}/units/main/structures/colony.jpg`
   },
   ship_yard: {
@@ -242,6 +250,7 @@ let buildings = {
       buildings: ['launch_site'],
       research: []
     },
+    unique: true,
     image: `${imgDG}/units/main/structures/ship_yard.jpg`
   },
   comms_satellite: {
@@ -269,6 +278,7 @@ let buildings = {
       buildings: ['launch_site'],
       research: []
     },
+    unique: true,
     image: `${imgDG}/units/main/structures/comms_satellite.jpg`
   },
   living_quarters: {
@@ -296,6 +306,7 @@ let buildings = {
       buildings: [],
       research: []
     },
+    unique: false,
     image: `${imgDG}/units/main/structures/living_quarters.jpg`
   },
   habitat: {
@@ -323,6 +334,7 @@ let buildings = {
       buildings: ['launch_site'],
       research: []
     },
+    unique: false,
     image: `${imgDG}/units/main/structures/habitat.jpg`
   },
   light_weapons_factory: {
@@ -350,6 +362,7 @@ let buildings = {
       buildings: ['colony'],
       research: []
     },
+    unique: true,
     image: `${imgDG}/units/main/structures/light_weapons_factory.jpg`
   },
   army_barracks: {
@@ -377,6 +390,7 @@ let buildings = {
       buildings: ['light_weapons_factory'],
       research: []
     },
+    unique: true,
     image: `${imgDG}/units/main/structures/army_barracks.jpg`
   },
   space_dock: {
@@ -404,6 +418,7 @@ let buildings = {
       buildings: ['metropolis'],
       research: []
     },
+    unique: true,
     image: `${imgDG}/units/main/structures/space_dock.jpg`
   },
   heavy_weapons_factory: {
@@ -431,6 +446,7 @@ let buildings = {
       buildings: ['metropolis'],
       research: []
     },
+    unique: true,
     image: `${imgDG}/units/main/structures/heavy_weapons_factory.jpg`
   },
   metropolis: {
@@ -458,6 +474,7 @@ let buildings = {
       buildings: ['colony'],
       research: []
     },
+    unique: true,
     image: `${imgDG}/units/main/structures/metropolis.jpg`
   }
 }

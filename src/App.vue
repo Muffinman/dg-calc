@@ -1,17 +1,37 @@
 <template>
   <div id="app" class="flex">
     <div class="content flex justify-content-stretch scroll">
-      <building-queue :order="buildOrder" @orderUpdated="updateBuildOrder" />
+      <building-queue
+        v-model="buildOrder"
+        :available="availableBuildings"
+        :log="buildLog"
+      />
       <div class="margin-left">
-        <research-queue :order="researchOrder" @orderUpdated="updateResearchOrder" />
-        <ship-queue :order="shipOrder" :available="availableShips" @orderUpdated="updateShipOrder" class="margin-top" />
+        <research-queue
+          :order="researchOrder"
+          @orderUpdated="updateResearchOrder"
+        />
+        <ship-queue
+          v-model="shipOrder"
+          :available="availableShips"
+          :log="shipLog"
+          class="margin-top"
+        />
       </div>
-      <calc :build-order="buildOrder" :research-order="researchOrder" :ship-order="shipOrder" class="grow margin-left" :key="orderHash" />
+      <calc
+        :build-order="buildOrder"
+        :research-order="researchOrder"
+        :ship-order="shipOrder"
+        :key="orderHash"
+        class="grow margin-left"
+        @logUpdated="updateLog"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import Buildings from '@/buildings.js'
 import Calc from './views/Calc'
 import BuildingQueue from './views/BuildingQueue'
 import ResearchQueue from './views/ResearchQueue'
@@ -26,9 +46,38 @@ export default {
     shipQueue: ShipQueue,
     calc: Calc
   },
+  data () {
+    return {
+      buildOrder: [],
+      researchOrder: [],
+      shipOrder: [],
+      buildings: Buildings,
+      ships: Ships,
+      log: []
+    }
+  },
+  mounted () {
+    if (window.location.hash) {
+      let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
+      this.$set(this, 'buildOrder', this.migrateBuildingData(loadedData[0]))
+      this.$set(this, 'researchOrder', loadedData[1])
+      this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
+    }
+  },
   computed: {
     orderHash () {
       return md5(JSON.stringify(this.buildOrder) + JSON.stringify(this.researchOrder) + JSON.stringify(this.shipOrder))
+    },
+    availableBuildings () {
+      let buildings = {}
+
+      for (let buildingRef in this.buildings) {
+        if (this.buildings[buildingRef].canBuild && this.buildingRequirementsMet(buildingRef) && !(this.buildings[buildingRef].unique && this.alreadyBuilt(buildingRef))) {
+          buildings[buildingRef] = this.buildings[buildingRef]
+        }
+      }
+
+      return buildings
     },
     availableShips () {
       let ships = {}
@@ -44,6 +93,40 @@ export default {
       }
 
       return ships
+    },
+
+    /*
+     * Some buildings, e.g. for energy, are automatically handled when energy is required,
+     * but we still want them to be visible in the buildOrder.
+     * Therefore we extract all required information from the calculated log.
+     */
+    buildLog () {
+      let buildLog = []
+      this.log.forEach(({ queue, turn }) => {
+        if (queue.building.ref && queue.building.turns === this.buildings[queue.building.ref].turns) {
+          buildLog.push({
+            turn: turn,
+            ref: queue.building.ref
+          })
+        }
+      })
+      return buildLog
+    },
+
+    shipLog () {
+      let shipLog = []
+      let waiting = false
+      this.log.forEach(({ queue, turn }) => {
+        if ((queue.production.ref === 'wait' && !waiting) || (queue.production.ref && queue.production.turns === this.ships[queue.production.ref].turns)) {
+          shipLog.push({
+            turn: turn,
+            ref: queue.production.ref,
+            quantity: queue.production.quantity
+          })
+          waiting = queue.production.ref === 'wait'
+        }
+      })
+      return shipLog
     }
   },
   watch: {
@@ -57,56 +140,51 @@ export default {
       this.updateUrlHash()
     }
   },
-  data () {
-    return {
-      buildOrder: [],
-      researchOrder: [],
-      shipOrder: [],
-      ships: Ships
-    }
-  },
-  mounted () {
-    if (window.location.hash) {
-      let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
-      this.$set(this, 'buildOrder', this.migrateBuildingData(loadedData[0]))
-      this.$set(this, 'researchOrder', loadedData[1])
-      this.$set(this, 'shipOrder', loadedData[2] === undefined ? [] : loadedData[2])
-    }
-  },
   methods: {
-    /**
-     * We received an orderUpdated event for buildings, propagate to children
-     * @param {Array} newOrder
-     */
-    updateBuildOrder (newOrder) {
-      this.buildOrder = newOrder
-    },
-
     /**
      * We received an orderUpdated event for research, propagate to children
      * @param {Array} newOrder
      */
     updateResearchOrder (newOrder) {
-      this.researchOrder = newOrder
+      this.$set(this, 'researchOrder', newOrder)
     },
 
     /**
-     * We received an orderUpdated event for research, propagate to children
-     * @param {Array} newOrder
+     * @param {Array} log
      */
-    updateShipOrder (newOrder) {
-      this.shipOrder = newOrder
+    updateLog (log) {
+      this.$set(this, 'log', log)
     },
 
     /**
      * Update stored URL hash of build order
      */
     updateUrlHash () {
-      window.location.hash = btoa(JSON.stringify([ this.buildOrder, this.researchOrder, this.shipOrder ]))
+      window.location.hash = btoa(JSON.stringify([this.buildOrder, this.researchOrder, this.shipOrder]))
     },
 
     /**
-     * Different versions of hashes exist, which results in the annoying fact that when people load a bookmarked buildlist, they lost their data.
+     * Check if requirements are met for a building
+     * @param {String} buildingRef
+     */
+    buildingRequirementsMet (buildingRef) {
+      return this.buildings[buildingRef].requires.buildings.every(
+        requiredBuildingRef => this.alreadyBuilt(requiredBuildingRef)
+      )
+    },
+
+    /**
+     * Check if a building is already built
+     * @param {String} buildingRef
+     */
+    alreadyBuilt (buildingRef) {
+      return this.buildLog.some(
+        ({ ref }) => buildingRef === ref
+      )
+    },
+
+    /**
+     * Different versions of hashes exist, which results in the annoying fact that when people load a bookmarked buildlist, they lose their data.
      * To avoid frustration, we execute a migration step.
      *
      * v1: Only use string containing building ref.
@@ -155,6 +233,51 @@ export default {
           item = {
             turn: null,
             ref: item.key
+          }
+        }
+        return item
+      })
+
+      return data
+    },
+
+    /**
+     * Different versions of hashes exist, which results in the annoying fact that when people load a bookmarked buildlist, they lose their data.
+     * To avoid frustration, we execute a migration step.
+     *
+     * v1: Use object with keys 'turn' and 'ref'.
+     * Example:
+     * [
+     *   {
+     *     turn: '100',
+     *     ref: 'outpost_ship'
+     *   }
+     * ]
+     *
+     * v2: add quantity
+     * Example:
+     * [
+     *   {
+     *     turn: '100',
+     *     ref: 'outpost_ship',
+     *     quantity: 1
+     *   }
+     * ]
+     *
+     * @param {Object} data
+     */
+    migrateShipData (data) {
+      if (data === undefined) {
+        return data
+      }
+
+      // Migrate from v1 to v2
+      data = data.map(item => {
+        if (!item.quantity) {
+          item = {
+            turn: item.turn,
+            ref: item.ref,
+            quantity: 1
           }
         }
         return item

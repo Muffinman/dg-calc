@@ -52,7 +52,7 @@ import ResearchQueue from './views/ResearchQueue'
 import ShipQueue from './views/ShipQueue'
 import Ships from '@/ships.js'
 import md5 from 'md5'
-let TinyURL = require('tinyurl');
+import TinyURL from '@/helper/tiny-url.js';
 
 export default {
   components: {

@@ -6,7 +6,7 @@
 
       <h3>Available</h3>
       <ul class="queue">
-        <li v-for="(building, ref) in availableBuildings" :key="ref">
+        <li v-for="(building, ref) in available" :key="ref">
           <button class="button-add" title="Add" @click="addToQueue(ref)">+</button>
           <img :src="building.image" :title="building.name" class="image-queue">
           {{ building.name }}
@@ -39,24 +39,14 @@ export default {
     Draggable
   },
   props: {
-    order: Array
+    order: Array,
+    available: Object
   },
   data () {
     return {
       buildings: Buildings,
       newOrder: this.order,
       imgDG: 'https://beta.darkgalaxy.com/images'
-    }
-  },
-  computed: {
-    availableBuildings () {
-      let available = Object.assign({}, this.buildings)
-      for (let building in available) {
-        if (!available[building].canBuild) {
-          delete available[building]
-        }
-      }
-      return available
     }
   },
   watch: {

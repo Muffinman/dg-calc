@@ -1,17 +1,37 @@
 <template>
   <div id="app" class="flex">
     <div class="content flex justify-content-stretch scroll">
-      <building-queue :order="buildOrder" @orderUpdated="updateBuildOrder" />
+      <building-queue
+        :order="buildOrder"
+        :available="availableBuildings"
+        @orderUpdated="updateBuildOrder"
+      />
       <div class="margin-left">
-        <research-queue :order="researchOrder" @orderUpdated="updateResearchOrder" />
-        <ship-queue :order="shipOrder" :available="availableShips" @orderUpdated="updateShipOrder" class="margin-top" />
+        <research-queue
+          :order="researchOrder"
+          @orderUpdated="updateResearchOrder"
+        />
+        <ship-queue
+          :order="shipOrder"
+          :available="availableShips"
+          @orderUpdated="updateShipOrder"
+          class="margin-top"
+        />
       </div>
-      <calc :build-order="buildOrder" :research-order="researchOrder" :ship-order="shipOrder" class="grow margin-left" :key="orderHash" @orderUpdated="updateBuildOrder" />
+      <calc
+        :build-order="buildOrder"
+        :research-order="researchOrder"
+        :ship-order="shipOrder"
+        :key="orderHash"
+        class="grow margin-left"
+        @orderUpdated="updateBuildOrder"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import Buildings from '@/buildings.js'
 import Calc from './views/Calc'
 import BuildingQueue from './views/BuildingQueue'
 import ResearchQueue from './views/ResearchQueue'
@@ -29,6 +49,17 @@ export default {
   computed: {
     orderHash () {
       return md5(JSON.stringify(this.buildOrder) + JSON.stringify(this.researchOrder) + JSON.stringify(this.shipOrder))
+    },
+    availableBuildings () {
+      let buildings = {}
+
+      for (let buildingRef in this.buildings) {
+        if (this.buildingRequirementsMet(buildingRef) && !(this.buildings[buildingRef].unique && this.alreadyBuilt(buildingRef))) {
+          buildings[buildingRef] = this.buildings[buildingRef]
+        }
+      }
+
+      return buildings
     },
     availableShips () {
       let ships = {}
@@ -62,6 +93,7 @@ export default {
       buildOrder: [],
       researchOrder: [],
       shipOrder: [],
+      buildings: Buildings,
       ships: Ships
     }
   },
@@ -102,7 +134,27 @@ export default {
      * Update stored URL hash of build order
      */
     updateUrlHash () {
-      window.location.hash = btoa(JSON.stringify([ this.buildOrder, this.researchOrder, this.shipOrder ]))
+      window.location.hash = btoa(JSON.stringify([this.buildOrder, this.researchOrder, this.shipOrder]))
+    },
+
+    /**
+     * Check if requirements are met for a building
+     * @param {String} buildingRef
+     */
+    buildingRequirementsMet (buildingRef) {
+      return this.buildings[buildingRef].requires.buildings.every(
+        requiredBuildingRef => this.alreadyBuilt(requiredBuildingRef)
+      )
+    },
+
+    /**
+     * Check if a building is already built
+     * @param {String} buildingRef
+     */
+    alreadyBuilt (buildingRef) {
+      return this.buildOrder.some(
+        ({ ref }) => buildingRef === ref
+      )
     },
 
     /**

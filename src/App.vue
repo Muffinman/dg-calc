@@ -52,7 +52,7 @@ import ResearchQueue from './views/ResearchQueue'
 import ShipQueue from './views/ShipQueue'
 import Ships from '@/data/ships.js'
 import md5 from 'md5'
-import TinyURL from '@/helper/tiny-url.js';
+import TinyURL from '@/helper/tiny-url.js'
 
 export default {
   components: {
@@ -70,7 +70,7 @@ export default {
       buildings: Buildings,
       ships: Ships,
       log: [],
-      shortUrl: '',
+      shortUrl: ''
     }
   },
   mounted () {
@@ -84,11 +84,11 @@ export default {
       // Look up current short URL
       TinyURL.resolve(window.location.href + '#' + window.location.hash)
         .then(shortUrl => {
-          this.shortUrl = shortUrl;
+          this.shortUrl = shortUrl
         })
-        .catch(error => {
+        .catch(() => {
           // No need to do anything with the error
-        });
+        })
     }
   },
   computed: {
@@ -188,7 +188,7 @@ export default {
      */
     updateUrlHash () {
       window.location.hash = btoa(JSON.stringify([this.buildOrder, this.researchOrder, this.shipOrder]))
-      this.shortUrl = '';
+      this.shortUrl = ''
     },
 
     /**
@@ -197,9 +197,9 @@ export default {
     getShortLink () {
       TinyURL.shorten(window.location.href + '#' + window.location.hash)
         .then(shortUrl => {
-          this.shortUrl = shortUrl;
+          this.shortUrl = shortUrl
         })
-        .catch(error => {
+        .catch(() => {
           // No need to do anything with the error
         })
     },

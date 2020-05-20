@@ -478,14 +478,12 @@ export default {
 
         if (!this.checkShipResources(next.ref, next.quantity) || !this.checkShipBuildings(next.ref)) {
           this.currentShipOrder.unshift(next)
-          next = null
+          return
         }
 
-        if (next) {
-          this.shipConstructionStart(next.ref, next.quantity)
-          this.$set(this.log[this.turn].queue, 'production', Object.assign({}, this.queue.production))
-          next.turn = this.turn
-        }
+        this.shipConstructionStart(next.ref, next.quantity)
+        this.$set(this.log[this.turn].queue, 'production', Object.assign({}, this.queue.production))
+        next.turn = this.turn
       }
     },
 

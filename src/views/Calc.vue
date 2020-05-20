@@ -284,8 +284,6 @@ export default {
   },
 
   mounted () {
-    this.removeEnergyBuildingsFromBuildOrder()
-
     this.calcOutputAndStorage()
     this.ticks(300)
 
@@ -685,21 +683,6 @@ export default {
       return Object
         .values(this.log)
         .reduce((total, turn) => total + turn.output[resource], 0)
-    },
-
-    /**
-     * Because we automatically add the best possible energy building at the earliest possible turn,
-     * extra energy buildings may be created when moving a building earlier than the previous energy building.
-     * We want to avoid this and optimize the build list by removing all energy structures and later add them again at best possible turn.
-     */
-    removeEnergyBuildingsFromBuildOrder () {
-      this.$set(
-        this,
-        'currentBuildOrder',
-        this.currentBuildOrder.filter(({ ref }) => {
-          return this.buildings[ref].output.energy <= 0
-        })
-      )
     }
   }
 }

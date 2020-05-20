@@ -34,13 +34,13 @@
       <h3>Current Queue</h3>
       <ul class="queue draggable">
         <draggable
-          :list="newOrder"
+          :list="currentOrder"
           group="buildings"
           handle=".handle"
           @change="updateOrder"
         >
           <li
-            v-for="(building, index) in newOrder"
+            v-for="(building, index) in currentOrder"
             :key="index"
           >
             <input
@@ -88,12 +88,16 @@ export default {
     return {
       buildings: Buildings,
       imgDG: 'https://beta.darkgalaxy.com/images',
+      currentOrder: [],
       newOrder: []
     }
   },
   watch: {
     log () {
-      this.newOrder = JSON.parse(JSON.stringify(this.log))
+      this.$set(this, 'currentOrder', JSON.parse(JSON.stringify(this.log)))
+    },
+    value () {
+      this.$set(this, 'newOrder', JSON.parse(JSON.stringify(this.value)))
     }
   },
   methods: {
@@ -101,7 +105,9 @@ export default {
      * Emit the updated queue order to the parent
      */
     updateOrder () {
-      this.$emit('input', this.newOrder)
+      this.$emit('input', this.currentOrder.filter(
+        ({ ref }) => this.buildings[ref].output['energy'] <= 0
+      ))
     },
 
     /**
@@ -109,10 +115,7 @@ export default {
      * @param {String} building
      */
     addToQueue (building) {
-      this.newOrder.push({
-        turn: null,
-        ref: building
-      })
+      this.newOrder.push({ ref: building })
       this.$emit('input', this.newOrder)
     },
 
@@ -121,8 +124,10 @@ export default {
      * @param {Integer} index
      */
     removeFromQueue (index) {
-      this.newOrder.splice(index, 1)
-      this.$emit('input', this.newOrder)
+      this.currentOrder.splice(index, 1)
+      this.$emit('input', this.currentOrder.filter(
+        ({ ref }) => this.buildings[ref].output['energy'] <= 0
+      ))
     }
   }
 }

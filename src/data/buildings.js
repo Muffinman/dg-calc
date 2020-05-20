@@ -335,7 +335,7 @@ let buildings = {
       research: []
     },
     unique: false,
-    image: `${imgDG}/units/main/structures/hydroponics_lab.jpg`
+    image: `${imgDG}/units/main/structures/solar_array.jpg`
   },
   ship_yard: {
     name: 'Ship Yard',

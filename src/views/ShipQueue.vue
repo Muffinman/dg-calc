@@ -5,7 +5,7 @@
       <h2 slot="header" class="card-header-title">Ship <strong>Order</strong></h2>
 
       <h3>Available</h3>
-      <p><label>Quantity: <input v-model.number="quantity" class="queue-quantity" /></label></p>
+      <p><label>Quantity: <input v-model.number="quantity" class="queue-quantity is-pulled-right" /></label></p>
       <ul class="queue">
         <li v-for="(ship, ref) in available" :key="ref">
           <button class="button-add" title="Add" @click="addToQueue(ref)">+</button>
@@ -23,7 +23,7 @@
               <img :src="ships[ship.ref].image" :title="ships[ship.ref].name" class="image-queue">
               {{ `${ship.turn} ${ships[ship.ref].name}` }}
             </span>
-            <input v-model.number="ship.quantity" class="queue-quantity" />
+            <input v-model.number="ship.quantity" class="queue-quantity is-pulled-right" />
           </li>
         </draggable>
       </ul>

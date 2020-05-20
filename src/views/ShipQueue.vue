@@ -16,11 +16,13 @@
 
       <h3>Current Queue</h3>
       <ul class="queue draggable">
-        <draggable :list="newOrder" group="ships" @change="updateOrder">
+        <draggable :list="newOrder" group="ships" handle=".handle" @change="updateOrder">
           <li v-for="(ship, index) in newOrder" :key="index">
             <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
-            <img :src="ships[ship.ref].image" :title="ships[ship.ref].name" class="image-queue">
-            {{ `${ship.turn} ${ships[ship.ref].name}` }}
+            <span class="handle">
+              <img :src="ships[ship.ref].image" :title="ships[ship.ref].name" class="image-queue">
+              {{ `${ship.turn} ${ships[ship.ref].name}` }}
+            </span>
             <input v-model.number="ship.quantity" class="queue-quantity" />
           </li>
         </draggable>

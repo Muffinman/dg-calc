@@ -2,9 +2,9 @@
   <div id="app" class="flex">
     <div class="content flex justify-content-stretch scroll">
       <building-queue
-        :order="buildOrder"
+        v-model="buildOrder"
         :available="availableBuildings"
-        @orderUpdated="updateBuildOrder"
+        :log="buildLog"
       />
       <div class="margin-left">
         <research-queue
@@ -24,7 +24,7 @@
         :ship-order="shipOrder"
         :key="orderHash"
         class="grow margin-left"
-        @orderUpdated="updateBuildOrder"
+        @logUpdated="updateBuildLog"
       />
     </div>
   </div>
@@ -54,7 +54,7 @@ export default {
       let buildings = {}
 
       for (let buildingRef in this.buildings) {
-        if (this.buildingRequirementsMet(buildingRef) && !(this.buildings[buildingRef].unique && this.alreadyBuilt(buildingRef))) {
+        if (this.buildings[buildingRef].canBuild && this.buildingRequirementsMet(buildingRef) && !(this.buildings[buildingRef].unique && this.alreadyBuilt(buildingRef))) {
           buildings[buildingRef] = this.buildings[buildingRef]
         }
       }
@@ -94,7 +94,8 @@ export default {
       researchOrder: [],
       shipOrder: [],
       buildings: Buildings,
-      ships: Ships
+      ships: Ships,
+      buildLog: []
     }
   },
   mounted () {
@@ -106,14 +107,6 @@ export default {
     }
   },
   methods: {
-    /**
-     * We received an orderUpdated event for buildings, propagate to children
-     * @param {Array} newOrder
-     */
-    updateBuildOrder (newOrder) {
-      this.buildOrder = newOrder
-    },
-
     /**
      * We received an orderUpdated event for research, propagate to children
      * @param {Array} newOrder
@@ -128,6 +121,25 @@ export default {
      */
     updateShipOrder (newOrder) {
       this.shipOrder = newOrder
+    },
+
+    /**
+     * Some buildings, e.g. for energy are automatically handled when energy is required,
+     * but we still want them to be visible in the buildOrder.
+     * Therefore we extract all required information from the calculated log.
+     * @param {Array} log
+     */
+    updateBuildLog (log) {
+      let buildLog = []
+      log.forEach(({ queue, turn }) => {
+        if (queue.building.ref && queue.building.turns === this.buildings[queue.building.ref].turns) {
+          buildLog.push({
+            turn: turn,
+            ref: queue.building.ref
+          })
+        }
+      })
+      this.$set(this, 'buildLog', buildLog)
     },
 
     /**
@@ -152,7 +164,7 @@ export default {
      * @param {String} buildingRef
      */
     alreadyBuilt (buildingRef) {
-      return this.buildOrder.some(
+      return this.buildLog.some(
         ({ ref }) => buildingRef === ref
       )
     },

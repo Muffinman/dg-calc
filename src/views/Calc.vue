@@ -289,7 +289,7 @@ export default {
     this.calcOutputAndStorage()
     this.ticks(300)
 
-    this.setBuildOrderFromLog()
+    this.$emit('logUpdated', Object.values(this.log))
   },
 
   methods: {
@@ -700,26 +700,6 @@ export default {
           return this.buildings[ref].output.energy <= 0
         })
       )
-    },
-
-    /**
-     * Some buildings, e.g. for energy are automatically handled when energy is required,
-     * but we still want them to be visible in the buildOrder.
-     * Therefore we get all buildings from the log and emit the completed build order.
-     *
-     * @return {String}
-     */
-    setBuildOrderFromLog () {
-      let newBuildOrder = []
-      Object.values(this.log).forEach(({ queue, turn }) => {
-        if (queue.building.ref && queue.building.turns === this.buildings[queue.building.ref].turns) {
-          newBuildOrder.push({
-            turn: turn,
-            ref: queue.building.ref
-          })
-        }
-      })
-      this.$emit('orderUpdated', newBuildOrder)
     }
   }
 }

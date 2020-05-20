@@ -4,6 +4,7 @@ let buildings = {
   wait: {
     name: 'Wait...',
     turns: 1,
+    canBuild: true,
     cost: {
       metal: 0,
       mineral: 0,
@@ -31,6 +32,7 @@ let buildings = {
   outpost: {
     name: 'Outpost',
     turns: 0,
+    canBuild: false,
     cost: {
       metal: 0,
       mineral: 0,
@@ -58,6 +60,7 @@ let buildings = {
   metal_mine: {
     name: 'Metal Mine',
     turns: 4,
+    canBuild: true,
     cost: {
       metal: 600,
       mineral: 2000,
@@ -85,6 +88,7 @@ let buildings = {
   mineral_extractor: {
     name: 'Mineral Extractor',
     turns: 4,
+    canBuild: true,
     cost: {
       metal: 3000,
       mineral: 400,
@@ -112,6 +116,7 @@ let buildings = {
   farm: {
     name: 'Farm',
     turns: 4,
+    canBuild: true,
     cost: {
       metal: 1500,
       mineral: 1000,
@@ -139,6 +144,7 @@ let buildings = {
   solar_generator: {
     name: 'Solar Generator',
     turns: 4,
+    canBuild: false,
     cost: {
       metal: 1500,
       mineral: 1000,
@@ -166,6 +172,7 @@ let buildings = {
   launch_site: {
     name: 'Launch Site',
     turns: 8,
+    canBuild: true,
     cost: {
       metal: 15000,
       mineral: 10000,
@@ -193,6 +200,7 @@ let buildings = {
   colony: {
     name: 'Colony',
     turns: 24,
+    canBuild: true,
     cost: {
       metal: 60000,
       mineral: 40000,
@@ -220,6 +228,7 @@ let buildings = {
   ship_yard: {
     name: 'Ship Yard',
     turns: 12,
+    canBuild: true,
     cost: {
       metal: 48000,
       mineral: 32000,
@@ -247,6 +256,7 @@ let buildings = {
   comms_satellite: {
     name: 'Comms Satellite',
     turns: 8,
+    canBuild: true,
     cost: {
       metal: 33000,
       mineral: 22000,
@@ -274,6 +284,7 @@ let buildings = {
   living_quarters: {
     name: 'Living Quarters',
     turns: 6,
+    canBuild: true,
     cost: {
       metal: 2400,
       mineral: 1600,
@@ -301,6 +312,7 @@ let buildings = {
   habitat: {
     name: 'Habitat',
     turns: 6,
+    canBuild: true,
     cost: {
       metal: 4800,
       mineral: 3200,
@@ -328,6 +340,7 @@ let buildings = {
   light_weapons_factory: {
     name: 'Light Weapons Factory',
     turns: 12,
+    canBuild: true,
     cost: {
       metal: 30000,
       mineral: 20000,
@@ -355,6 +368,7 @@ let buildings = {
   army_barracks: {
     name: 'Army Barracks',
     turns: 8,
+    canBuild: true,
     cost: {
       metal: 12000,
       mineral: 8000,
@@ -382,6 +396,7 @@ let buildings = {
   space_dock: {
     name: 'Space Dock',
     turns: 24,
+    canBuild: true,
     cost: {
       metal: 144000,
       mineral: 96000,
@@ -409,6 +424,7 @@ let buildings = {
   heavy_weapons_factory: {
     name: 'Heavy Weapons Factory',
     turns: 24,
+    canBuild: true,
     cost: {
       metal: 90000,
       mineral: 60000,
@@ -436,6 +452,7 @@ let buildings = {
   metropolis: {
     name: 'Metropolis',
     turns: 48,
+    canBuild: true,
     cost: {
       metal: 120000,
       mineral: 80000,

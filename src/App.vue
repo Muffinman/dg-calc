@@ -16,7 +16,7 @@
             v-model="buildOrder"
             :available="availableBuildings"
             :log="buildLog"
-            class="margin-top"
+            class="margin-top margin-bottom"
           />
         </div>
         <div class="margin-left grow">
@@ -28,7 +28,7 @@
             v-model="shipOrder"
             :available="availableShips"
             :log="shipLog"
-            class="margin-top"
+            class="margin-top margin-bottom"
           />
         </div>
       </div>

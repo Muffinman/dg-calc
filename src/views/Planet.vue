@@ -1,81 +1,75 @@
 <template>
   <div>
-    <border-box>
-
-      <h2
-        slot="header"
-        class="card-header-title"
-      >
-        Planet
-      </h2>
-
-      <h3>Resources</h3>
-
-      <table>
-        <thead>
-        <tr>
-          <th />
-          <th>Stored</th>
-          <th>Output</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td><img :src="`${imgDG}/units/small/metal.gif`" title="Metal" class="image-header"> Metal</td>
-          <td class="resource-metal">{{ planet.stored.metal }}</td>
-          <td class="resource-metal">{{ planet.abundances.metal*100 }}%</td>
-        </tr>
-        <tr>
-          <td><img :src="`${imgDG}/units/small/mineral.gif`" title="Mineral" class="image-header"> Mineral</td>
-          <td class="resource-mineral">{{ planet.stored.mineral }}</td>
-          <td class="resource-mineral">{{ planet.abundances.mineral*100 }}%</td>
-        </tr>
-        <tr>
-          <td><img :src="`${imgDG}/units/small/energy.gif`" title="Energy" class="image-header"> Energy</td>
-          <td class="resource-energy">{{ planet.stored.energy }}</td>
-          <td class="resource-energy">{{ planet.abundances.energy*100 }}%</td>
-        </tr>
-        <tr>
-          <td><img :src="`${imgDG}/units/small/worker.gif`" title="Workers" class="image-header"> Workers</td>
-          <td class="workers">{{ planet.stored.pop }}</td>
-          <td />
-        </tr>
-        </tbody>
-      </table>
-    </border-box>
+    <planet-view
+      v-if="!editing && planet.stored"
+      v-model="editing"
+      :planet="planet"
+    />
+    <planet-edit
+      v-else-if="planet.stored"
+      v-model="planet"
+    />
   </div>
 </template>
 
 <script>
-import BorderBox from '@/components/BorderBox'
 import HomePlanet from '@/home_planet.js'
 import ColonyPlanet from '@/colony_planet.js'
+import PlanetEdit from './PlanetEdit'
+import PlanetView from './PlanetView'
 
 export default {
   components: {
-    BorderBox
+    PlanetEdit,
+    PlanetView
   },
   props: {
     planetType: String
   },
   data () {
     return {
-      /**
-       * Link to the website of Dark Galaxy to get images
-       */
-      imgDG: 'https://beta.darkgalaxy.com/images'
+      planet: {},
+      editing: false
     }
   },
-  computed: {
-    planet () {
+  mounted () {
+    this.setPlanet()
+  },
+  watch: {
+    planetType () {
+      console.log('aaa')
+      this.setPlanet()
+    },
+    planet: {
+      deep: true,
+      handler () {
+        this.$set(this, 'editing', false)
+      }
+    }
+  },
+  methods: {
+    setPlanet () {
       switch (this.planetType) {
         case 'colony':
-          return JSON.parse(JSON.stringify(ColonyPlanet))
+          this.$set(this, 'planet', JSON.parse(JSON.stringify(ColonyPlanet)))
+          break
         case 'home':
         default:
-          return JSON.parse(JSON.stringify(HomePlanet))
+          this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
+          break
       }
     }
   }
 }
 </script>
+
+<style>
+.no-border {
+  border: none;
+}
+
+.dark {
+  color: whitesmoke;
+  background-color: #1a1a1a;
+}
+</style>

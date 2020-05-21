@@ -1,33 +1,31 @@
 <template>
-  <div>
-    <border-box>
+  <border-box>
 
-      <h2 slot="header" class="card-header-title">Research <strong>Order</strong></h2>
+    <h2 slot="header" class="card-header-title">Research <strong>Order</strong></h2>
 
-      <h3>Available</h3>
-      <ul class="queue">
-        <li v-for="(item, index) in availableResearch" :key="index">
-          <button class="button-add" title="Add" @click="addToQueue(item.ref)">+</button>
-          <img :src="item.image" :title="item.name" class="image-queue">
-          {{ item.name }}
+    <h3>Available</h3>
+    <ul class="queue">
+      <li v-for="(item, index) in availableResearch" :key="index">
+        <button class="button-add" title="Add" @click="addToQueue(item.ref)">+</button>
+        <img :src="item.image" :title="item.name" class="image-queue">
+        {{ item.name }}
+      </li>
+    </ul>
+
+    <h3>Current Queue</h3>
+    <ul class="queue draggable">
+      <draggable :list="newOrder" group="research" handle=".handle" @change="updateOrder">
+        <li v-for="(item, index) in newOrder" :key="index">
+          <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
+          <span class="handle">
+            <img :src="research[item].image" :title="research[item].name" class="image-queue">
+            {{ research[item].name }}
+          </span>
         </li>
-      </ul>
+      </draggable>
+    </ul>
 
-      <h3>Current Queue</h3>
-      <ul class="queue draggable">
-        <draggable :list="newOrder" group="research" handle=".handle" @change="updateOrder">
-          <li v-for="(item, index) in newOrder" :key="index">
-            <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
-            <span class="handle">
-              <img :src="research[item].image" :title="research[item].name" class="image-queue">
-              {{ research[item].name }}
-            </span>
-          </li>
-        </draggable>
-      </ul>
-
-    </border-box>
-  </div>
+  </border-box>
 </template>
 
 <script>

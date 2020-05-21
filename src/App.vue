@@ -82,7 +82,7 @@ export default {
       this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
 
       // Look up current short URL
-      TinyURL.resolve(window.location.href + '#' + window.location.hash)
+      TinyURL.resolve(window.location.href)
         .then(shortUrl => {
           this.shortUrl = shortUrl
         })
@@ -195,7 +195,7 @@ export default {
      * Get a short link for the current config
      */
     getShortLink () {
-      TinyURL.shorten(window.location.href + '#' + window.location.hash)
+      TinyURL.shorten(window.location.href)
         .then(shortUrl => {
           this.shortUrl = shortUrl
         })

@@ -33,9 +33,6 @@ export default {
       planet: {}
     }
   },
-  mounted () {
-    this.$set(this, 'planet', JSON.parse(JSON.stringify(this.value)))
-  },
   watch: {
     planet: {
       deep: true,
@@ -44,6 +41,9 @@ export default {
         this.$emit('input', this.planet)
       }
     }
+  },
+  mounted () {
+    this.$set(this, 'planet', JSON.parse(JSON.stringify(this.value)))
   }
 }
 </script>

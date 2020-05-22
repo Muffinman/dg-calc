@@ -12,8 +12,8 @@
                 Get Shortlink
               </button>
               <input
-                type="text"
                 v-model="shortUrl"
+                type="text"
                 placeholder="No url saved..."
                 readonly
                 class="grow"
@@ -48,10 +48,10 @@
 
       <div class="right-panel grow margin-left">
         <calc
+          :key="orderHash"
           :build-order="buildOrder"
           :research-order="researchOrder"
           :ship-order="shipOrder"
-          :key="orderHash"
           @logUpdated="updateLog"
         />
       </div>
@@ -83,34 +83,14 @@ export default {
   },
   data () {
     return {
+      buildings: Buildings,
+      ships: Ships,
       planet: {},
       buildOrder: [],
       researchOrder: [],
       shipOrder: [],
-      buildings: Buildings,
-      ships: Ships,
       log: [],
       shortUrl: ''
-    }
-  },
-  mounted () {
-    this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
-
-    if (window.location.hash) {
-      let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
-
-      this.$set(this, 'buildOrder', this.migrateBuildingData(loadedData[0]))
-      this.$set(this, 'researchOrder', loadedData[1])
-      this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
-
-      // Look up current short URL
-      TinyURL.resolve(window.location.href)
-        .then(shortUrl => {
-          this.shortUrl = shortUrl
-        })
-        .catch(() => {
-          // No need to do anything with the error
-        })
     }
   },
   computed: {
@@ -187,6 +167,26 @@ export default {
     },
     shipOrder () {
       this.updateUrlHash()
+    }
+  },
+  mounted () {
+    this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
+
+    if (window.location.hash) {
+      let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
+
+      this.$set(this, 'buildOrder', this.migrateBuildingData(loadedData[0]))
+      this.$set(this, 'researchOrder', loadedData[1])
+      this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
+
+      // Look up current short URL
+      TinyURL.resolve(window.location.href)
+        .then(shortUrl => {
+          this.shortUrl = shortUrl
+        })
+        .catch(() => {
+          // No need to do anything with the error
+        })
     }
   },
   methods: {

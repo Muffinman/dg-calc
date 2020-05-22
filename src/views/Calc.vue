@@ -426,12 +426,12 @@ export default {
 
       this.recordOutputs()
 
-      this.processBuildingQueue()
-      this.processProductionQueue()
-
       if (this.turn > 1) {
         this.addOutputs()
       }
+
+      this.processBuildingQueue()
+      this.processProductionQueue()
 
       this.startResearchQueue()
       this.startBuildingQueue()

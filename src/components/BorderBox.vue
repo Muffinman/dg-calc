@@ -1,13 +1,13 @@
 <template>
   <div class="card">
     <header class="card-header">
-      <slot name="header"></slot>
+      <slot name="header" />
     </header>
     <div class="card-content">
-      <slot></slot>
+      <slot />
     </div>
     <footer class="card-footer">
-      <slot name="footer"></slot>
+      <slot name="footer" />
     </footer>
   </div>
 </template>

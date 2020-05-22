@@ -1,6 +1,5 @@
 <template>
   <border-box>
-
     <template slot="header">
       <h2 class="card-header-title">
         Planet
@@ -16,36 +15,73 @@
 
     <table>
       <thead>
-      <tr>
-        <th />
-        <th>Stored</th>
-        <th>Abundance</th>
-      </tr>
+        <tr>
+          <th />
+          <th>Stored</th>
+          <th>Abundance</th>
+        </tr>
       </thead>
       <tbody>
-      <tr>
-        <td><img :src="`${imgDG}/units/small/metal.gif`" title="Metal" class="image-header"> Metal</td>
-        <td class="resource-metal">{{ planet.stored.metal }}</td>
-        <td class="resource-metal">{{ planet.abundances.metal }}%</td>
-      </tr>
-      <tr>
-        <td><img :src="`${imgDG}/units/small/mineral.gif`" title="Mineral" class="image-header"> Mineral</td>
-        <td class="resource-mineral">{{ planet.stored.mineral }}</td>
-        <td class="resource-mineral">{{ planet.abundances.mineral }}%</td>
-      </tr>
-      <tr>
-        <td><img :src="`${imgDG}/units/small/energy.gif`" title="Energy" class="image-header"> Energy</td>
-        <td class="resource-energy">{{ planet.stored.energy }}</td>
-        <td class="resource-energy">{{ planet.abundances.energy }}%</td>
-      </tr>
-      <tr>
-        <td><img :src="`${imgDG}/units/small/worker.gif`" title="Workers" class="image-header"> Workers</td>
-        <td class="workers">{{ planet.stored.pop }}</td>
-        <td />
-      </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/metal.gif`"
+              title="Metal"
+              class="image-header"
+            > Metal
+          </td>
+          <td class="resource-metal">
+            {{ planet.stored.metal }}
+          </td>
+          <td class="resource-metal">
+            {{ planet.abundances.metal }}%
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/mineral.gif`"
+              title="Mineral"
+              class="image-header"
+            > Mineral
+          </td>
+          <td class="resource-mineral">
+            {{ planet.stored.mineral }}
+          </td>
+          <td class="resource-mineral">
+            {{ planet.abundances.mineral }}%
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/energy.gif`"
+              title="Energy"
+              class="image-header"
+            > Energy
+          </td>
+          <td class="resource-energy">
+            {{ planet.stored.energy }}
+          </td>
+          <td class="resource-energy">
+            {{ planet.abundances.energy }}%
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/worker.gif`"
+              title="Workers"
+              class="image-header"
+            > Workers
+          </td>
+          <td class="workers">
+            {{ planet.stored.pop }}
+          </td>
+          <td />
+        </tr>
       </tbody>
     </table>
-
   </border-box>
 </template>
 
@@ -59,8 +95,14 @@ export default {
     LeadPencilIcon
   },
   props: {
-    value: Boolean,
-    planet: Object
+    value: {
+      type: Boolean,
+      required: true
+    },
+    planet: {
+      type: Object,
+      required: true
+    }
   },
   data () {
     return {

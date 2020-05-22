@@ -1,18 +1,28 @@
 <template>
-  <div id="app" class="flex">
+  <div
+    id="app"
+    class="flex"
+  >
     <div class="content flex align-items-top justify-content-stretch scroll">
       <div class="left-panel wrap">
         <div class="short-url grow full-width">
           <border-box>
             <div class="flex justify-content-stretch">
-              <button @click="getShortLink">Get Shortlink</button>
-              <input type="text" v-model="shortUrl" placeholder="No url saved..." readonly class="grow" />
+              <button @click="getShortLink">
+                Get Shortlink
+              </button>
+              <input
+                type="text"
+                v-model="shortUrl"
+                placeholder="No url saved..."
+                readonly
+                class="grow"
+              >
             </div>
           </border-box>
         </div>
         <div class="grow">
           <planet-view
-            v-if="planet.abundances"
             v-model="planet"
           />
           <building-queue

@@ -22,7 +22,10 @@ export default {
     PlanetView
   },
   props: {
-    value: {}
+    value: {
+      type: Object,
+      required: true
+    }
   },
   data () {
     return {

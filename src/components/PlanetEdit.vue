@@ -1,6 +1,5 @@
 <template>
   <border-box>
-
     <template slot="header">
       <h2 class="card-header-title">
         Planet
@@ -16,100 +15,115 @@
 
     <table v-if="planet.stored">
       <thead>
-      <tr>
-        <th />
-        <th>Stored</th>
-        <th>Abundance</th>
-      </tr>
+        <tr>
+          <th />
+          <th>Stored</th>
+          <th>Abundance</th>
+        </tr>
       </thead>
       <tbody>
-      <tr>
-        <td>
-          <img :src="`${imgDG}/units/small/metal.gif`" title="Metal" class="image-header">
-        </td>
-        <td class="resource-metal">
-          <input
-            v-model.number="planet.stored.metal"
-            type="number"
-            min="0"
-            step="1000"
-            class="queue-quantity"
-          />
-        </td>
-        <td class="resource-metal">
-          <input
-            v-model.number="planet.abundances.metal"
-            type="number"
-            min="0"
-            step="1"
-            class="queue-quantity"
-          />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <img :src="`${imgDG}/units/small/mineral.gif`" title="Mineral" class="image-header">
-        </td>
-        <td class="resource-mineral">
-          <input
-            v-model.number="planet.stored.mineral"
-            type="number"
-            min="0"
-            step="1000"
-            class="queue-quantity"
-          />
-        </td>
-        <td class="resource-mineral">
-          <input
-            v-model.number="planet.abundances.mineral"
-            type="number"
-            min="0"
-            step="1"
-            class="queue-quantity"
-          />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <img :src="`${imgDG}/units/small/energy.gif`" title="Energy" class="image-header">
-        </td>
-        <td class="resource-energy">
-          <input
-            v-model.number="planet.stored.energy"
-            type="number"
-            min="0"
-            step="1000"
-            class="queue-quantity"
-          />
-        </td>
-        <td class="resource-energy">
-          <input
-            v-model.number="planet.abundances.energy"
-            type="number"
-            min="0"
-            step="1"
-            class="queue-quantity"
-          />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <img :src="`${imgDG}/units/small/worker.gif`" title="Workers" class="image-header">
-        </td>
-        <td class="workers">
-          <input
-            v-model.number="planet.stored.pop"
-            type="number"
-            min="0"
-            step="1000"
-            class="queue-quantity"
-          />
-        </td>
-        <td />
-      </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/metal.gif`"
+              title="Metal"
+              class="image-header"
+            >
+          </td>
+          <td class="resource-metal">
+            <input
+              v-model.number="planet.stored.metal"
+              type="number"
+              min="0"
+              step="1000"
+              class="queue-quantity"
+            >
+          </td>
+          <td class="resource-metal">
+            <input
+              v-model.number="planet.abundances.metal"
+              type="number"
+              min="0"
+              step="1"
+              class="queue-quantity"
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/mineral.gif`"
+              title="Mineral"
+              class="image-header"
+            >
+          </td>
+          <td class="resource-mineral">
+            <input
+              v-model.number="planet.stored.mineral"
+              type="number"
+              min="0"
+              step="1000"
+              class="queue-quantity"
+            >
+          </td>
+          <td class="resource-mineral">
+            <input
+              v-model.number="planet.abundances.mineral"
+              type="number"
+              min="0"
+              step="1"
+              class="queue-quantity"
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/energy.gif`"
+              title="Energy"
+              class="image-header"
+            >
+          </td>
+          <td class="resource-energy">
+            <input
+              v-model.number="planet.stored.energy"
+              type="number"
+              min="0"
+              step="1000"
+              class="queue-quantity"
+            >
+          </td>
+          <td class="resource-energy">
+            <input
+              v-model.number="planet.abundances.energy"
+              type="number"
+              min="0"
+              step="1"
+              class="queue-quantity"
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/worker.gif`"
+              title="Workers"
+              class="image-header"
+            >
+          </td>
+          <td class="workers">
+            <input
+              v-model.number="planet.stored.pop"
+              type="number"
+              min="0"
+              step="1000"
+              class="queue-quantity"
+            >
+          </td>
+          <td />
+        </tr>
       </tbody>
     </table>
-
   </border-box>
 </template>
 
@@ -123,7 +137,10 @@ export default {
     CheckBoldIcon
   },
   props: {
-    value: Object
+    value: {
+      type: Object,
+      required: true
+    }
   },
   data () {
     return {

@@ -1,6 +1,5 @@
 <template>
   <border-box>
-
     <h2
       slot="header"
       class="card-header-title"
@@ -58,12 +57,11 @@
               :title="buildings[building.ref].name"
               class="image-queue"
             >
-              {{ `${building.turn} ${buildings[building.ref].name}` }}
+            {{ `${building.turn} ${buildings[building.ref].name}` }}
           </span>
         </li>
       </draggable>
     </ul>
-
   </border-box>
 </template>
 
@@ -78,9 +76,18 @@ export default {
     Draggable
   },
   props: {
-    value: Array,
-    log: Array,
-    available: Object
+    value: {
+      type: Array,
+      required: true
+    },
+    log: {
+      type: Array,
+      required: true
+    },
+    available: {
+      type: Array,
+      required: true
+    }
   },
   data () {
     return {

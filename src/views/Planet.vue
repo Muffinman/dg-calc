@@ -13,8 +13,7 @@
 </template>
 
 <script>
-import HomePlanet from '@/home_planet.js'
-import ColonyPlanet from '@/colony_planet.js'
+import HomePlanet from '@/data/home_planet.js'
 import PlanetEdit from './PlanetEdit'
 import PlanetView from './PlanetView'
 
@@ -23,9 +22,6 @@ export default {
     PlanetEdit,
     PlanetView
   },
-  props: {
-    planetType: String
-  },
   data () {
     return {
       planet: {},
@@ -33,13 +29,9 @@ export default {
     }
   },
   mounted () {
-    this.setPlanet()
+    this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
   },
   watch: {
-    planetType () {
-      console.log('aaa')
-      this.setPlanet()
-    },
     planet: {
       deep: true,
       handler () {
@@ -47,19 +39,6 @@ export default {
       }
     }
   },
-  methods: {
-    setPlanet () {
-      switch (this.planetType) {
-        case 'colony':
-          this.$set(this, 'planet', JSON.parse(JSON.stringify(ColonyPlanet)))
-          break
-        case 'home':
-        default:
-          this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
-          break
-      }
-    }
-  }
 }
 </script>
 

@@ -58,12 +58,12 @@
 
 <script>
 import BorderBox from '@/components/BorderBox'
-import Buildings from '@/buildings.js'
-import HomePlanet from '@/home_planet.js'
-import Ships from '@/ships.js'
-import Resources from '@/resources.js'
-import Research from '@/research.js'
-import Travel from '@/travel.js'
+import Buildings from '@/data/buildings.js'
+import HomePlanet from '@/data/home_planet.js'
+import Research from '@/data/research.js'
+import Resources from '@/data/resources.js'
+import Ships from '@/data/ships.js'
+import Travel from '@/data/travel.js'
 
 export default {
   components: {
@@ -625,14 +625,19 @@ export default {
      * @return {String}
      */
     energyBuilding () {
-      let toBuild = null
-      // TODO: this doesn't make sense and works because there is only 1 energy building in the buildings object. Try to add at least Solar Array, see what happens and improve.
-      Object.keys(this.buildings).forEach(building => {
-        if (this.buildings[building].output.energy > 0) {
-          toBuild = building
-        }
-      })
-      return toBuild
+      return Object
+        .keys(this.buildings)
+        .reduce((best, building) => {
+          if (!this.checkBuildingBuildings(building) || !this.checkBuildingResources(building)) {
+            return best
+          }
+
+          if (this.buildings[building].output.energy > this.buildings[best].output.energy) {
+            return building
+          }
+
+          return best
+        })
     },
 
     totalResource (resource) {

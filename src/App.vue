@@ -48,16 +48,15 @@
 
 <script>
 import BorderBox from '@/components/BorderBox'
-import Buildings from '@/buildings.js'
+import Buildings from '@/data/buildings.js'
 import Calc from './views/Calc'
 import BuildingQueue from './views/BuildingQueue'
 import Planet from './views/Planet'
 import ResearchQueue from './views/ResearchQueue'
 import ShipQueue from './views/ShipQueue'
-import Ships from '@/ships.js'
+import Ships from '@/data/ships.js'
 import md5 from 'md5'
-
-let TinyURL = require('tinyurl')
+import TinyURL from '@/helper/tiny-url.js'
 
 export default {
   components: {
@@ -88,7 +87,7 @@ export default {
       this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
 
       // Look up current short URL
-      TinyURL.resolve(window.location.href + '#' + window.location.hash)
+      TinyURL.resolve(window.location.href)
         .then(shortUrl => {
           this.shortUrl = shortUrl
         })
@@ -201,7 +200,7 @@ export default {
      * Get a short link for the current config
      */
     getShortLink () {
-      TinyURL.shorten(window.location.href + '#' + window.location.hash)
+      TinyURL.shorten(window.location.href)
         .then(shortUrl => {
           this.shortUrl = shortUrl
         })

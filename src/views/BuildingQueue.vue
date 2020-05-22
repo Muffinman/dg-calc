@@ -69,7 +69,7 @@
 
 <script>
 import BorderBox from '@/components/BorderBox'
-import Buildings from '@/buildings.js'
+import Buildings from '@/data/buildings.js'
 import Draggable from 'vuedraggable'
 
 export default {

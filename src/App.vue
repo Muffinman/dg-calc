@@ -11,7 +11,10 @@
           </border-box>
         </div>
         <div class="grow">
-          <planet planet-type="home" />
+          <planet-view
+            v-if="planet.abundances"
+            v-model="planet"
+          />
           <building-queue
             v-model="buildOrder"
             :available="availableBuildings"
@@ -47,21 +50,22 @@
 </template>
 
 <script>
-import BorderBox from '@/components/BorderBox'
-import Buildings from '@/data/buildings.js'
+import BorderBox from './components/BorderBox'
+import Buildings from './data/buildings.js'
 import Calc from './views/Calc'
 import BuildingQueue from './views/BuildingQueue'
+import HomePlanet from './data/home_planet.js'
 import Planet from './views/Planet'
 import ResearchQueue from './views/ResearchQueue'
 import ShipQueue from './views/ShipQueue'
-import Ships from '@/data/ships.js'
+import Ships from './data/ships.js'
 import md5 from 'md5'
-import TinyURL from '@/helper/tiny-url.js'
+import TinyURL from './helper/tiny-url.js'
 
 export default {
   components: {
     buildingQueue: BuildingQueue,
-    planet: Planet,
+    planetView: Planet,
     researchQueue: ResearchQueue,
     shipQueue: ShipQueue,
     calc: Calc,
@@ -69,6 +73,7 @@ export default {
   },
   data () {
     return {
+      planet: {},
       buildOrder: [],
       researchOrder: [],
       shipOrder: [],
@@ -79,6 +84,8 @@ export default {
     }
   },
   mounted () {
+    this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
+
     if (window.location.hash) {
       let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
 

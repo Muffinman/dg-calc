@@ -7,6 +7,7 @@
       </h2>
       <button
         class="card-header-icon no-border dark"
+        title="Edit"
         @click="$emit('input', true)"
       >
         <lead-pencil-icon />
@@ -25,17 +26,17 @@
       <tr>
         <td><img :src="`${imgDG}/units/small/metal.gif`" title="Metal" class="image-header"> Metal</td>
         <td class="resource-metal">{{ planet.stored.metal }}</td>
-        <td class="resource-metal">{{ planet.abundances.metal * 100 }}%</td>
+        <td class="resource-metal">{{ planet.abundances.metal }}%</td>
       </tr>
       <tr>
         <td><img :src="`${imgDG}/units/small/mineral.gif`" title="Mineral" class="image-header"> Mineral</td>
         <td class="resource-mineral">{{ planet.stored.mineral }}</td>
-        <td class="resource-mineral">{{ planet.abundances.mineral * 100 }}%</td>
+        <td class="resource-mineral">{{ planet.abundances.mineral }}%</td>
       </tr>
       <tr>
         <td><img :src="`${imgDG}/units/small/energy.gif`" title="Energy" class="image-header"> Energy</td>
         <td class="resource-energy">{{ planet.stored.energy }}</td>
-        <td class="resource-energy">{{ planet.abundances.energy * 100 }}%</td>
+        <td class="resource-energy">{{ planet.abundances.energy }}%</td>
       </tr>
       <tr>
         <td><img :src="`${imgDG}/units/small/worker.gif`" title="Workers" class="image-header"> Workers</td>
@@ -71,3 +72,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.no-border {
+  border: none;
+}
+
+.dark {
+  color: whitesmoke;
+  background-color: #1a1a1a;
+}
+</style>

@@ -1,54 +1,46 @@
 <template>
   <div>
     <planet-view
-      v-if="!editing && planet.stored"
+      v-if="!editing && planet.abundances"
       v-model="editing"
       :planet="planet"
     />
     <planet-edit
-      v-else-if="planet.stored"
+      v-else
       v-model="planet"
     />
   </div>
 </template>
 
 <script>
-import HomePlanet from '@/data/home_planet.js'
-import PlanetEdit from './PlanetEdit'
-import PlanetView from './PlanetView'
+import PlanetEdit from '../components/PlanetEdit'
+import PlanetView from '../components/PlanetView'
 
 export default {
   components: {
     PlanetEdit,
     PlanetView
   },
+  props: {
+    value: {}
+  },
   data () {
     return {
-      planet: {},
-      editing: false
+      editing: false,
+      planet: {}
     }
   },
   mounted () {
-    this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
+    this.$set(this, 'planet', JSON.parse(JSON.stringify(this.value)))
   },
   watch: {
     planet: {
       deep: true,
       handler () {
         this.$set(this, 'editing', false)
+        this.$emit('input', this.planet)
       }
     }
-  },
+  }
 }
 </script>
-
-<style>
-.no-border {
-  border: none;
-}
-
-.dark {
-  color: whitesmoke;
-  background-color: #1a1a1a;
-}
-</style>

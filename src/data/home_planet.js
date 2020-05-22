@@ -14,9 +14,9 @@ let homePlanet = {
     research: 0
   },
   abundances: {
-    metal: 0.7,
-    mineral: 0.7,
-    energy: 0.7,
+    metal: 70,
+    mineral: 70,
+    energy: 70,
     pop: 1,
     research: 1
   }

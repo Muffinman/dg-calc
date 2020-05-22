@@ -278,7 +278,7 @@ export default {
 
           // Take into account abundancy if not an energy cost or research
           if (resource !== 'energy' || this.buildings[building].output[resource] > 0) {
-            resourceOutput *= this.abundances[resource]
+            resourceOutput *= this.abundances[resource] / 100
           }
           if (resource !== 'research' && resource !== 'energy') {
             resourceOutput *= this.researchBonus[resource]

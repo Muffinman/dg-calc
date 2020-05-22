@@ -7,6 +7,7 @@
       </h2>
       <button
         class="card-header-icon no-border dark"
+        title="Confirm"
         @click="$emit('input', planet)"
       >
         <check-bold-icon />
@@ -40,7 +41,7 @@
             v-model.number="planet.abundances.metal"
             type="number"
             min="0"
-            step="0.1"
+            step="1"
             class="queue-quantity"
           />
         </td>
@@ -63,7 +64,7 @@
             v-model.number="planet.abundances.mineral"
             type="number"
             min="0"
-            step="0.1"
+            step="1"
             class="queue-quantity"
           />
         </td>
@@ -86,7 +87,7 @@
             v-model.number="planet.abundances.energy"
             type="number"
             min="0"
-            step="0.1"
+            step="1"
             class="queue-quantity"
           />
         </td>
@@ -131,7 +132,7 @@ export default {
       /**
        * Link to the website of Dark Galaxy to get images
        */
-      imgDG: 'https://beta.darkgalaxy.com/images',
+      imgDG: 'https://beta.darkgalaxy.com/images'
     }
   },
   mounted () {
@@ -149,5 +150,14 @@ export default {
   display: inline-block;
   color: #FFFFFF;
   text-align: center;
+}
+
+.no-border {
+  border: none;
+}
+
+.dark {
+  color: whitesmoke;
+  background-color: #1a1a1a;
 }
 </style>

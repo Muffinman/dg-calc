@@ -66,8 +66,8 @@
 </template>
 
 <script>
-import BorderBox from '@/components/BorderBox'
-import Buildings from '@/data/buildings.js'
+import BorderBox from '../components/BorderBox'
+import Buildings from '../data/buildings.js'
 import Draggable from 'vuedraggable'
 
 export default {

@@ -1,25 +1,25 @@
 <template>
   <div>
-    <planet-view
-      v-if="!editing && planet.abundances"
-      v-model="editing"
-      :planet="planet"
-    />
     <planet-edit
-      v-else
+      v-if="editing"
       v-model="planet"
+    />
+    <planet-view-component
+      v-else-if="planet"
+      :planet="planet"
+      @editClicked="editing = true"
     />
   </div>
 </template>
 
 <script>
 import PlanetEdit from '../components/PlanetEdit'
-import PlanetView from '../components/PlanetView'
+import PlanetViewComponent from '../components/PlanetView'
 
 export default {
   components: {
     PlanetEdit,
-    PlanetView
+    PlanetViewComponent
   },
   props: {
     value: {
@@ -30,7 +30,7 @@ export default {
   data () {
     return {
       editing: false,
-      planet: {}
+      planet: null
     }
   },
   watch: {
@@ -43,7 +43,7 @@ export default {
     }
   },
   mounted () {
-    this.$set(this, 'planet', this.value)
+    this.$set(this, 'planet', JSON.parse(JSON.stringify(this.value)))
   }
 }
 </script>

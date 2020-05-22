@@ -145,13 +145,12 @@
 </template>
 
 <script>
-import BorderBox from '@/components/BorderBox'
-import Buildings from '@/data/buildings.js'
-import HomePlanet from '@/data/home_planet.js'
-import Research from '@/data/research.js'
-import Resources from '@/data/resources.js'
-import Ships from '@/data/ships.js'
-import Travel from '@/data/travel.js'
+import BorderBox from '../components/BorderBox'
+import Buildings from '../data/buildings.js'
+import Research from '../data/research.js'
+import Resources from '../data/resources.js'
+import Ships from '../data/ships.js'
+import Travel from '../data/travel.js'
 
 export default {
   components: {
@@ -168,6 +167,10 @@ export default {
     },
     shipOrder: {
       type: Array,
+      required: true
+    },
+    planet: {
+      type: Object,
       required: true
     }
   },
@@ -325,9 +328,9 @@ export default {
   },
 
   mounted () {
-    this.constructed = JSON.parse(JSON.stringify(HomePlanet.constructed))
-    this.stored = JSON.parse(JSON.stringify(HomePlanet.stored))
-    this.abundances = JSON.parse(JSON.stringify(HomePlanet.abundances))
+    this.constructed = JSON.parse(JSON.stringify(this.planet.constructed))
+    this.stored = JSON.parse(JSON.stringify(this.planet.stored))
+    this.abundances = JSON.parse(JSON.stringify(this.planet.abundances))
     this.travel = JSON.parse(JSON.stringify(Travel))
     this.resources = JSON.parse(JSON.stringify(Resources))
 

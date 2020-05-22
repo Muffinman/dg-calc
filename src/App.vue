@@ -23,6 +23,7 @@
         </div>
         <div class="grow">
           <planet-view
+            v-if="planet"
             v-model="planet"
           />
           <building-queue
@@ -48,10 +49,12 @@
 
       <div class="right-panel grow margin-left">
         <calc
+          v-if="planet"
           :key="orderHash"
           :build-order="buildOrder"
           :research-order="researchOrder"
           :ship-order="shipOrder"
+          :planet="planet"
           @logUpdated="updateLog"
         />
       </div>
@@ -61,16 +64,16 @@
 
 <script>
 import BorderBox from './components/BorderBox'
+import BuildingQueue from './views/BuildingQueue'
 import Buildings from './data/buildings.js'
 import Calc from './views/Calc'
-import BuildingQueue from './views/BuildingQueue'
+import HomePlanet from './data/home_planet.js'
+import md5 from 'md5'
 import Planet from './views/Planet'
 import ResearchQueue from './views/ResearchQueue'
-import ShipQueue from './views/ShipQueue'
 import Ships from './data/ships.js'
-import md5 from 'md5'
+import ShipQueue from './views/ShipQueue'
 import TinyURL from './helper/tiny-url.js'
-import PlanetClass from './models/planet.js'
 
 export default {
   components: {
@@ -85,7 +88,7 @@ export default {
     return {
       buildings: Buildings,
       ships: Ships,
-      planet: new PlanetClass(),
+      planet: null,
       buildOrder: [],
       researchOrder: [],
       shipOrder: [],
@@ -95,7 +98,7 @@ export default {
   },
   computed: {
     orderHash () {
-      return md5(JSON.stringify(this.buildOrder) + JSON.stringify(this.researchOrder) + JSON.stringify(this.shipOrder))
+      return md5(JSON.stringify(this.buildOrder) + JSON.stringify(this.researchOrder) + JSON.stringify(this.shipOrder) + JSON.stringify(this.planet))
     },
     availableBuildings () {
       let buildings = {}
@@ -167,9 +170,14 @@ export default {
     },
     shipOrder () {
       this.updateUrlHash()
+    },
+    planet () {
+      this.updateUrlHash()
     }
   },
   mounted () {
+    this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
+
     if (window.location.hash) {
       let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
 
@@ -177,6 +185,9 @@ export default {
       this.$set(this, 'researchOrder', loadedData[1])
       if (loadedData[2] !== undefined) {
         this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
+      }
+      if (loadedData[3] !== undefined) {
+        this.$set(this, 'planet', loadedData[3])
       }
 
       // Look up current short URL
@@ -209,7 +220,7 @@ export default {
      * Update stored URL hash of build order
      */
     updateUrlHash () {
-      window.location.hash = btoa(JSON.stringify([this.buildOrder, this.researchOrder, this.shipOrder]))
+      window.location.hash = btoa(JSON.stringify([this.buildOrder, this.researchOrder, this.shipOrder, this.planet]))
       this.$set(this, 'shortUrl', '')
     },
 

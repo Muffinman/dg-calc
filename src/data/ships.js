@@ -163,7 +163,8 @@ let ships = {
     requires: {
       buildings: [
         'ship_yard',
-        'light_weapons_factory'
+        'light_weapons_factory',
+        'space_dock'
       ],
       research: []
     },

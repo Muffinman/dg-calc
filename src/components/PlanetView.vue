@@ -6,8 +6,8 @@
       </h2>
       <button
         class="card-header-icon no-border dark"
-        title="Edit"
-        @click="$emit('input', true)"
+        title="Edit planets stats for a colonised planet"
+        @click="$emit('editClicked')"
       >
         <lead-pencil-icon />
       </button>
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import BorderBox from '@/components/BorderBox'
+import BorderBox from '../components/BorderBox'
 import LeadPencilIcon from 'mdi-vue/LeadPencil.vue'
 
 export default {
@@ -95,10 +95,6 @@ export default {
     LeadPencilIcon
   },
   props: {
-    value: {
-      type: Boolean,
-      required: true
-    },
     planet: {
       type: Object,
       required: true

@@ -64,8 +64,8 @@
 </template>
 
 <script>
-import BorderBox from '@/components/BorderBox'
-import Research from '@/data/research.js'
+import BorderBox from '../components/BorderBox'
+import Research from '../data/research.js'
 import Draggable from 'vuedraggable'
 
 export default {

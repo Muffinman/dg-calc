@@ -128,8 +128,9 @@
 </template>
 
 <script>
-import BorderBox from '@/components/BorderBox'
+import BorderBox from '../components/BorderBox'
 import CheckBoldIcon from 'mdi-vue/CheckBold.vue'
+import ColonyPlanet from '../data/colony_planet.js'
 
 export default {
   components: {
@@ -153,7 +154,11 @@ export default {
     }
   },
   mounted () {
-    this.$set(this, 'planet', JSON.parse(JSON.stringify(this.value)))
+    let colonyPlanet = JSON.parse(JSON.stringify(this.value))
+    colonyPlanet.constructed = JSON.parse(JSON.stringify(ColonyPlanet.constructed))
+    colonyPlanet.stored = JSON.parse(JSON.stringify(ColonyPlanet.stored))
+
+    this.$set(this, 'planet', colonyPlanet)
   }
 }
 </script>

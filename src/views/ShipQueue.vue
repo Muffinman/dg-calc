@@ -80,8 +80,8 @@
 </template>
 
 <script>
-import BorderBox from '@/components/BorderBox'
-import Ships from '@/data/ships.js'
+import BorderBox from '../components/BorderBox'
+import Ships from '../data/ships.js'
 import Draggable from 'vuedraggable'
 
 export default {

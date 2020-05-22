@@ -43,7 +43,7 @@ export default {
     }
   },
   mounted () {
-    this.$set(this, 'planet', JSON.parse(JSON.stringify(this.value)))
+    this.$set(this, 'planet', this.value)
   }
 }
 </script>

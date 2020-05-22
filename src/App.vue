@@ -64,13 +64,13 @@ import BorderBox from './components/BorderBox'
 import Buildings from './data/buildings.js'
 import Calc from './views/Calc'
 import BuildingQueue from './views/BuildingQueue'
-import HomePlanet from './data/home_planet.js'
 import Planet from './views/Planet'
 import ResearchQueue from './views/ResearchQueue'
 import ShipQueue from './views/ShipQueue'
 import Ships from './data/ships.js'
 import md5 from 'md5'
 import TinyURL from './helper/tiny-url.js'
+import PlanetClass from './models/planet.js'
 
 export default {
   components: {
@@ -85,12 +85,12 @@ export default {
     return {
       buildings: Buildings,
       ships: Ships,
-      planet: {},
+      planet: new PlanetClass(),
       buildOrder: [],
       researchOrder: [],
       shipOrder: [],
       log: [],
-      shortUrl: ''
+      shortUrl: null
     }
   },
   computed: {
@@ -170,19 +170,19 @@ export default {
     }
   },
   mounted () {
-    this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
-
     if (window.location.hash) {
       let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
 
       this.$set(this, 'buildOrder', this.migrateBuildingData(loadedData[0]))
       this.$set(this, 'researchOrder', loadedData[1])
-      this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
+      if (loadedData[2] !== undefined) {
+        this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
+      }
 
       // Look up current short URL
       TinyURL.resolve(window.location.href)
         .then(shortUrl => {
-          this.shortUrl = shortUrl
+          this.$set(this, 'shortUrl', shortUrl)
         })
         .catch(() => {
           // No need to do anything with the error
@@ -210,7 +210,7 @@ export default {
      */
     updateUrlHash () {
       window.location.hash = btoa(JSON.stringify([this.buildOrder, this.researchOrder, this.shipOrder]))
-      this.shortUrl = ''
+      this.$set(this, 'shortUrl', '')
     },
 
     /**
@@ -219,7 +219,7 @@ export default {
     getShortLink () {
       TinyURL.shorten(window.location.href)
         .then(shortUrl => {
-          this.shortUrl = shortUrl
+          this.$set(this, 'shortUrl', shortUrl)
         })
         .catch(() => {
           // No need to do anything with the error
@@ -330,7 +330,7 @@ export default {
      * @param {Object} data
      */
     migrateShipData (data) {
-      if (data === undefined) {
+      if (data.length === 0) {
         return data
       }
 

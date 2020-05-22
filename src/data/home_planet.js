@@ -17,8 +17,8 @@ let homePlanet = {
     metal: 70,
     mineral: 70,
     energy: 70,
-    pop: 1,
-    research: 1
+    pop: 100,
+    research: 100
   }
 }
 

@@ -85,7 +85,7 @@ export default {
       required: true
     },
     available: {
-      type: Array,
+      type: Object,
       required: true
     }
   },

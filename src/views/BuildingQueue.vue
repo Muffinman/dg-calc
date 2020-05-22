@@ -1,77 +1,73 @@
 <template>
-  <div>
-    <border-box>
+  <border-box>
+    <h2
+      slot="header"
+      class="card-header-title"
+    >
+      Building <strong>Order</strong>
+    </h2>
 
-      <h2
-        slot="header"
-        class="card-header-title"
+    <h3>Available</h3>
+    <ul class="queue">
+      <li
+        v-for="(building, ref) in available"
+        :key="ref"
       >
-        Building <strong>Order</strong>
-      </h2>
+        <button
+          class="button-add"
+          title="Add"
+          @click="addToQueue(ref)"
+        >
+          +
+        </button>
+        <img
+          :src="building.image"
+          :title="building.name"
+          class="image-queue"
+        >
+        {{ building.name }}
+      </li>
+    </ul>
 
-      <h3>Available</h3>
-      <ul class="queue">
+    <h3>Current Queue</h3>
+    <ul class="queue draggable">
+      <draggable
+        :list="order"
+        group="buildings"
+        handle=".handle"
+        @change="emitOrder"
+      >
         <li
-          v-for="(building, ref) in available"
-          :key="ref"
+          v-for="(building, index) in order"
+          :key="index"
         >
-          <button
-            class="button-add"
-            title="Add"
-            @click="addToQueue(ref)"
+          <input
+            :src="`${imgDG}/queue/destroy.png`"
+            :disabled="!buildings[building.ref].canBuild"
+            :class="{ hidden: !buildings[building.ref].canBuild }"
+            type="image"
+            alt="Destroy"
+            title="Destroy"
+            class="button-destroy"
+            @click="removeFromQueue(index)"
           >
-            +
-          </button>
-          <img
-            :src="building.image"
-            :title="building.name"
-            class="image-queue"
-          >
-          {{ building.name }}
-        </li>
-      </ul>
-
-      <h3>Current Queue</h3>
-      <ul class="queue draggable">
-        <draggable
-          :list="order"
-          group="buildings"
-          handle=".handle"
-          @change="emitOrder"
-        >
-          <li
-            v-for="(building, index) in order"
-            :key="index"
-          >
-            <input
-              :src="`${imgDG}/queue/destroy.png`"
-              :disabled="!buildings[building.ref].canBuild"
-              :class="{ hidden: !buildings[building.ref].canBuild }"
-              type="image"
-              alt="Destroy"
-              title="Destroy"
-              class="button-destroy"
-              @click="removeFromQueue(index)"
+          <span :class="{ handle: buildings[building.ref].canBuild }">
+            <img
+              :src="buildings[building.ref].image"
+              :title="buildings[building.ref].name"
+              class="image-queue"
             >
-            <span :class="{ handle: buildings[building.ref].canBuild }">
-              <img
-                :src="buildings[building.ref].image"
-                :title="buildings[building.ref].name"
-                class="image-queue"
-              >
-                {{ `${building.turn} ${buildings[building.ref].name}` }}
-            </span>
-          </li>
-        </draggable>
-      </ul>
-
-    </border-box>
-  </div>
+            {{ `${building.turn} ${buildings[building.ref].name}` }}
+          </span>
+        </li>
+      </draggable>
+    </ul>
+  </border-box>
 </template>
 
 <script>
-import BorderBox from '@/components/BorderBox'
-import Buildings from '@/data/buildings.js'
+import BorderBox from '../components/BorderBox'
+import Buildings from '../data/buildings.js'
 import Draggable from 'vuedraggable'
 
 export default {
@@ -80,9 +76,18 @@ export default {
     Draggable
   },
   props: {
-    value: Array,
-    log: Array,
-    available: Object
+    value: {
+      type: Array,
+      required: true
+    },
+    log: {
+      type: Array,
+      required: true
+    },
+    available: {
+      type: Object,
+      required: true
+    }
   },
   data () {
     return {

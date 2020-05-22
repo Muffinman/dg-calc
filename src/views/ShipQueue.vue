@@ -1,40 +1,87 @@
 <template>
-  <div>
-    <border-box>
+  <border-box>
+    <h2
+      slot="header"
+      class="card-header-title"
+    >
+      Ship <strong>Order</strong>
+    </h2>
 
-      <h2 slot="header" class="card-header-title">Ship <strong>Order</strong></h2>
+    <h3>Available</h3>
+    <p>
+      <label>Quantity: <input
+        v-model.number="quantity"
+        type="number"
+        min="1"
+        class="queue-quantity is-pulled-right"
+      ></label>
+    </p>
+    <ul class="queue">
+      <li
+        v-for="(ship, ref) in available"
+        :key="ref"
+      >
+        <button
+          class="button-add"
+          title="Add"
+          @click="addToQueue(ref)"
+        >
+          +
+        </button>
+        <img
+          :src="ship.image"
+          :title="ship.name"
+          class="image-queue"
+        >
+        {{ ship.name }}
+      </li>
+    </ul>
 
-      <h3>Available</h3>
-      <p><label>Quantity: <input v-model.number="quantity" type="number" min="1" class="queue-quantity is-pulled-right" /></label></p>
-      <ul class="queue">
-        <li v-for="(ship, ref) in available" :key="ref">
-          <button class="button-add" title="Add" @click="addToQueue(ref)">+</button>
-          <img :src="ship.image" :title="ship.name" class="image-queue">
-          {{ ship.name }}
+    <h3>Current Queue</h3>
+    <ul class="queue draggable">
+      <draggable
+        :list="order"
+        group="ships"
+        handle=".handle"
+        @change="$emit('input', order)"
+      >
+        <li
+          v-for="(ship, index) in order"
+          :key="index"
+        >
+          <input
+            type="image"
+            :src="`${imgDG}/queue/destroy.png`"
+            alt="Destroy"
+            title="Destroy"
+            class="button-destroy"
+            @click="removeFromQueue(index)"
+          >
+          <span class="handle">
+            <img
+              :src="ships[ship.ref].image"
+              :title="ships[ship.ref].name"
+              class="image-queue"
+            >
+            {{ `${ship.turn} ${ships[ship.ref].name}` }}
+          </span>
+          <input
+            v-model.number="ship.quantity"
+            type="number"
+            min="1"
+            class="queue-quantity is-pulled-right"
+            @change="handleShipInput"
+            @keyup="handleShipInput"
+          >
         </li>
-      </ul>
-
-      <h3>Current Queue</h3>
-      <ul class="queue draggable">
-        <draggable :list="order" group="ships" handle=".handle" @change="$emit('input', order)">
-          <li v-for="(ship, index) in order" :key="index">
-            <input type="image" :src="`${imgDG}/queue/destroy.png`" alt="Destroy" title="Destroy" class="button-destroy" @click="removeFromQueue(index)">
-            <span class="handle">
-              <img :src="ships[ship.ref].image" :title="ships[ship.ref].name" class="image-queue">
-              {{ `${ship.turn} ${ships[ship.ref].name}` }}
-            </span>
-            <input v-model.number="ship.quantity" type="number" min="1" class="queue-quantity is-pulled-right" @change="handleShipInput" @keyup="handleShipInput" />
-          </li>
-        </draggable>
-      </ul>
-
-    </border-box>
-  </div>
+      </draggable>
+    </ul>
+  </border-box>
 </template>
 
 <script>
-import BorderBox from '@/components/BorderBox'
-import Ships from '@/data/ships.js'
+import BorderBox from '../components/BorderBox'
+import Ships from '../data/ships.js'
 import Draggable from 'vuedraggable'
 
 export default {
@@ -43,9 +90,18 @@ export default {
     Draggable
   },
   props: {
-    value: Array,
-    log: Array,
-    available: Object
+    value: {
+      type: Array,
+      required: true
+    },
+    log: {
+      type: Array,
+      required: true
+    },
+    available: {
+      type: Object,
+      required: true
+    }
   },
   data () {
     return {

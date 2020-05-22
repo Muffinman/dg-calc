@@ -1,21 +1,38 @@
 <template>
-  <div id="app" class="flex">
+  <div
+    id="app"
+    class="flex"
+  >
     <div class="content flex align-items-top justify-content-stretch scroll">
       <div class="left-panel wrap">
         <div class="short-url grow full-width">
           <border-box>
             <div class="flex justify-content-stretch">
-              <button @click="getShortLink">Get Shortlink</button>
-              <input type="text" v-model="shortUrl" placeholder="No url saved..." readonly class="grow" />
+              <button @click="getShortLink">
+                Get Shortlink
+              </button>
+              <input
+                v-model="shortUrl"
+                type="text"
+                placeholder="No url saved..."
+                readonly
+                class="grow"
+              >
             </div>
           </border-box>
         </div>
-        <building-queue
-          v-model="buildOrder"
-          :available="availableBuildings"
-          :log="buildLog"
-          class="grow"
-        />
+        <div class="grow">
+          <planet-view
+            v-if="planet"
+            v-model="planet"
+          />
+          <building-queue
+            v-model="buildOrder"
+            :available="availableBuildings"
+            :log="buildLog"
+            class="margin-top margin-bottom"
+          />
+        </div>
         <div class="margin-left grow">
           <research-queue
             :order="researchOrder"
@@ -25,17 +42,19 @@
             v-model="shipOrder"
             :available="availableShips"
             :log="shipLog"
-            class="margin-top"
+            class="margin-top margin-bottom"
           />
         </div>
       </div>
 
       <div class="right-panel grow margin-left">
         <calc
+          v-if="planet"
+          :key="orderHash"
           :build-order="buildOrder"
           :research-order="researchOrder"
           :ship-order="shipOrder"
-          :key="orderHash"
+          :planet="planet"
           @logUpdated="updateLog"
         />
       </div>
@@ -44,19 +63,22 @@
 </template>
 
 <script>
-import BorderBox from '@/components/BorderBox'
-import Buildings from '@/data/buildings.js'
-import Calc from './views/Calc'
+import BorderBox from './components/BorderBox'
 import BuildingQueue from './views/BuildingQueue'
-import ResearchQueue from './views/ResearchQueue'
-import ShipQueue from './views/ShipQueue'
-import Ships from '@/data/ships.js'
+import Buildings from './data/buildings.js'
+import Calc from './views/Calc'
+import HomePlanet from './data/home_planet.js'
 import md5 from 'md5'
-import TinyURL from '@/helper/tiny-url.js'
+import Planet from './views/Planet'
+import ResearchQueue from './views/ResearchQueue'
+import Ships from './data/ships.js'
+import ShipQueue from './views/ShipQueue'
+import TinyURL from './helper/tiny-url.js'
 
 export default {
   components: {
     buildingQueue: BuildingQueue,
+    planetView: Planet,
     researchQueue: ResearchQueue,
     shipQueue: ShipQueue,
     calc: Calc,
@@ -64,36 +86,19 @@ export default {
   },
   data () {
     return {
+      buildings: Buildings,
+      ships: Ships,
+      planet: null,
       buildOrder: [],
       researchOrder: [],
       shipOrder: [],
-      buildings: Buildings,
-      ships: Ships,
       log: [],
-      shortUrl: ''
-    }
-  },
-  mounted () {
-    if (window.location.hash) {
-      let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
-
-      this.$set(this, 'buildOrder', this.migrateBuildingData(loadedData[0]))
-      this.$set(this, 'researchOrder', loadedData[1])
-      this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
-
-      // Look up current short URL
-      TinyURL.resolve(window.location.href)
-        .then(shortUrl => {
-          this.shortUrl = shortUrl
-        })
-        .catch(() => {
-          // No need to do anything with the error
-        })
+      shortUrl: null
     }
   },
   computed: {
     orderHash () {
-      return md5(JSON.stringify(this.buildOrder) + JSON.stringify(this.researchOrder) + JSON.stringify(this.shipOrder))
+      return md5(JSON.stringify(this.buildOrder) + JSON.stringify(this.researchOrder) + JSON.stringify(this.shipOrder) + JSON.stringify(this.planet))
     },
     availableBuildings () {
       let buildings = {}
@@ -165,6 +170,34 @@ export default {
     },
     shipOrder () {
       this.updateUrlHash()
+    },
+    planet () {
+      this.updateUrlHash()
+    }
+  },
+  mounted () {
+    this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
+
+    if (window.location.hash) {
+      let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
+
+      this.$set(this, 'buildOrder', this.migrateBuildingData(loadedData[0]))
+      this.$set(this, 'researchOrder', loadedData[1])
+      if (loadedData[2] !== undefined) {
+        this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
+      }
+      if (loadedData[3] !== undefined) {
+        this.$set(this, 'planet', loadedData[3])
+      }
+
+      // Look up current short URL
+      TinyURL.resolve(window.location.href)
+        .then(shortUrl => {
+          this.$set(this, 'shortUrl', shortUrl)
+        })
+        .catch(() => {
+          // No need to do anything with the error
+        })
     }
   },
   methods: {
@@ -187,8 +220,8 @@ export default {
      * Update stored URL hash of build order
      */
     updateUrlHash () {
-      window.location.hash = btoa(JSON.stringify([this.buildOrder, this.researchOrder, this.shipOrder]))
-      this.shortUrl = ''
+      window.location.hash = btoa(JSON.stringify([this.buildOrder, this.researchOrder, this.shipOrder, this.planet]))
+      this.$set(this, 'shortUrl', '')
     },
 
     /**
@@ -197,7 +230,7 @@ export default {
     getShortLink () {
       TinyURL.shorten(window.location.href)
         .then(shortUrl => {
-          this.shortUrl = shortUrl
+          this.$set(this, 'shortUrl', shortUrl)
         })
         .catch(() => {
           // No need to do anything with the error
@@ -308,7 +341,7 @@ export default {
      * @param {Object} data
      */
     migrateShipData (data) {
-      if (data === undefined) {
+      if (data.length === 0) {
         return data
       }
 

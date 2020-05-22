@@ -1,54 +1,142 @@
 <template>
   <div>
     <border-box>
-      <h2 slot="header" class="card-header-title">Build<strong>Order</strong>Calculator &nbsp; (first colo turn {{ first_colo_turn }})</h2>
+      <h2
+        slot="header"
+        class="card-header-title"
+      >
+        Build<strong>Order</strong>Calculator &nbsp; (first colo turn {{ first_colo_turn }})
+      </h2>
       <table>
         <thead>
-        <tr>
-          <th><img :src="`${imgDG}/units/small/time.png`" title="Turn" class="image-header"></th>
-          <th><img :src="`${imgDG}/buttons/construction.png`" title="Building" class="image-header"> Building</th>
-          <th><img :src="`${imgDG}/buttons/production.png`" title="Production" class="image-header"> Production</th>
-          <th><img :src="`${imgDG}/icons/research_small.png`" title="Research" class="image-header"> Research</th>
-          <th><img :src="`${imgDG}/units/small/metal.gif`" title="Metal" class="image-header"> Metal</th>
-          <th><img :src="`${imgDG}/units/small/mineral.gif`" title="Mineral" class="image-header"> Mineral</th>
-          <th><img :src="`${imgDG}/units/small/energy.gif`" title="Energy" class="image-header"> Energy</th>
-          <th><img :src="`${imgDG}/units/small/worker.gif`" title="Population" class="image-header"> Population</th>
-        </tr>
+          <tr>
+            <th>
+              <img
+                :src="`${imgDG}/units/small/time.png`"
+                title="Turn"
+                class="image-header"
+              >
+            </th>
+            <th>
+              <img
+                :src="`${imgDG}/buttons/construction.png`"
+                title="Building"
+                class="image-header"
+              > Building
+            </th>
+            <th>
+              <img
+                :src="`${imgDG}/buttons/production.png`"
+                title="Production"
+                class="image-header"
+              > Production
+            </th>
+            <th>
+              <img
+                :src="`${imgDG}/icons/research_small.png`"
+                title="Research"
+                class="image-header"
+              > Research
+            </th>
+            <th>
+              <img
+                :src="`${imgDG}/units/small/metal.gif`"
+                title="Metal"
+                class="image-header"
+              > Metal
+            </th>
+            <th>
+              <img
+                :src="`${imgDG}/units/small/mineral.gif`"
+                title="Mineral"
+                class="image-header"
+              > Mineral
+            </th>
+            <th>
+              <img
+                :src="`${imgDG}/units/small/energy.gif`"
+                title="Energy"
+                class="image-header"
+              > Energy
+            </th>
+            <th>
+              <img
+                :src="`${imgDG}/units/small/worker.gif`"
+                title="Workers"
+                class="image-header"
+              > Workers
+            </th>
+          </tr>
         </thead>
         <tbody>
-        <tr v-for="turn in log" :key="turn.turn">
-          <td>{{ turn.turn }}</td>
-          <td><span v-if="turn.queue.building.ref">{{ buildings[turn.queue.building.ref].name }} ({{ turn.queue.building.turns }})</span></td>
-          <td><span v-if="turn.queue.production.ref">{{turn.queue.production.quantity}} {{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
-          <td><span v-if="turn.queue.research.ref">{{ research[turn.queue.research.ref].name }}</span></td>
-          <td class="metal">{{ turn.stored.metal | numeral('0,0') }} ({{ turn.output.metal | numeral('+0,0') }})</td>
-          <td class="mineral">{{ turn.stored.mineral | numeral('0,0') }} ({{ turn.output.mineral | numeral('+0,0') }})</td>
-          <td class="energy">{{ turn.stored.energy | numeral('0,0') }} ({{ turn.output.energy | numeral('+0,0') }})</td>
-          <td>
-            {{ (turn.stored.pop + turn.stored.pop_busy) | numeral('0,0') }}
-            / {{ turn.storage.pop | numeral('0,0') }}
-            <span class="population">({{ turn.output.pop | numeral('+0,0') }}) </span>
-            <span class="neutral">({{ turn.stored.pop_busy | numeral('0,0') }} occupied)</span>
-          </td>
-        </tr>
+          <tr
+            v-for="turn in log"
+            :key="turn.turn"
+          >
+            <td>{{ turn.turn }}</td>
+            <td><span v-if="turn.queue.building.ref">{{ buildings[turn.queue.building.ref].name }} ({{ turn.queue.building.turns }})</span></td>
+            <td><span v-if="turn.queue.production.ref">{{ turn.queue.production.quantity }}x {{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
+            <td><span v-if="turn.queue.research.ref">{{ research[turn.queue.research.ref].name }}</span></td>
+            <td class="resource-metal">
+              {{ turn.stored.metal | numeral('0,0') }} ({{ turn.output.metal | numeral('+0,0') }})
+            </td>
+            <td class="resource-mineral">
+              {{ turn.stored.mineral | numeral('0,0') }} ({{ turn.output.mineral | numeral('+0,0') }})
+            </td>
+            <td class="resource-energy">
+              {{ turn.stored.energy | numeral('0,0') }} ({{ turn.output.energy | numeral('+0,0') }})
+            </td>
+            <td>
+              {{ (turn.stored.pop + turn.stored.pop_busy) | numeral('0,0') }}
+              / {{ turn.storage.pop | numeral('0,0') }}
+              <span class="workers">({{ turn.output.pop | numeral('+0,0') }}) </span>
+              <span class="neutral">({{ turn.stored.pop_busy | numeral('0,0') }} occupied)</span>
+            </td>
+          </tr>
         </tbody>
         <tfoot>
           <tr>
-            <td></td>
+            <td />
             <td>Asset Score</td>
             <td>Outposts</td>
-            <td></td>
-            <td colspan="4">Total Output</td>
+            <td />
+            <td colspan="4">
+              Total Output
+            </td>
           </tr>
           <tr>
-            <td></td>
+            <td />
             <td>{{ totalScore }}</td>
             <td>{{ totalOutposts }}</td>
-            <td></td>
-            <td><img :src="`${imgDG}/units/small/metal.gif`" title="Metal" class="image-header"> {{ totalResource('metal') | numeral('0,0') }}</td>
-            <td><img :src="`${imgDG}/units/small/mineral.gif`" title="Mineral" class="image-header"> {{ totalResource('mineral') | numeral('0,0') }}</td>
-            <td><img :src="`${imgDG}/units/small/energy.gif`" title="Energy" class="image-header"> {{ totalResource('energy') | numeral('0,0') }}</td>
-            <td><img :src="`${imgDG}/units/small/worker.gif`" title="Population" class="image-header"> {{ totalResource('pop') | numeral('0,0') }}</td>
+            <td />
+            <td>
+              <img
+                :src="`${imgDG}/units/small/metal.gif`"
+                title="Metal"
+                class="image-header"
+              > {{ totalResource('metal') | numeral('0,0') }}
+            </td>
+            <td>
+              <img
+                :src="`${imgDG}/units/small/mineral.gif`"
+                title="Mineral"
+                class="image-header"
+              > {{ totalResource('mineral') | numeral('0,0') }}
+            </td>
+            <td>
+              <img
+                :src="`${imgDG}/units/small/energy.gif`"
+                title="Energy"
+                class="image-header"
+              > {{ totalResource('energy') | numeral('0,0') }}
+            </td>
+            <td>
+              <img
+                :src="`${imgDG}/units/small/worker.gif`"
+                title="Workers"
+                class="image-header"
+              > {{ totalResource('pop') | numeral('0,0') }}
+            </td>
           </tr>
         </tfoot>
       </table>
@@ -57,19 +145,34 @@
 </template>
 
 <script>
-import BorderBox from '@/components/BorderBox'
-import Buildings from '@/data/buildings.js'
-import Ships from '@/data/ships.js'
-import Research from '@/data/research.js'
+import BorderBox from '../components/BorderBox'
+import Buildings from '../data/buildings.js'
+import Research from '../data/research.js'
+import Resources from '../data/resources.js'
+import Ships from '../data/ships.js'
+import Travel from '../data/travel.js'
 
 export default {
   components: {
     BorderBox
   },
   props: {
-    buildOrder: Array,
-    researchOrder: Array,
-    shipOrder: Array
+    buildOrder: {
+      type: Array,
+      required: true
+    },
+    researchOrder: {
+      type: Array,
+      required: true
+    },
+    shipOrder: {
+      type: Array,
+      required: true
+    },
+    planet: {
+      type: Object,
+      required: true
+    }
   },
   data () {
     return {
@@ -92,13 +195,7 @@ export default {
       /**
        * List of resources
        */
-      resources: [
-        'metal',
-        'mineral',
-        'energy',
-        'pop',
-        'research'
-      ],
+      resources: [],
 
       /**
        * Current building order
@@ -118,14 +215,7 @@ export default {
       /**
        * Current stored planet resources
        */
-      stored: {
-        metal: 30000,
-        mineral: 20000,
-        energy: 1000,
-        pop: 20000,
-        pop_busy: 0,
-        research: 0
-      },
+      stored: {},
 
       /**
        * Current resource storage limits
@@ -146,15 +236,9 @@ export default {
       },
 
       /**
-       * Home planet abundances
+       * Planet abundances
        */
-      abundancies: {
-        metal: 0.7,
-        mineral: 0.7,
-        energy: 0.7,
-        pop: 1,
-        research: 1
-      },
+      abundances: {},
 
       /**
        * List of ships
@@ -193,22 +277,7 @@ export default {
       /**
        * Completed structures
        */
-      constructed: {
-        outpost: 1,
-        metal_mine: 3,
-        mineral_extractor: 3,
-        solar_generator: 2,
-        farm: 0,
-        launch_site: 0,
-        ship_yard: 0,
-        comms_satellite: 0,
-        light_weapons_factory: 0,
-        army_barracks: 0,
-        colony: 0,
-        metropolis: 0,
-        space_dock: 0,
-        heavy_weapons_factory: 0
-      },
+      constructed: {},
 
       /**
        * Completed research
@@ -230,32 +299,7 @@ export default {
        * Syntax:
        * source: { destination: turns }
        */
-      travel: {
-        homeworld: {
-          center: 24,
-          inner: 24,
-          outer: 24,
-          homeworld: 24
-        },
-        center: {
-          center: 12,
-          inner: 20,
-          outer: 28,
-          homeworld: 24
-        },
-        inner: {
-          center: 12,
-          inner: 12,
-          outer: 20,
-          homeworld: 24
-        },
-        outer: {
-          center: 16,
-          inner: 16,
-          outer: 12,
-          homeworld: 24
-        }
-      },
+      travel: {},
 
       /**
        * Link to the website of Dark Galaxy to get images
@@ -284,6 +328,12 @@ export default {
   },
 
   mounted () {
+    this.constructed = JSON.parse(JSON.stringify(this.planet.constructed))
+    this.stored = JSON.parse(JSON.stringify(this.planet.stored))
+    this.abundances = JSON.parse(JSON.stringify(this.planet.abundances))
+    this.travel = JSON.parse(JSON.stringify(Travel))
+    this.resources = JSON.parse(JSON.stringify(Resources))
+
     this.calcOutputAndStorage()
     this.ticks(300)
 
@@ -328,7 +378,7 @@ export default {
 
           // Take into account abundancy if not an energy cost or research
           if (resource !== 'energy' || this.buildings[building].output[resource] > 0) {
-            resourceOutput *= this.abundancies[resource]
+            resourceOutput *= this.abundances[resource] / 100
           }
           if (resource !== 'research' && resource !== 'energy') {
             resourceOutput *= this.researchBonus[resource]
@@ -702,22 +752,6 @@ export default {
 <style scoped>
 .image-header {
   width: 17px;
-}
-
-.metal {
-  color: #EEEEEE;
-}
-
-.mineral {
-  color: #E33E4C;
-}
-
-.energy {
-  color: #6596DA;
-}
-
-.population {
-  color: #EAC861;
 }
 
 .neutral {

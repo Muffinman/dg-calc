@@ -383,7 +383,7 @@ export default {
           if (resource !== 'research' && resource !== 'energy') {
             resourceOutput *= this.researchBonus[resource]
           }
-          this.output[resource] += resourceOutput
+          this.output[resource] += Math.floor(resourceOutput)
 
           // Calc storages, only do this for pop at the moment
           if (resource === 'pop') {

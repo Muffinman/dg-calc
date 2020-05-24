@@ -13,17 +13,18 @@
         v-for="(item, index) in availableResearch"
         :key="index"
       >
-        <button
-          class="button-add"
+        <input
+          :src="`${imgDG}/queue/add.png`"
+          type="image"
+          alt="Add"
           title="Add"
+          class="touch-size vertical-align-bottom"
           @click="addToQueue(item.ref)"
         >
-          +
-        </button>
         <img
           :src="item.image"
           :title="item.name"
-          class="image-queue"
+          class="touch-size margin-left-small"
         >
         {{ item.name }}
       </li>
@@ -43,17 +44,17 @@
         >
           <input
             type="image"
-            :src="`${imgDG}/queue/destroy.png`"
+            :src="`${imgDG}/queue/remove.png`"
             alt="Destroy"
             title="Destroy"
-            class="button-destroy"
+            class="touch-size vertical-align-bottom"
             @click="removeFromQueue(index)"
           >
           <span class="handle">
             <img
               :src="research[item].image"
               :title="research[item].name"
-              class="image-queue"
+              class="touch-size margin-left-small"
             >
             {{ research[item].name }}
           </span>
@@ -132,22 +133,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.image-queue {
-  width: 18px;
-  margin-left: 3px;
-}
-
-.button-destroy {
-  width: 23px;
-  vertical-align: bottom;
-}
-
-.button-add {
-  background-color: black;
-  color: darkgrey;
-  border: none;
-  cursor: pointer;
-}
-</style>

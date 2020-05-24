@@ -45,12 +45,28 @@
     margin-bottom: $base-spacing;
 }
 
+.margin-left-small {
+    margin-left: $base-spacing / 2;
+}
+
+.vertical-align-bottom {
+    vertical-align: bottom;
+}
+
 .sticky {
     position: sticky;
 }
 
 .scroll {
     overflow: scroll;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.no-border {
+    border: none;
 }
 
 .left-panel {

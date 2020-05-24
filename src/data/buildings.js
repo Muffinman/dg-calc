@@ -11,7 +11,8 @@ let buildings = {
       energy: 0,
       pop: 0,
       research: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -22,7 +23,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: [],
@@ -41,7 +43,8 @@ let buildings = {
       energy: 0,
       pop: 0,
       research: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -52,7 +55,8 @@ let buildings = {
     },
     storage: {
       pop: 50000,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: [],
@@ -71,7 +75,8 @@ let buildings = {
       energy: 0,
       pop: 5000,
       research: 0,
-      ground: 1
+      ground_space: 1,
+      orbit_space: 0
     },
     output: {
       metal: 300,
@@ -82,7 +87,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: [],
@@ -101,7 +107,8 @@ let buildings = {
       energy: 0,
       pop: 5000,
       research: 0,
-      ground: 1
+      ground_space: 1,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -112,7 +119,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: [],
@@ -131,7 +139,8 @@ let buildings = {
       energy: 0,
       pop: 5000,
       research: 0,
-      ground: 1
+      ground_space: 1,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -142,7 +151,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: [],
@@ -161,7 +171,8 @@ let buildings = {
       pop: 5000,
       energy: 0,
       research: 0,
-      ground: 1
+      ground_space: 1,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -172,7 +183,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: [],
@@ -191,7 +203,8 @@ let buildings = {
       pop: 25000,
       energy: 0,
       research: 0,
-      ground: 1
+      ground_space: 1,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -202,7 +215,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: [],
@@ -221,7 +235,8 @@ let buildings = {
       pop: 80000,
       energy: 0,
       research: 0,
-      ground: 2
+      ground_space: 2,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -232,7 +247,8 @@ let buildings = {
     },
     storage: {
       pop: 125000,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: [],
@@ -251,7 +267,8 @@ let buildings = {
       energy: 0,
       pop: 40000,
       research: 0,
-      ground: 2
+      ground_space: 2,
+      orbit_space: 0
     },
     output: {
       metal: 900,
@@ -262,7 +279,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: ['colony'],
@@ -281,7 +299,8 @@ let buildings = {
       energy: 0,
       pop: 40000,
       research: 0,
-      ground: 2
+      ground_space: 2,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -292,7 +311,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: ['colony'],
@@ -311,7 +331,8 @@ let buildings = {
       energy: 0,
       pop: 40000,
       research: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 2
     },
     output: {
       metal: 0,
@@ -322,7 +343,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: ['colony', 'launch_site'],
@@ -341,7 +363,8 @@ let buildings = {
       energy: 0,
       pop: 40000,
       research: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 2
     },
     output: {
       metal: 0,
@@ -352,7 +375,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: ['colony', 'launch_site'],
@@ -371,7 +395,8 @@ let buildings = {
       pop: 25000,
       energy: 0,
       research: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 2
     },
     output: {
       metal: 0,
@@ -382,7 +407,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: ['launch_site'],
@@ -401,7 +427,8 @@ let buildings = {
       pop: 40000,
       energy: 0,
       research: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 2
     },
     output: {
       metal: 0,
@@ -412,7 +439,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: ['launch_site'],
@@ -431,7 +459,8 @@ let buildings = {
       pop: 25000,
       energy: 0,
       research: 0,
-      ground: 1
+      ground_space: 1,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -442,7 +471,8 @@ let buildings = {
     },
     storage: {
       pop: 50000,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: [],
@@ -461,7 +491,8 @@ let buildings = {
       pop: 25000,
       energy: 0,
       research: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 1
     },
     output: {
       metal: 0,
@@ -472,7 +503,8 @@ let buildings = {
     },
     storage: {
       pop: 75000,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: ['launch_site'],
@@ -491,7 +523,8 @@ let buildings = {
       pop: 50000,
       energy: 0,
       research: 0,
-      ground: 2
+      ground_space: 2,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -502,7 +535,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: ['colony'],
@@ -521,7 +555,8 @@ let buildings = {
       pop: 25000,
       energy: 0,
       research: 0,
-      ground: 2
+      ground_space: 2,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -532,7 +567,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: ['light_weapons_factory'],
@@ -551,7 +587,8 @@ let buildings = {
       pop: 240000,
       energy: 0,
       research: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 4
     },
     output: {
       metal: 0,
@@ -562,7 +599,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: ['metropolis'],
@@ -581,7 +619,8 @@ let buildings = {
       pop: 200000,
       energy: 0,
       research: 0,
-      ground: 2
+      ground_space: 2,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -592,7 +631,8 @@ let buildings = {
     },
     storage: {
       pop: 0,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: ['metropolis'],
@@ -611,7 +651,8 @@ let buildings = {
       pop: 160000,
       energy: 0,
       research: 0,
-      ground: 4
+      ground_space: 4,
+      orbit_space: 0
     },
     output: {
       metal: 0,
@@ -622,7 +663,8 @@ let buildings = {
     },
     storage: {
       pop: 200000,
-      ground: 0
+      ground_space: 0,
+      orbit_space: 0
     },
     requires: {
       buildings: ['colony'],

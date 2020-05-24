@@ -69,7 +69,14 @@
             <th>
               <img
                 :src="`${imgDG}/units/small/ground.gif`"
-                title="Ground"
+                title="Ground Space"
+                class="image-header"
+              >
+            </th>
+            <th>
+              <img
+                :src="`${imgDG}/units/small/orbit.gif`"
+                title="Orbit Space"
                 class="image-header"
               >
             </th>
@@ -100,7 +107,10 @@
               <span class="neutral">({{ turn.stored.pop_busy | numeral('0,0') }} occupied)</span>
             </td>
             <td>
-              {{ turn.stored.ground }}
+              {{ turn.stored.ground_space }}
+            </td>
+            <td>
+              {{ turn.stored.orbit_space }}
             </td>
           </tr>
         </tbody>
@@ -379,7 +389,7 @@ export default {
 
         output['research'] += this.constructed[building] * this.buildings[building].output['research']
 
-        output['ground'] += this.constructed[building] * this.buildings[building].output['ground']
+        output['ground_space'] += this.constructed[building] * this.buildings[building].output['ground_space']
       })
 
       this.$set(this, 'output', output)
@@ -391,7 +401,8 @@ export default {
     calcStorage () {
       let storage = {
         pop: 0,
-        ground: 0
+        ground_space: 0,
+        orbit_space: 0
       }
 
       Object.keys(this.constructed).forEach(building => {

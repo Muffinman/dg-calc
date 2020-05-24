@@ -13,14 +13,9 @@
       </button>
     </template>
 
+    <h3>Abundances</h3>
+
     <table v-if="planet.stored">
-      <thead>
-        <tr>
-          <th />
-          <th>Stored</th>
-          <th>Abundance</th>
-        </tr>
-      </thead>
       <tbody>
         <tr>
           <td>
@@ -28,24 +23,15 @@
               :src="`${imgDG}/units/small/metal.gif`"
               title="Metal"
               class="image-header"
-            >
+            > Metal
           </td>
-          <td class="resource-metal">
-            <input
-              v-model.number="planet.stored.metal"
-              type="number"
-              min="0"
-              step="1000"
-              class="queue-quantity"
-            >
-          </td>
-          <td class="resource-metal">
+          <td class="queue-quantity">
             <input
               v-model.number="planet.abundances.metal"
               type="number"
               min="0"
+              max="9999"
               step="1"
-              class="queue-quantity"
             >
           </td>
         </tr>
@@ -55,24 +41,15 @@
               :src="`${imgDG}/units/small/mineral.gif`"
               title="Mineral"
               class="image-header"
-            >
+            > Mineral
           </td>
-          <td class="resource-mineral">
-            <input
-              v-model.number="planet.stored.mineral"
-              type="number"
-              min="0"
-              step="1000"
-              class="queue-quantity"
-            >
-          </td>
-          <td class="resource-mineral">
+          <td class="queue-quantity">
             <input
               v-model.number="planet.abundances.mineral"
               type="number"
               min="0"
+              max="9999"
               step="1"
-              class="queue-quantity"
             >
           </td>
         </tr>
@@ -82,24 +59,76 @@
               :src="`${imgDG}/units/small/energy.gif`"
               title="Energy"
               class="image-header"
-            >
+            > Energy
           </td>
-          <td class="resource-energy">
-            <input
-              v-model.number="planet.stored.energy"
-              type="number"
-              min="0"
-              step="1000"
-              class="queue-quantity"
-            >
-          </td>
-          <td class="resource-energy">
+          <td class="queue-quantity">
             <input
               v-model.number="planet.abundances.energy"
               type="number"
               min="0"
+              max="9999"
               step="1"
-              class="queue-quantity"
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Resources</h3>
+
+    <table v-if="planet.stored">
+      <tbody>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/metal.gif`"
+              title="Metal"
+              class="image-header"
+            > Metal
+          </td>
+          <td class="queue-quantity">
+            <input
+              v-model.number="planet.stored.metal"
+              type="number"
+              min="0"
+              max="9999"
+              step="1000"
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/mineral.gif`"
+              title="Mineral"
+              class="image-header"
+            > Mineral
+          </td>
+          <td class="queue-quantity">
+            <input
+              v-model.number="planet.stored.mineral"
+              type="number"
+              min="0"
+              max="9999"
+              step="1000"
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/energy.gif`"
+              title="Energy"
+              class="image-header"
+            > Energy
+          </td>
+          <td class="queue-quantity">
+            <input
+              v-model.number="planet.stored.energy"
+              type="number"
+              min="0"
+              max="9999"
+              step="1000"
             >
           </td>
         </tr>
@@ -109,18 +138,53 @@
               :src="`${imgDG}/units/small/worker.gif`"
               title="Workers"
               class="image-header"
-            >
+            > Workers
           </td>
-          <td class="workers">
+          <td class="queue-quantity">
             <input
               v-model.number="planet.stored.pop"
               type="number"
               min="0"
+              max="9999"
               step="1000"
-              class="queue-quantity"
             >
           </td>
-          <td />
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/ground.gif`"
+              title="Ground Space"
+              class="image-header"
+            > Ground Space
+          </td>
+          <td class="queue-quantity">
+            <input
+              v-model.number="planet.stored.ground_space"
+              type="number"
+              min="0"
+              max="9999"
+              step="1"
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/orbit.gif`"
+              title="Orbit Space"
+              class="image-header"
+            > orbit Space
+          </td>
+          <td class="queue-quantity">
+            <input
+              v-model.number="planet.stored.orbit_space"
+              type="number"
+              min="0"
+              max="9999"
+              step="1"
+            >
+          </td>
         </tr>
       </tbody>
     </table>
@@ -154,21 +218,27 @@ export default {
     }
   },
   mounted () {
-    let colonyPlanet = JSON.parse(JSON.stringify(this.value))
-    colonyPlanet.constructed = JSON.parse(JSON.stringify(ColonyPlanet.constructed))
-    colonyPlanet.stored = JSON.parse(JSON.stringify(ColonyPlanet.stored))
+    let planet = JSON.parse(JSON.stringify(this.value))
 
-    this.$set(this, 'planet', colonyPlanet)
+    if (!planet.colony) {
+      planet.constructed = JSON.parse(JSON.stringify(ColonyPlanet.constructed))
+      planet.stored = JSON.parse(JSON.stringify(ColonyPlanet.stored))
+      planet.colony = true
+    }
+
+    this.$set(this, 'planet', planet)
   }
 }
 </script>
 
 <style scoped>
 .queue-quantity {
+  text-align: right;
+}
+.queue-quantity input {
   background-color: #000000;
   border: 1px solid #444444;
   padding: 0.4em 0.2em;
-  width: 65px;
   display: inline-block;
   color: #FFFFFF;
   text-align: center;

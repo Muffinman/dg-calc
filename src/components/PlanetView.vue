@@ -13,25 +13,17 @@
       </button>
     </template>
 
+    <h3>Abundances</h3>
+
     <table>
-      <thead>
-        <tr>
-          <th />
-          <th>Stored</th>
-          <th>Abundance</th>
-        </tr>
-      </thead>
       <tbody>
         <tr>
-          <td>
+          <td width="67%">
             <img
               :src="`${imgDG}/units/small/metal.gif`"
               title="Metal"
               class="image-header"
             > Metal
-          </td>
-          <td class="resource-metal">
-            {{ planet.stored.metal }}
           </td>
           <td class="resource-metal">
             {{ planet.abundances.metal }}%
@@ -46,10 +38,50 @@
             > Mineral
           </td>
           <td class="resource-mineral">
-            {{ planet.stored.mineral }}
+            {{ planet.abundances.mineral }}%
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/energy.gif`"
+              title="Energy"
+              class="image-header"
+            > Energy
+          </td>
+          <td class="resource-energy">
+            {{ planet.abundances.energy }}%
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Resources</h3>
+
+    <table>
+      <tbody>
+        <tr>
+          <td width="67%">
+            <img
+              :src="`${imgDG}/units/small/metal.gif`"
+              title="Metal"
+              class="image-header"
+            > Metal
+          </td>
+          <td class="resource-metal">
+            {{ planet.stored.metal }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/mineral.gif`"
+              title="Mineral"
+              class="image-header"
+            > Mineral
           </td>
           <td class="resource-mineral">
-            {{ planet.abundances.mineral }}%
+            {{ planet.stored.mineral }}
           </td>
         </tr>
         <tr>
@@ -63,9 +95,6 @@
           <td class="resource-energy">
             {{ planet.stored.energy }}
           </td>
-          <td class="resource-energy">
-            {{ planet.abundances.energy }}%
-          </td>
         </tr>
         <tr>
           <td>
@@ -78,7 +107,30 @@
           <td class="workers">
             {{ planet.stored.pop }}
           </td>
-          <td />
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/ground.gif`"
+              title="Ground Space"
+              class="image-header"
+            > Ground Space
+          </td>
+          <td>
+            {{ planet.stored.ground_space }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img
+              :src="`${imgDG}/units/small/orbit.gif`"
+              title="Orbit Space"
+              class="image-header"
+            > Orbit Space
+          </td>
+          <td>
+            {{ planet.stored.orbit_space }}
+          </td>
         </tr>
       </tbody>
     </table>

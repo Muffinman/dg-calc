@@ -11,7 +11,8 @@ let homePlanet = {
     energy: 1000,
     pop: 20000,
     pop_busy: 0,
-    research: 0
+    research: 0,
+    ground: 60
   },
   abundances: {
     metal: 70,

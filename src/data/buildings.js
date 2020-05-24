@@ -10,7 +10,8 @@ let buildings = {
       mineral: 0,
       energy: 0,
       pop: 0,
-      research: 0
+      research: 0,
+      ground: 0
     },
     output: {
       metal: 0,
@@ -20,7 +21,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: [],
@@ -38,7 +40,8 @@ let buildings = {
       mineral: 0,
       energy: 0,
       pop: 0,
-      research: 0
+      research: 0,
+      ground: 0
     },
     output: {
       metal: 0,
@@ -48,7 +51,8 @@ let buildings = {
       research: 1
     },
     storage: {
-      pop: 50000
+      pop: 50000,
+      ground: 0
     },
     requires: {
       buildings: [],
@@ -66,7 +70,8 @@ let buildings = {
       mineral: 2000,
       energy: 0,
       pop: 5000,
-      research: 0
+      research: 0,
+      ground: 1
     },
     output: {
       metal: 300,
@@ -76,7 +81,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: [],
@@ -94,7 +100,8 @@ let buildings = {
       mineral: 400,
       energy: 0,
       pop: 5000,
-      research: 0
+      research: 0,
+      ground: 1
     },
     output: {
       metal: 0,
@@ -104,7 +111,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: [],
@@ -122,7 +130,8 @@ let buildings = {
       mineral: 1000,
       energy: 0,
       pop: 5000,
-      research: 0
+      research: 0,
+      ground: 1
     },
     output: {
       metal: 0,
@@ -132,7 +141,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: [],
@@ -150,7 +160,8 @@ let buildings = {
       mineral: 1000,
       pop: 5000,
       energy: 0,
-      research: 0
+      research: 0,
+      ground: 1
     },
     output: {
       metal: 0,
@@ -160,7 +171,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: [],
@@ -178,7 +190,8 @@ let buildings = {
       mineral: 10000,
       pop: 25000,
       energy: 0,
-      research: 0
+      research: 0,
+      ground: 1
     },
     output: {
       metal: 0,
@@ -188,7 +201,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: [],
@@ -206,7 +220,8 @@ let buildings = {
       mineral: 40000,
       pop: 80000,
       energy: 0,
-      research: 0
+      research: 0,
+      ground: 2
     },
     output: {
       metal: 0,
@@ -216,7 +231,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 125000
+      pop: 125000,
+      ground: 0
     },
     requires: {
       buildings: [],
@@ -234,7 +250,8 @@ let buildings = {
       mineral: 12000,
       energy: 0,
       pop: 40000,
-      research: 0
+      research: 0,
+      ground: 2
     },
     output: {
       metal: 900,
@@ -244,7 +261,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: ['colony'],
@@ -262,7 +280,8 @@ let buildings = {
       mineral: 2400,
       energy: 0,
       pop: 40000,
-      research: 0
+      research: 0,
+      ground: 2
     },
     output: {
       metal: 0,
@@ -272,7 +291,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: ['colony'],
@@ -290,7 +310,8 @@ let buildings = {
       mineral: 6000,
       energy: 0,
       pop: 40000,
-      research: 0
+      research: 0,
+      ground: 0
     },
     output: {
       metal: 0,
@@ -300,7 +321,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: ['colony', 'launch_site'],
@@ -318,7 +340,8 @@ let buildings = {
       mineral: 6000,
       energy: 0,
       pop: 40000,
-      research: 0
+      research: 0,
+      ground: 0
     },
     output: {
       metal: 0,
@@ -328,7 +351,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: ['colony', 'launch_site'],
@@ -346,7 +370,8 @@ let buildings = {
       mineral: 32000,
       pop: 25000,
       energy: 0,
-      research: 0
+      research: 0,
+      ground: 0
     },
     output: {
       metal: 0,
@@ -356,7 +381,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: ['launch_site'],
@@ -374,7 +400,8 @@ let buildings = {
       mineral: 22000,
       pop: 40000,
       energy: 0,
-      research: 0
+      research: 0,
+      ground: 0
     },
     output: {
       metal: 0,
@@ -384,7 +411,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: ['launch_site'],
@@ -402,7 +430,8 @@ let buildings = {
       mineral: 1600,
       pop: 25000,
       energy: 0,
-      research: 0
+      research: 0,
+      ground: 1
     },
     output: {
       metal: 0,
@@ -412,7 +441,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 50000
+      pop: 50000,
+      ground: 0
     },
     requires: {
       buildings: [],
@@ -430,7 +460,8 @@ let buildings = {
       mineral: 3200,
       pop: 25000,
       energy: 0,
-      research: 0
+      research: 0,
+      ground: 0
     },
     output: {
       metal: 0,
@@ -440,7 +471,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 75000
+      pop: 75000,
+      ground: 0
     },
     requires: {
       buildings: ['launch_site'],
@@ -458,7 +490,8 @@ let buildings = {
       mineral: 20000,
       pop: 50000,
       energy: 0,
-      research: 0
+      research: 0,
+      ground: 2
     },
     output: {
       metal: 0,
@@ -468,7 +501,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: ['colony'],
@@ -486,17 +520,19 @@ let buildings = {
       mineral: 8000,
       pop: 25000,
       energy: 0,
-      research: 0
+      research: 0,
+      ground: 2
     },
     output: {
       metal: 0,
       mineral: 0,
-      energy: -20,
+      energy: -10,
       pop: 0,
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: ['light_weapons_factory'],
@@ -514,7 +550,8 @@ let buildings = {
       mineral: 96000,
       pop: 240000,
       energy: 0,
-      research: 0
+      research: 0,
+      ground: 0
     },
     output: {
       metal: 0,
@@ -524,7 +561,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: ['metropolis'],
@@ -542,7 +580,8 @@ let buildings = {
       mineral: 60000,
       pop: 200000,
       energy: 0,
-      research: 0
+      research: 0,
+      ground: 2
     },
     output: {
       metal: 0,
@@ -552,7 +591,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 0
+      pop: 0,
+      ground: 0
     },
     requires: {
       buildings: ['metropolis'],
@@ -570,7 +610,8 @@ let buildings = {
       mineral: 80000,
       pop: 160000,
       energy: 0,
-      research: 0
+      research: 0,
+      ground: 4
     },
     output: {
       metal: 0,
@@ -580,7 +621,8 @@ let buildings = {
       research: 0
     },
     storage: {
-      pop: 200000
+      pop: 200000,
+      ground: 0
     },
     requires: {
       buildings: ['colony'],

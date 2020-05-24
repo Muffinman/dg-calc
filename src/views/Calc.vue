@@ -366,12 +366,14 @@ export default {
       }
 
       Object.keys(this.constructed).forEach(building => {
-        output['metal'] += this.constructed[building] * this.buildings[building].output['metal'] * this.abundances['metal'] / 100 * this.researchBonus['metal']
+        output['metal'] += Math.round(this.constructed[building] * this.buildings[building].output['metal'] * this.abundances['metal'] / 100 * this.researchBonus['metal'])
 
-        output['mineral'] += this.constructed[building] * this.buildings[building].output['mineral'] * this.abundances['mineral'] / 100 * this.researchBonus['mineral']
+        output['mineral'] += Math.round(this.constructed[building] * this.buildings[building].output['mineral'] * this.abundances['mineral'] / 100 * this.researchBonus['mineral'])
 
-        output['energy'] += this.constructed[building] * this.buildings[building].output['energy'] *
+        output['energy'] += Math.round(
+          this.constructed[building] * this.buildings[building].output['energy'] *
           (this.buildings[building].output['energy'] > 0 ? this.abundances['energy'] / 100 : 1)
+        )
 
         output['pop'] += this.constructed[building] * this.buildings[building].output['pop'] * this.researchBonus['pop']
 

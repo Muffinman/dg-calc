@@ -6,12 +6,13 @@ let homePlanet = {
     solar_generator: 1
   },
   stored: {
-    metal: 0,
-    mineral: 0,
-    energy: 0,
+    metal: 5000,
+    mineral: 3000,
+    energy: 30,
     pop: 5000,
     pop_busy: 0,
-    research: 0
+    research: 0,
+    ground: 60
   }
 }
 

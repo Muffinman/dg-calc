@@ -66,6 +66,13 @@
                 class="image-header"
               > Workers
             </th>
+            <th>
+              <img
+                :src="`${imgDG}/units/small/ground.gif`"
+                title="Ground"
+                class="image-header"
+              >
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -91,6 +98,9 @@
               / {{ turn.storage.pop | numeral('0,0') }}
               <span class="workers">({{ turn.output.pop | numeral('+0,0') }}) </span>
               <span class="neutral">({{ turn.stored.pop_busy | numeral('0,0') }} occupied)</span>
+            </td>
+            <td>
+              {{ turn.stored.ground }}
             </td>
           </tr>
         </tbody>
@@ -334,63 +344,63 @@ export default {
     this.travel = JSON.parse(JSON.stringify(Travel))
     this.resources = JSON.parse(JSON.stringify(Resources))
 
-    this.calcOutputAndStorage()
+    this.calcOutput()
+    this.calcStorage()
+
     this.ticks(300)
 
     this.$emit('logUpdated', Object.values(this.log))
   },
 
   methods: {
-
     /**
-     * Reset all outputs to 0
+     * Re-calculate current planet output
      */
-    resetOutput () {
-      this.output = {
+    calcOutput () {
+      let output = {
         metal: 0,
         mineral: 0,
         energy: 0,
         pop: 0,
         research: 0
       }
-    },
-
-    /**
-     * Reset all storage to 0
-     */
-    resetStorage () {
-      this.storage = {
-        pop: 0
-      }
-    },
-
-    /**
-     * Re-calculate current planet output
-     */
-    calcOutputAndStorage () {
-      this.resetOutput()
-      this.resetStorage()
 
       Object.keys(this.constructed).forEach(building => {
-        this.resources.forEach(resource => {
-          // Calc outputs
-          let resourceOutput = this.constructed[building] * this.buildings[building].output[resource]
+        output['metal'] += Math.round(this.constructed[building] * this.buildings[building].output['metal'] * this.abundances['metal'] / 100 * this.researchBonus['metal'])
 
-          // Take into account abundancy if not an energy cost or research
-          if (resource !== 'energy' || this.buildings[building].output[resource] > 0) {
-            resourceOutput *= this.abundances[resource] / 100
-          }
-          if (resource !== 'research' && resource !== 'energy') {
-            resourceOutput *= this.researchBonus[resource]
-          }
-          this.output[resource] += Math.floor(resourceOutput)
+        output['mineral'] += Math.round(this.constructed[building] * this.buildings[building].output['mineral'] * this.abundances['mineral'] / 100 * this.researchBonus['mineral'])
 
-          // Calc storages, only do this for pop at the moment
-          if (resource === 'pop') {
-            this.storage[resource] += this.constructed[building] * this.buildings[building].storage[resource]
-          }
+        output['energy'] += Math.round(
+          this.constructed[building] * this.buildings[building].output['energy'] *
+          (this.buildings[building].output['energy'] > 0 ? this.abundances['energy'] / 100 : 1)
+        )
+
+        output['pop'] += this.constructed[building] * this.buildings[building].output['pop'] * this.researchBonus['pop']
+
+        output['research'] += this.constructed[building] * this.buildings[building].output['research']
+
+        output['ground'] += this.constructed[building] * this.buildings[building].output['ground']
+      })
+
+      this.$set(this, 'output', output)
+    },
+
+    /**
+     * Re-calculate current planet storage
+     */
+    calcStorage () {
+      let storage = {
+        pop: 0,
+        ground: 0
+      }
+
+      Object.keys(this.constructed).forEach(building => {
+        Object.keys(this.storage).forEach(resource => {
+          storage[resource] += this.constructed[building] * this.buildings[building].storage[resource]
         })
       })
+
+      this.$set(this, 'storage', storage)
     },
 
     /**
@@ -584,7 +594,9 @@ export default {
       }
       this.stored.pop += this.buildings[building].cost.pop
       this.stored.pop_busy -= this.buildings[building].cost.pop
-      this.calcOutputAndStorage()
+
+      this.calcOutput()
+      this.calcStorage()
 
       this.$set(this.queue.building, 'ref', null)
       this.$set(this.queue.building, 'turns', 0)
@@ -650,7 +662,9 @@ export default {
       this.researchBonus[this.research[researchItem].affects] += this.research[researchItem].bonus
       this.$set(this.queue.research, 'ref', null)
       this.$set(this.queue.research, 'turns', 0)
-      this.calcOutputAndStorage()
+
+      this.calcOutput()
+      this.calcStorage()
     },
 
     /**

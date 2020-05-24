@@ -187,7 +187,7 @@ export default {
         this.$set(this, 'shipOrder', this.migrateShipData(loadedData[2]))
       }
       if (loadedData[3] !== undefined) {
-        this.$set(this, 'planet', loadedData[3])
+        this.$set(this, 'planet', this.migratePlanetData(loadedData[3]))
       }
 
       // Look up current short URL
@@ -356,6 +356,29 @@ export default {
         }
         return item
       })
+
+      return data
+    },
+
+    /**
+     * Different versions of hashes exist, which results in the annoying fact that when people load a bookmarked buildlist, they lose their data.
+     * To avoid frustration, we execute a migration step.
+     *
+     * v1: contains most attributes
+     *
+     * v2: add ground to stored
+     *
+     * @param {Object} data
+     */
+    migratePlanetData (data) {
+      if (data.length === 0) {
+        return data
+      }
+
+      // Migrate from v1 to v2
+      if (!data.stored.ground) {
+        data.stored.ground = HomePlanet.stored.ground
+      }
 
       return data
     }

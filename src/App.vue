@@ -366,7 +366,7 @@ export default {
      *
      * v1: contains most attributes
      *
-     * v2: add ground to stored
+     * v2: add ground space and orbit space to stored
      *
      * @param {Object} data
      */
@@ -376,8 +376,12 @@ export default {
       }
 
       // Migrate from v1 to v2
-      if (!data.stored.ground) {
-        data.stored.ground = HomePlanet.stored.ground
+      if (!data.stored.ground_space) {
+        data.stored.ground_space = HomePlanet.stored.ground_space
+      }
+
+      if (!data.stored.orbit_space) {
+        data.stored.orbit_space = HomePlanet.stored.orbit_space
       }
 
       return data

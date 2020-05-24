@@ -12,7 +12,8 @@ let homePlanet = {
     pop: 5000,
     pop_busy: 0,
     research: 0,
-    ground: 60
+    ground_space: 70,
+    orbit_space: 50
   }
 }
 

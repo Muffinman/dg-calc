@@ -13,6 +13,7 @@
         v-model.number="quantity"
         type="number"
         min="1"
+        max="9"
         class="queue-quantity is-pulled-right"
       ></label>
     </p>
@@ -21,17 +22,18 @@
         v-for="(ship, ref) in available"
         :key="ref"
       >
-        <button
-          class="button-add"
+        <input
+          :src="`${imgDG}/queue/add.png`"
+          type="image"
+          alt="Add"
           title="Add"
+          class="touch-size vertical-align-bottom"
           @click="addToQueue(ref)"
         >
-          +
-        </button>
         <img
           :src="ship.image"
           :title="ship.name"
-          class="image-queue"
+          class="touch-size margin-left-small"
         >
         {{ ship.name }}
       </li>
@@ -51,17 +53,17 @@
         >
           <input
             type="image"
-            :src="`${imgDG}/queue/destroy.png`"
+            :src="`${imgDG}/queue/remove.png`"
             alt="Destroy"
             title="Destroy"
-            class="button-destroy"
+            class="touch-size vertical-align-bottom"
             @click="removeFromQueue(index)"
           >
           <span class="handle">
             <img
               :src="ships[ship.ref].image"
               :title="ships[ship.ref].name"
-              class="image-queue"
+              class="touch-size margin-left-small"
             >
             {{ `${ship.turn} ${ships[ship.ref].name}` }}
           </span>
@@ -69,6 +71,7 @@
             v-model.number="ship.quantity"
             type="number"
             min="1"
+            max="9"
             class="queue-quantity is-pulled-right"
             @change="handleShipInput"
             @keyup="handleShipInput"
@@ -158,32 +161,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.image-queue {
-  width: 18px;
-  margin-left: 3px;
-}
-
-.button-destroy {
-  width: 23px;
-  vertical-align: bottom;
-}
-
-.button-add {
-  background-color: black;
-  color: darkgrey;
-  border: none;
-  cursor: pointer;
-}
-
-.queue-quantity {
-  background-color: #000000;
-  border: 1px solid #444444;
-  padding: 0.4em 0.2em;
-  width: 50px;
-  display: inline-block;
-  color: #FFFFFF;
-  text-align: center;
-}
-</style>

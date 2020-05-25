@@ -23,15 +23,15 @@
               :src="`${imgDG}/units/small/metal.gif`"
               title="Metal"
               class="image-header"
-            > Metal
-          </td>
-          <td class="queue-quantity">
+            >
+            Metal
             <input
               v-model.number="planet.abundances.metal"
               type="number"
               min="0"
               max="9999"
               step="1"
+              class="queue-quantity is-pulled-right"
             >
           </td>
         </tr>
@@ -41,15 +41,15 @@
               :src="`${imgDG}/units/small/mineral.gif`"
               title="Mineral"
               class="image-header"
-            > Mineral
-          </td>
-          <td class="queue-quantity">
+            >
+            Mineral
             <input
               v-model.number="planet.abundances.mineral"
               type="number"
               min="0"
               max="9999"
               step="1"
+              class="queue-quantity is-pulled-right"
             >
           </td>
         </tr>
@@ -59,15 +59,15 @@
               :src="`${imgDG}/units/small/energy.gif`"
               title="Energy"
               class="image-header"
-            > Energy
-          </td>
-          <td class="queue-quantity">
+            >
+            Energy
             <input
               v-model.number="planet.abundances.energy"
               type="number"
               min="0"
               max="9999"
               step="1"
+              class="queue-quantity is-pulled-right"
             >
           </td>
         </tr>
@@ -84,15 +84,15 @@
               :src="`${imgDG}/units/small/metal.gif`"
               title="Metal"
               class="image-header"
-            > Metal
-          </td>
-          <td class="queue-quantity">
+            >
+            Metal
             <input
               v-model.number="planet.stored.metal"
               type="number"
               min="0"
               max="9999"
               step="1000"
+              class="queue-quantity is-pulled-right"
             >
           </td>
         </tr>
@@ -102,15 +102,15 @@
               :src="`${imgDG}/units/small/mineral.gif`"
               title="Mineral"
               class="image-header"
-            > Mineral
-          </td>
-          <td class="queue-quantity">
+            >
+            Mineral
             <input
               v-model.number="planet.stored.mineral"
               type="number"
               min="0"
               max="9999"
               step="1000"
+              class="queue-quantity is-pulled-right"
             >
           </td>
         </tr>
@@ -120,15 +120,15 @@
               :src="`${imgDG}/units/small/energy.gif`"
               title="Energy"
               class="image-header"
-            > Energy
-          </td>
-          <td class="queue-quantity">
+            >
+            Energy
             <input
               v-model.number="planet.stored.energy"
               type="number"
               min="0"
               max="9999"
               step="1000"
+              class="queue-quantity is-pulled-right"
             >
           </td>
         </tr>
@@ -138,15 +138,15 @@
               :src="`${imgDG}/units/small/worker.gif`"
               title="Workers"
               class="image-header"
-            > Workers
-          </td>
-          <td class="queue-quantity">
+            >
+            Workers
             <input
               v-model.number="planet.stored.pop"
               type="number"
               min="0"
               max="9999"
               step="1000"
+              class="queue-quantity is-pulled-right"
             >
           </td>
         </tr>
@@ -157,14 +157,13 @@
               title="Ground Space"
               class="image-header"
             > Ground Space
-          </td>
-          <td class="queue-quantity">
             <input
               v-model.number="planet.stored.ground_space"
               type="number"
               min="0"
               max="9999"
               step="1"
+              class="queue-quantity is-pulled-right"
             >
           </td>
         </tr>
@@ -175,14 +174,13 @@
               title="Orbit Space"
               class="image-header"
             > orbit Space
-          </td>
-          <td class="queue-quantity">
             <input
               v-model.number="planet.stored.orbit_space"
               type="number"
               min="0"
               max="9999"
               step="1"
+              class="queue-quantity is-pulled-right"
             >
           </td>
         </tr>
@@ -232,22 +230,6 @@ export default {
 </script>
 
 <style scoped>
-.queue-quantity {
-  text-align: right;
-}
-.queue-quantity input {
-  background-color: #000000;
-  border: 1px solid #444444;
-  padding: 0.4em 0.2em;
-  display: inline-block;
-  color: #FFFFFF;
-  text-align: center;
-}
-
-.no-border {
-  border: none;
-}
-
 .dark {
   color: whitesmoke;
   background-color: #1a1a1a;

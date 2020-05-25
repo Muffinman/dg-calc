@@ -23,7 +23,8 @@
               :src="`${imgDG}/units/small/metal.gif`"
               title="Metal"
               class="image-header"
-            > Metal
+            >
+            Metal
           </td>
           <td class="resource-metal">
             {{ planet.abundances.metal }}%
@@ -35,7 +36,8 @@
               :src="`${imgDG}/units/small/mineral.gif`"
               title="Mineral"
               class="image-header"
-            > Mineral
+            >
+            Mineral
           </td>
           <td class="resource-mineral">
             {{ planet.abundances.mineral }}%
@@ -47,7 +49,8 @@
               :src="`${imgDG}/units/small/energy.gif`"
               title="Energy"
               class="image-header"
-            > Energy
+            >
+            Energy
           </td>
           <td class="resource-energy">
             {{ planet.abundances.energy }}%
@@ -66,7 +69,8 @@
               :src="`${imgDG}/units/small/metal.gif`"
               title="Metal"
               class="image-header"
-            > Metal
+            >
+            Metal
           </td>
           <td class="resource-metal">
             {{ planet.stored.metal }}
@@ -78,7 +82,8 @@
               :src="`${imgDG}/units/small/mineral.gif`"
               title="Mineral"
               class="image-header"
-            > Mineral
+            >
+            Mineral
           </td>
           <td class="resource-mineral">
             {{ planet.stored.mineral }}
@@ -90,7 +95,8 @@
               :src="`${imgDG}/units/small/energy.gif`"
               title="Energy"
               class="image-header"
-            > Energy
+            >
+            Energy
           </td>
           <td class="resource-energy">
             {{ planet.stored.energy }}
@@ -114,7 +120,8 @@
               :src="`${imgDG}/units/small/ground.gif`"
               title="Ground Space"
               class="image-header"
-            > Ground Space
+            >
+            Ground Space
           </td>
           <td>
             {{ planet.stored.ground_space }}
@@ -126,7 +133,8 @@
               :src="`${imgDG}/units/small/orbit.gif`"
               title="Orbit Space"
               class="image-header"
-            > Orbit Space
+            >
+            Orbit Space
           </td>
           <td>
             {{ planet.stored.orbit_space }}

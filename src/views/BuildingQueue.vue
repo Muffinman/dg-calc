@@ -13,17 +13,18 @@
         v-for="(building, ref) in available"
         :key="ref"
       >
-        <button
-          class="button-add"
+        <input
+          :src="`${imgDG}/queue/add.png`"
+          type="image"
+          alt="Add"
           title="Add"
+          class="touch-size vertical-align-bottom"
           @click="addToQueue(ref)"
         >
-          +
-        </button>
         <img
           :src="building.image"
           :title="building.name"
-          class="image-queue"
+          class="touch-size margin-left-small"
         >
         {{ building.name }}
       </li>
@@ -42,20 +43,20 @@
           :key="index"
         >
           <input
-            :src="`${imgDG}/queue/destroy.png`"
+            :src="`${imgDG}/queue/remove.png`"
             :disabled="!buildings[building.ref].canBuild"
             :class="{ hidden: !buildings[building.ref].canBuild }"
             type="image"
             alt="Destroy"
             title="Destroy"
-            class="button-destroy"
+            class="touch-size vertical-align-bottom"
             @click="removeFromQueue(index)"
           >
           <span :class="{ handle: buildings[building.ref].canBuild }">
             <img
               :src="buildings[building.ref].image"
               :title="buildings[building.ref].name"
-              class="image-queue"
+              class="touch-size margin-left-small"
             >
             {{ `${building.turn} ${buildings[building.ref].name}` }}
           </span>
@@ -133,26 +134,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.image-queue {
-  width: 18px;
-  margin-left: 10px;
-}
-
-.button-destroy {
-  width: 23px;
-  vertical-align: bottom;
-}
-
-.hidden {
-  visibility: hidden;
-}
-
-.button-add {
-  background-color: black;
-  color: darkgrey;
-  border: none;
-  cursor: pointer;
-}
-</style>

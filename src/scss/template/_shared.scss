@@ -158,3 +158,16 @@ ul.draggable li {
         background: $grey-light;
     }
 }
+
+.touch-size {
+    width: 20px;
+}
+
+.queue-quantity {
+    background-color: #000000;
+    border: 1px solid #444444;
+    padding: 0.4em 0.2em;
+    display: inline-block;
+    color: #FFFFFF;
+    text-align: center;
+}

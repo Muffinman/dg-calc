@@ -205,7 +205,7 @@ export default {
       /**
        * The maximum number of turns we want to calculate, starting from the planet colonisation turn
        */
-      maxTurns: 300,
+      noOfTurns: 300,
 
       /**
        * Debug log
@@ -340,19 +340,19 @@ export default {
 
     totalOutposts () {
       let turn = this.planet.colonisation_turn
-      let count = 0
+      let totalQuantity = 0
       while (this.log[turn]) {
         let prod = this.log[turn].queue.production
         if (prod.ref === 'outpost_ship' && prod.turns === 16) {
-          count += prod.quantity
+          totalQuantity += prod.quantity
         }
         turn++
       }
-      return count
+      return totalQuantity
     },
 
     maxTurn () {
-      return this.planet.colonisation_turn + this.maxTurns - 1
+      return this.planet.colonisation_turn + this.noOfTurns - 1
     }
   },
 
@@ -367,7 +367,7 @@ export default {
     this.calcOutput()
     this.calcStorage()
 
-    this.ticks(this.maxTurn)
+    this.ticks(this.noOfTurns)
 
     this.$emit('logUpdated', Object.values(this.log))
   },
@@ -457,7 +457,7 @@ export default {
 
       this.recordOutputs()
 
-      if (this.turn > 1) {
+      if (this.turn > this.planet.colonisation_turn) {
         this.addOutputs()
       }
 
@@ -474,11 +474,11 @@ export default {
     },
 
     /**
-     * Advance {count} ticks
-     * @param {Integer} count
+     * Advance {noOfTurns} ticks
+     * @param {Integer} noOfTurns
      */
-    ticks (count) {
-      for (let i = 0; i < count; i++) {
+    ticks (noOfTurns) {
+      for (let i = 0; i < noOfTurns; i++) {
         this.tick()
       }
     },

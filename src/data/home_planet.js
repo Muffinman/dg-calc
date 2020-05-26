@@ -1,4 +1,5 @@
 let homePlanet = {
+  colonisation_turn: 1,
   constructed: {
     outpost: 1,
     metal_mine: 3,

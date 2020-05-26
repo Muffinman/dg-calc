@@ -365,8 +365,8 @@ export default {
      * To avoid frustration, we execute a migration step.
      *
      * v1: contains most attributes
-     *
      * v2: add ground space and orbit space to stored
+     * v3: add colonisation turn
      *
      * @param {Object} data
      */
@@ -382,6 +382,11 @@ export default {
 
       if (!data.stored.orbit_space) {
         data.stored.orbit_space = HomePlanet.stored.orbit_space
+      }
+
+      // Migrate from v2 to v3
+      if (!data.colonisation_turn) {
+        data.colonisation_turn = HomePlanet.colonisation_turn
       }
 
       return data

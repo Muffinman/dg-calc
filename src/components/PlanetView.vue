@@ -13,12 +13,50 @@
       </button>
     </template>
 
+    <h3>
+      <img
+        :src="`${imgDG}/units/small/time.gif`"
+        title="Timing"
+        class="image-header"
+      >
+      Timing
+    </h3>
+
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            Colonisation turn
+          </td>
+          <td>
+            {{ planet.colonisation_turn }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Current time
+          </td>
+          <td>
+            {{ currentTime.format('DD-MM-YYYY hh:mm') }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Current turn
+          </td>
+          <td>
+            {{ currentTurn }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
     <h3>Abundances</h3>
 
     <table>
       <tbody>
         <tr>
-          <td width="67%">
+          <td width="50%">
             <img
               :src="`${imgDG}/units/small/metal.gif`"
               title="Metal"
@@ -64,7 +102,7 @@
     <table>
       <tbody>
         <tr>
-          <td width="67%">
+          <td width="50%">
             <img
               :src="`${imgDG}/units/small/metal.gif`"
               title="Metal"
@@ -148,6 +186,7 @@
 <script>
 import BorderBox from '../components/BorderBox'
 import LeadPencilIcon from 'mdi-vue/LeadPencil.vue'
+import moment from 'moment'
 
 export default {
   components: {
@@ -165,7 +204,25 @@ export default {
       /**
        * Link to the website of Dark Galaxy to get images
        */
-      imgDG: 'https://beta.darkgalaxy.com/images'
+      imgDG: 'https://beta.darkgalaxy.com/images',
+
+      startOfGame: moment('2020-05-22 20:00'),
+      currentTime: moment()
+    }
+  },
+  computed: {
+    currentTurn () {
+      return this.currentTime.diff(this.startOfGame, 'hours')
+    }
+  },
+  mounted () {
+    this.$options.interval = setInterval(this.updateCurrentTime, 1000)
+  },
+  methods: {
+    updateCurrentTime () {
+      if (this.currentTime.seconds() === 0) {
+        this.$set(this, 'currentTime', moment())
+      }
     }
   }
 }

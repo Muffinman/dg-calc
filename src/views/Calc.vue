@@ -203,6 +203,11 @@ export default {
       turn: 0,
 
       /**
+       * The maximum number of turns we want to calculate, starting from the planet colonisation turn
+       */
+      maxTurns: 300,
+
+      /**
        * Debug log
        */
       log: {},
@@ -334,7 +339,7 @@ export default {
     },
 
     totalOutposts () {
-      let turn = 1
+      let turn = this.planet.colonisation_turn
       let count = 0
       while (this.log[turn]) {
         let prod = this.log[turn].queue.production
@@ -344,20 +349,25 @@ export default {
         turn++
       }
       return count
+    },
+
+    maxTurn () {
+      return this.planet.colonisation_turn + this.maxTurns - 1
     }
   },
 
   mounted () {
-    this.constructed = JSON.parse(JSON.stringify(this.planet.constructed))
-    this.stored = JSON.parse(JSON.stringify(this.planet.stored))
-    this.abundances = JSON.parse(JSON.stringify(this.planet.abundances))
-    this.travel = JSON.parse(JSON.stringify(Travel))
-    this.resources = JSON.parse(JSON.stringify(Resources))
+    this.$set(this, 'constructed', JSON.parse(JSON.stringify(this.planet.constructed)))
+    this.$set(this, 'stored', JSON.parse(JSON.stringify(this.planet.stored)))
+    this.$set(this, 'abundances', JSON.parse(JSON.stringify(this.planet.abundances)))
+    this.$set(this, 'travel', JSON.parse(JSON.stringify(Travel)))
+    this.$set(this, 'resources', JSON.parse(JSON.stringify(Resources)))
+    this.$set(this, 'turn', this.planet.colonisation_turn - 1)
 
     this.calcOutput()
     this.calcStorage()
 
-    this.ticks(300)
+    this.ticks(this.maxTurn)
 
     this.$emit('logUpdated', Object.values(this.log))
   },

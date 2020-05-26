@@ -13,6 +13,33 @@
       </button>
     </template>
 
+    <h3>
+      <img
+        :src="`${imgDG}/units/small/time.gif`"
+        title="Timing"
+        class="image-header"
+      >
+      Timing
+    </h3>
+
+    <table>
+      <tr>
+        <td>
+          Colonisation turn
+        </td>
+        <td>
+          <input
+            v-model.number="planet.colonisation_turn"
+            type="number"
+            min="1"
+            max="3000"
+            step="1"
+            class="queue-quantity is-pulled-right"
+          >
+        </td>
+      </tr>
+    </table>
+
     <h3>Abundances</h3>
 
     <table v-if="planet.stored">

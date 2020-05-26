@@ -367,7 +367,7 @@ export default {
      *
      * v1: contains most attributes
      * v2: add ground space and orbit space to stored
-     * v3: add colonisation turn, name and home
+     * v3: add colonisation turn, name and home; remove colony
      *
      * @param {Object} data
      */
@@ -395,7 +395,12 @@ export default {
       }
 
       if (!data.home) {
-        data.home = HomePlanet.home
+        if (data.colony) {
+          data.home = !data.colony
+          delete data.colony
+        } else {
+          data.home = HomePlanet.home
+        }
       }
 
       return data

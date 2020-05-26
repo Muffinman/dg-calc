@@ -260,7 +260,7 @@ export default {
   },
   methods: {
     toggleHome () {
-      let planet = this.planet.home ? HomePlanet : ColonyPlanet
+      let planet = !this.planet.home ? HomePlanet : ColonyPlanet
 
       this.$set(this.planet, 'constructed', JSON.parse(JSON.stringify(planet.constructed)))
       this.$set(this.planet, 'stored', JSON.parse(JSON.stringify(planet.stored)))

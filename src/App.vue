@@ -176,8 +176,6 @@ export default {
     }
   },
   mounted () {
-    this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
-
     if (window.location.hash) {
       let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
 
@@ -198,6 +196,9 @@ export default {
         .catch(() => {
           // No need to do anything with the error
         })
+    }
+    if (!this.planet) {
+      this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
     }
   },
   methods: {
@@ -366,7 +367,7 @@ export default {
      *
      * v1: contains most attributes
      * v2: add ground space and orbit space to stored
-     * v3: add colonisation turn
+     * v3: add colonisation turn, name and home
      *
      * @param {Object} data
      */
@@ -387,6 +388,14 @@ export default {
       // Migrate from v2 to v3
       if (!data.colonisation_turn) {
         data.colonisation_turn = HomePlanet.colonisation_turn
+      }
+
+      if (!data.name) {
+        data.name = HomePlanet.name
+      }
+
+      if (!data.home) {
+        data.home = HomePlanet.home
       }
 
       return data

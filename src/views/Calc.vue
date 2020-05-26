@@ -88,9 +88,30 @@
             :key="turn.turn"
           >
             <td>{{ turn.turn }}</td>
-            <td><span v-if="turn.queue.building.ref">{{ buildings[turn.queue.building.ref].name }} ({{ turn.queue.building.turns }})</span></td>
-            <td><span v-if="turn.queue.production.ref">{{ turn.queue.production.quantity }}x {{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
-            <td><span v-if="turn.queue.research.ref">{{ research[turn.queue.research.ref].name }}</span></td>
+            <td>
+              <span
+                v-if="turn.queue.building.ref"
+                :class="{ grey: turn.turn < currentTurn }"
+              >
+                {{ buildings[turn.queue.building.ref].name }} ({{ turn.queue.building.turns }})
+              </span>
+            </td>
+            <td>
+              <span
+                v-if="turn.queue.production.ref"
+                :class="{ grey: turn.turn < currentTurn }"
+              >
+                {{ turn.queue.production.quantity }}x {{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})
+              </span>
+            </td>
+            <td>
+              <span
+                v-if="turn.queue.research.ref"
+                :class="{ grey: turn.turn < currentTurn }"
+              >
+                {{ research[turn.queue.research.ref].name }}
+              </span>
+            </td>
             <td class="resource-metal">
               {{ turn.stored.metal | numeral('0,0') }} ({{ turn.output.metal | numeral('+0,0') }})
             </td>
@@ -191,6 +212,10 @@ export default {
     },
     planet: {
       type: Object,
+      required: true
+    },
+    currentTurn: {
+      type: Number,
       required: true
     }
   },

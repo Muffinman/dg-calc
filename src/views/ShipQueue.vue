@@ -59,7 +59,10 @@
             class="touch-size vertical-align-bottom"
             @click="removeFromQueue(index)"
           >
-          <span class="handle">
+          <span
+            :class="{ grey: ship.turn < currentTurn }"
+            class="handle"
+          >
             <img
               :src="ships[ship.ref].image"
               :title="ships[ship.ref].name"
@@ -103,6 +106,10 @@ export default {
     },
     available: {
       type: Object,
+      required: true
+    },
+    currentTurn: {
+      type: Number,
       required: true
     }
   },

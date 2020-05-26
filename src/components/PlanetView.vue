@@ -202,7 +202,6 @@
 import BorderBox from '../components/BorderBox'
 import Buildings from '../data/buildings.js'
 import LeadPencilIcon from 'mdi-vue/LeadPencil.vue'
-import moment from 'moment'
 
 export default {
   components: {
@@ -213,6 +212,14 @@ export default {
     planet: {
       type: Object,
       required: true
+    },
+    currentTime: {
+      type: Object,
+      required: true
+    },
+    currentTurn: {
+      type: Number,
+      required: true
     }
   },
   data () {
@@ -222,25 +229,7 @@ export default {
        */
       imgDG: 'https://beta.darkgalaxy.com/images',
 
-      buildings: Buildings,
-
-      startOfGame: moment('2020-05-22 20:00'),
-      currentTime: moment()
-    }
-  },
-  computed: {
-    currentTurn () {
-      return this.currentTime.diff(this.startOfGame, 'hours')
-    }
-  },
-  mounted () {
-    this.$options.interval = setInterval(this.updateCurrentTime, 1000)
-  },
-  methods: {
-    updateCurrentTime () {
-      if (this.currentTime.seconds() === 0) {
-        this.$set(this, 'currentTime', moment())
-      }
+      buildings: Buildings
     }
   }
 }

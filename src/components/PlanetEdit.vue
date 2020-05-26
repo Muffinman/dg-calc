@@ -224,7 +224,6 @@
         </td>
       </tr>
     </table>
-
   </border-box>
 </template>
 

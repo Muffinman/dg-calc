@@ -7,6 +7,8 @@
     <planet-view-component
       v-else-if="planet"
       :planet="planet"
+      :current-time="currentTime"
+      :current-turn="currentTurn"
       @editClicked="editing = true"
     />
   </div>
@@ -24,6 +26,14 @@ export default {
   props: {
     value: {
       type: Object,
+      required: true
+    },
+    currentTime: {
+      type: Object,
+      required: true
+    },
+    currentTurn: {
+      type: Number,
       required: true
     }
   },

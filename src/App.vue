@@ -25,11 +25,14 @@
           <planet-view
             v-if="planet"
             v-model="planet"
+            :current-time="currentTime"
+            :current-turn="currentTurn"
           />
           <building-queue
             v-model="buildOrder"
             :available="availableBuildings"
             :log="buildLog"
+            :current-turn="currentTurn"
             class="margin-top margin-bottom"
           />
         </div>
@@ -42,6 +45,7 @@
             v-model="shipOrder"
             :available="availableShips"
             :log="shipLog"
+            :current-turn="currentTurn"
             class="margin-top margin-bottom"
           />
         </div>
@@ -55,6 +59,7 @@
           :research-order="researchOrder"
           :ship-order="shipOrder"
           :planet="planet"
+          :current-turn="currentTurn"
           @logUpdated="updateLog"
         />
       </div>
@@ -69,6 +74,7 @@ import Buildings from './data/buildings.js'
 import Calc from './views/Calc'
 import HomePlanet from './data/home_planet.js'
 import md5 from 'md5'
+import moment from 'moment'
 import Planet from './views/Planet'
 import ResearchQueue from './views/ResearchQueue'
 import Ships from './data/ships.js'
@@ -93,12 +99,17 @@ export default {
       researchOrder: [],
       shipOrder: [],
       log: [],
-      shortUrl: null
+      shortUrl: null,
+      startOfGame: moment('2020-05-22 20:00'),
+      currentTime: moment()
     }
   },
   computed: {
     orderHash () {
       return md5(JSON.stringify(this.buildOrder) + JSON.stringify(this.researchOrder) + JSON.stringify(this.shipOrder) + JSON.stringify(this.planet))
+    },
+    currentTurn () {
+      return this.currentTime.diff(this.startOfGame, 'hours')
     },
     availableBuildings () {
       let buildings = {}
@@ -200,8 +211,19 @@ export default {
     if (!this.planet) {
       this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
     }
+    this.$options.interval = setInterval(this.updateCurrentTime, 1000)
   },
   methods: {
+    /**
+     * We received an orderUpdated event for research, propagate to children
+     * @param {Array} newOrder
+     */
+    updateCurrentTime () {
+      if (moment().seconds() === 0) {
+        this.$set(this, 'currentTime', moment())
+      }
+    },
+
     /**
      * We received an orderUpdated event for research, propagate to children
      * @param {Array} newOrder

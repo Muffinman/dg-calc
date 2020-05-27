@@ -25,11 +25,14 @@
           <planet-view
             v-if="planet"
             v-model="planet"
+            :current-time="currentTime"
+            :current-turn="currentTurn"
           />
           <building-queue
             v-model="buildOrder"
             :available="availableBuildings"
             :log="buildLog"
+            :current-turn="currentTurn"
             class="margin-top margin-bottom"
           />
         </div>
@@ -42,6 +45,7 @@
             v-model="shipOrder"
             :available="availableShips"
             :log="shipLog"
+            :current-turn="currentTurn"
             class="margin-top margin-bottom"
           />
         </div>
@@ -55,6 +59,7 @@
           :research-order="researchOrder"
           :ship-order="shipOrder"
           :planet="planet"
+          :current-turn="currentTurn"
           @logUpdated="updateLog"
         />
       </div>
@@ -69,6 +74,7 @@ import Buildings from './data/buildings.js'
 import Calc from './views/Calc'
 import HomePlanet from './data/home_planet.js'
 import md5 from 'md5'
+import moment from 'moment'
 import Planet from './views/Planet'
 import ResearchQueue from './views/ResearchQueue'
 import Ships from './data/ships.js'
@@ -93,12 +99,17 @@ export default {
       researchOrder: [],
       shipOrder: [],
       log: [],
-      shortUrl: null
+      shortUrl: null,
+      startOfGame: moment('2020-05-22 20:00'),
+      currentTime: moment()
     }
   },
   computed: {
     orderHash () {
       return md5(JSON.stringify(this.buildOrder) + JSON.stringify(this.researchOrder) + JSON.stringify(this.shipOrder) + JSON.stringify(this.planet))
+    },
+    currentTurn () {
+      return this.currentTime.diff(this.startOfGame, 'hours')
     },
     availableBuildings () {
       let buildings = {}
@@ -176,8 +187,6 @@ export default {
     }
   },
   mounted () {
-    this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
-
     if (window.location.hash) {
       let loadedData = JSON.parse(atob(window.location.hash.replace('#', '')))
 
@@ -199,8 +208,22 @@ export default {
           // No need to do anything with the error
         })
     }
+    if (!this.planet) {
+      this.$set(this, 'planet', JSON.parse(JSON.stringify(HomePlanet)))
+    }
+    this.$options.interval = setInterval(this.updateCurrentTime, 1000)
   },
   methods: {
+    /**
+     * We received an orderUpdated event for research, propagate to children
+     * @param {Array} newOrder
+     */
+    updateCurrentTime () {
+      if (moment().seconds() === 0) {
+        this.$set(this, 'currentTime', moment())
+      }
+    },
+
     /**
      * We received an orderUpdated event for research, propagate to children
      * @param {Array} newOrder
@@ -308,6 +331,7 @@ export default {
             turn: null,
             ref: item.key
           }
+          delete item.key
         }
         return item
       })
@@ -347,12 +371,8 @@ export default {
 
       // Migrate from v1 to v2
       data = data.map(item => {
-        if (!item.quantity) {
-          item = {
-            turn: item.turn,
-            ref: item.ref,
-            quantity: 1
-          }
+        if (item.quantity === null) {
+          item.quantity = 1
         }
         return item
       })
@@ -365,8 +385,8 @@ export default {
      * To avoid frustration, we execute a migration step.
      *
      * v1: contains most attributes
-     *
      * v2: add ground space and orbit space to stored
+     * v3: add colonisation turn, name and home; remove colony
      *
      * @param {Object} data
      */
@@ -376,12 +396,30 @@ export default {
       }
 
       // Migrate from v1 to v2
-      if (!data.stored.ground_space) {
+      if (data.stored.ground_space === null) {
         data.stored.ground_space = HomePlanet.stored.ground_space
       }
 
-      if (!data.stored.orbit_space) {
+      if (data.stored.orbit_space === null) {
         data.stored.orbit_space = HomePlanet.stored.orbit_space
+      }
+
+      // Migrate from v2 to v3
+      if (data.colonisation_turn === null) {
+        data.colonisation_turn = HomePlanet.colonisation_turn
+      }
+
+      if (data.name === null) {
+        data.name = HomePlanet.name
+      }
+
+      if (data.home === null) {
+        if (data.colony) {
+          data.home = !data.colony
+          delete data.colony
+        } else {
+          data.home = HomePlanet.home
+        }
       }
 
       return data

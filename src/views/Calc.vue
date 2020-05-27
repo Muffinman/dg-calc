@@ -88,9 +88,30 @@
             :key="turn.turn"
           >
             <td>{{ turn.turn }}</td>
-            <td><span v-if="turn.queue.building.ref">{{ buildings[turn.queue.building.ref].name }} ({{ turn.queue.building.turns }})</span></td>
-            <td><span v-if="turn.queue.production.ref">{{ turn.queue.production.quantity }}x {{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})</span></td>
-            <td><span v-if="turn.queue.research.ref">{{ research[turn.queue.research.ref].name }}</span></td>
+            <td>
+              <span
+                v-if="turn.queue.building.ref"
+                :class="{ grey: turn.turn < currentTurn }"
+              >
+                {{ buildings[turn.queue.building.ref].name }} ({{ turn.queue.building.turns }})
+              </span>
+            </td>
+            <td>
+              <span
+                v-if="turn.queue.production.ref"
+                :class="{ grey: turn.turn < currentTurn }"
+              >
+                {{ turn.queue.production.quantity }}x {{ ships[turn.queue.production.ref].name }} ({{ turn.queue.production.turns }})
+              </span>
+            </td>
+            <td>
+              <span
+                v-if="turn.queue.research.ref"
+                :class="{ grey: turn.turn < currentTurn }"
+              >
+                {{ research[turn.queue.research.ref].name }}
+              </span>
+            </td>
             <td class="resource-metal">
               {{ turn.stored.metal | numeral('0,0') }} ({{ turn.output.metal | numeral('+0,0') }})
             </td>
@@ -192,6 +213,10 @@ export default {
     planet: {
       type: Object,
       required: true
+    },
+    currentTurn: {
+      type: Number,
+      required: true
     }
   },
   data () {
@@ -201,6 +226,11 @@ export default {
        * Current tick/turn
        */
       turn: 0,
+
+      /**
+       * The maximum number of turns we want to calculate, starting from the planet colonisation turn
+       */
+      noOfTurns: 300,
 
       /**
        * Debug log
@@ -334,30 +364,35 @@ export default {
     },
 
     totalOutposts () {
-      let turn = 1
-      let count = 0
+      let turn = this.planet.colonisation_turn
+      let totalQuantity = 0
       while (this.log[turn]) {
         let prod = this.log[turn].queue.production
         if (prod.ref === 'outpost_ship' && prod.turns === 16) {
-          count += prod.quantity
+          totalQuantity += prod.quantity
         }
         turn++
       }
-      return count
+      return totalQuantity
+    },
+
+    maxTurn () {
+      return this.planet.colonisation_turn + this.noOfTurns - 1
     }
   },
 
   mounted () {
-    this.constructed = JSON.parse(JSON.stringify(this.planet.constructed))
-    this.stored = JSON.parse(JSON.stringify(this.planet.stored))
-    this.abundances = JSON.parse(JSON.stringify(this.planet.abundances))
-    this.travel = JSON.parse(JSON.stringify(Travel))
-    this.resources = JSON.parse(JSON.stringify(Resources))
+    this.$set(this, 'constructed', JSON.parse(JSON.stringify(this.planet.constructed)))
+    this.$set(this, 'stored', JSON.parse(JSON.stringify(this.planet.stored)))
+    this.$set(this, 'abundances', JSON.parse(JSON.stringify(this.planet.abundances)))
+    this.$set(this, 'travel', JSON.parse(JSON.stringify(Travel)))
+    this.$set(this, 'resources', JSON.parse(JSON.stringify(Resources)))
+    this.$set(this, 'turn', this.planet.colonisation_turn - 1)
 
     this.calcOutput()
     this.calcStorage()
 
-    this.ticks(300)
+    this.ticks(this.noOfTurns)
 
     this.$emit('logUpdated', Object.values(this.log))
   },
@@ -447,7 +482,7 @@ export default {
 
       this.recordOutputs()
 
-      if (this.turn > 1) {
+      if (this.turn > this.planet.colonisation_turn) {
         this.addOutputs()
       }
 
@@ -464,11 +499,11 @@ export default {
     },
 
     /**
-     * Advance {count} ticks
-     * @param {Integer} count
+     * Advance {noOfTurns} ticks
+     * @param {Integer} noOfTurns
      */
-    ticks (count) {
-      for (let i = 0; i < count; i++) {
+    ticks (noOfTurns) {
+      for (let i = 0; i < noOfTurns; i++) {
         this.tick()
       }
     },

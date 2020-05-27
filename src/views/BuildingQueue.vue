@@ -8,6 +8,7 @@
     </h2>
 
     <h3>Available</h3>
+
     <ul class="queue">
       <li
         v-for="(building, ref) in available"
@@ -31,6 +32,7 @@
     </ul>
 
     <h3>Current Queue</h3>
+
     <ul class="queue draggable">
       <draggable
         :list="order"
@@ -52,7 +54,7 @@
             class="touch-size vertical-align-bottom"
             @click="removeFromQueue(index)"
           >
-          <span :class="{ handle: buildings[building.ref].canBuild }">
+          <span :class="{ handle: buildings[building.ref].canBuild, grey: building.turn < currentTurn }">
             <img
               :src="buildings[building.ref].image"
               :title="buildings[building.ref].name"
@@ -87,6 +89,10 @@ export default {
     },
     available: {
       type: Object,
+      required: true
+    },
+    currentTurn: {
+      type: Number,
       required: true
     }
   },

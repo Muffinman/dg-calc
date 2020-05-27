@@ -203,7 +203,7 @@ let buildings = {
       pop: 25000,
       energy: 0,
       research: 0,
-      ground_space: 1,
+      ground_space: 2,
       orbit_space: 0
     },
     output: {

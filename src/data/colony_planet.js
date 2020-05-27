@@ -1,4 +1,5 @@
 let homePlanet = {
+  home: false,
   constructed: {
     outpost: 1,
     metal_mine: 1,

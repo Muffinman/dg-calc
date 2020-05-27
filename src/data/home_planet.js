@@ -1,4 +1,7 @@
 let homePlanet = {
+  home: true,
+  colonisation_turn: 1,
+  name: 'Planet',
   constructed: {
     outpost: 1,
     metal_mine: 3,
@@ -12,8 +15,8 @@ let homePlanet = {
     pop: 20000,
     pop_busy: 0,
     research: 0,
-    ground_space: 60,
-    orbit_space: 40
+    ground_space: 40,
+    orbit_space: 30
   },
   abundances: {
     metal: 70,

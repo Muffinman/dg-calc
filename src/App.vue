@@ -331,6 +331,7 @@ export default {
             turn: null,
             ref: item.key
           }
+          delete item.key
         }
         return item
       })
@@ -370,12 +371,8 @@ export default {
 
       // Migrate from v1 to v2
       data = data.map(item => {
-        if (!item.quantity) {
-          item = {
-            turn: item.turn,
-            ref: item.ref,
-            quantity: 1
-          }
+        if (item.quantity === null) {
+          item.quantity = 1
         }
         return item
       })
@@ -399,24 +396,24 @@ export default {
       }
 
       // Migrate from v1 to v2
-      if (!data.stored.ground_space) {
+      if (data.stored.ground_space === null) {
         data.stored.ground_space = HomePlanet.stored.ground_space
       }
 
-      if (!data.stored.orbit_space) {
+      if (data.stored.orbit_space === null) {
         data.stored.orbit_space = HomePlanet.stored.orbit_space
       }
 
       // Migrate from v2 to v3
-      if (!data.colonisation_turn) {
+      if (data.colonisation_turn === null) {
         data.colonisation_turn = HomePlanet.colonisation_turn
       }
 
-      if (!data.name) {
+      if (data.name === null) {
         data.name = HomePlanet.name
       }
 
-      if (!data.home) {
+      if (data.home === null) {
         if (data.colony) {
           data.home = !data.colony
           delete data.colony

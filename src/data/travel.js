@@ -12,7 +12,7 @@ let travel = {
     homeworld: 24
   },
   inner: {
-    center: 12,
+    center: 16,
     inner: 12,
     outer: 20,
     homeworld: 24

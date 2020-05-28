@@ -36,7 +36,7 @@
           Current time
         </td>
         <td>
-          {{ currentTime.format('DD-MM-YYYY hh:mm') }}
+          {{ currentTime.format('DD-MM-YYYY HH:mm') }}
         </td>
       </tr>
       <tr>

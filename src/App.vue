@@ -100,7 +100,7 @@ export default {
       shipOrder: [],
       log: [],
       shortUrl: null,
-      startOfGame: moment('2020-05-22 20:00'),
+      startOfGame: moment.utc('2020-05-22 18:00'),
       currentTime: moment()
     }
   },

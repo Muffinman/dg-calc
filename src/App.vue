@@ -416,7 +416,7 @@ export default {
         data.name = HomePlanet.name
       }
 
-      if (!data.home) {
+      if (data.home === null) {
         if (data.colony) {
           data.home = !data.colony
           delete data.colony

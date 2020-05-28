@@ -84,7 +84,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="turn in log"
+            v-for="turn in filteredLog"
             :key="turn.turn"
           >
             <td>{{ turn.turn }}</td>
@@ -374,6 +374,16 @@ export default {
         turn++
       }
       return totalQuantity
+    },
+
+    filteredLog () {
+      let log = JSON.parse(JSON.stringify(this.log))
+      for (let turn = 1; turn < this.planet.colonisation_turn; turn++) {
+        if (log[turn] !== undefined && !log[turn].queue.research.ref) {
+          delete log[turn]
+        }
+      }
+      return log
     }
   },
 
@@ -494,7 +504,7 @@ export default {
         this.startBuildingQueue()
         this.startProductionQueue()
       }
-      
+
       this.recordOutputs()
 
       this.finishResearchQueue()

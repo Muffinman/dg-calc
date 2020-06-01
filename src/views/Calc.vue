@@ -84,7 +84,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="turn in log"
+            v-for="turn in filteredLog"
             :key="turn.turn"
           >
             <td>{{ turn.turn }}</td>
@@ -376,8 +376,14 @@ export default {
       return totalQuantity
     },
 
-    maxTurn () {
-      return this.planet.colonisation_turn + this.noOfTurns - 1
+    filteredLog () {
+      let log = JSON.parse(JSON.stringify(this.log))
+      for (let turn = 1; turn < this.planet.colonisation_turn; turn++) {
+        if (log[turn] !== undefined && !log[turn].queue.research.ref) {
+          delete log[turn]
+        }
+      }
+      return log
     }
   },
 
@@ -387,12 +393,11 @@ export default {
     this.$set(this, 'abundances', JSON.parse(JSON.stringify(this.planet.abundances)))
     this.$set(this, 'travel', JSON.parse(JSON.stringify(Travel)))
     this.$set(this, 'resources', JSON.parse(JSON.stringify(Resources)))
-    this.$set(this, 'turn', this.planet.colonisation_turn - 1)
 
     this.calcOutput()
     this.calcStorage()
 
-    this.ticks(this.noOfTurns)
+    this.ticks(this.planet.colonisation_turn + this.noOfTurns - 1)
 
     this.$emit('logUpdated', Object.values(this.log))
   },
@@ -484,14 +489,21 @@ export default {
 
       if (this.turn > this.planet.colonisation_turn) {
         this.addOutputs()
+      } else if (this.turn > 1) {
+        this.stored['research'] += this.output['research']
       }
 
-      this.processBuildingQueue()
-      this.processProductionQueue()
+      if (this.turn >= this.planet.colonisation_turn) {
+        this.processBuildingQueue()
+        this.processProductionQueue()
+      }
 
       this.startResearchQueue()
-      this.startBuildingQueue()
-      this.startProductionQueue()
+
+      if (this.turn >= this.planet.colonisation_turn) {
+        this.startBuildingQueue()
+        this.startProductionQueue()
+      }
 
       this.recordOutputs()
 
